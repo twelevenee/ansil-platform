@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
-import { Search } from "lucide-react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ProgramCard } from "@/components/ProgramCard";
@@ -14,10 +15,10 @@ const ProgramsPage = () => {
   const [freeOnly, setFreeOnly] = useState(false);
   const [openOnly, setOpenOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filtersExpanded, setFiltersExpanded] = useState(false);
 
   const { data: cities = [] } = useRegionCities();
 
-  // Fetch with server-side filters for region, free, open
   const { data: programs = [], isLoading } = usePrograms({
     regionCity: regionFilter !== "all" ? regionFilter : undefined,
     freeOnly,
@@ -31,25 +32,27 @@ const ProgramsPage = () => {
     );
   };
 
-  // Client-side category multi-filter
   const filtered = useMemo(() => {
     if (activeCategories.length === 0) return programs;
     return programs.filter((p) => activeCategories.includes(p.category));
   }, [programs, activeCategories]);
 
+  const activeFilterCount = activeCategories.length + (freeOnly ? 1 : 0) + (openOnly ? 1 : 0) + (regionFilter !== "all" ? 1 : 0);
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Navbar />
       <main className="flex-1">
-        <div className="container py-8 md:py-12">
-          <h1 className="mb-6 text-2xl font-bold text-secondary md:text-3xl">전체 지원제도</h1>
+        <div className="container py-6 md:py-12">
+          <h1 className="mb-4 text-2xl font-bold text-secondary md:mb-6 md:text-3xl">전체 지원제도</h1>
 
-          <div className="mb-6 space-y-4 rounded-xl border bg-card p-4 shadow-sm md:p-5">
+          <div className="mb-6 space-y-3 rounded-xl border bg-card p-4 shadow-sm md:space-y-4 md:p-5">
+            {/* Top row: search + region + mobile filter toggle */}
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <select
                 value={regionFilter}
                 onChange={(e) => setRegionFilter(e.target.value)}
-                className="w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none focus:border-primary sm:w-48"
+                className="w-full rounded-lg border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary min-h-[44px] sm:w-48"
               >
                 <option value="all">전체</option>
                 {cities.map((c) => (
@@ -63,46 +66,65 @@ const ProgramsPage = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="제도명 또는 내용 검색"
-                  className="pl-9"
+                  className="pl-9 min-h-[44px]"
                 />
               </div>
+
+              {/* Mobile filter toggle */}
+              <Button
+                variant="outline"
+                size="sm"
+                className="sm:hidden min-h-[44px] gap-2"
+                onClick={() => setFiltersExpanded(!filtersExpanded)}
+              >
+                <SlidersHorizontal className="h-4 w-4" />
+                필터
+                {activeFilterCount > 0 && (
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
+                    {activeFilterCount}
+                  </span>
+                )}
+              </Button>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
-              {categoryList.map((cat) => (
+            {/* Filter chips — horizontal scroll on mobile, wrap on desktop */}
+            <div className={`${filtersExpanded ? "block" : "hidden"} sm:block`}>
+              <div className="flex gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-x-visible sm:pb-0 scrollbar-hide">
+                {categoryList.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => toggleCategory(cat)}
+                    className={`shrink-0 rounded-full px-3.5 py-2 text-xs font-medium transition-colors min-h-[40px] active:scale-95 ${
+                      activeCategories.includes(cat)
+                        ? "bg-primary text-primary-foreground"
+                        : "border bg-background text-muted-foreground hover:bg-primary-light hover:text-primary"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+                <span className="mx-0.5 hidden h-8 w-px self-center bg-border sm:block" />
                 <button
-                  key={cat}
-                  onClick={() => toggleCategory(cat)}
-                  className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
-                    activeCategories.includes(cat)
-                      ? "bg-primary text-primary-foreground"
-                      : "border bg-background text-muted-foreground hover:bg-primary-light hover:text-primary"
+                  onClick={() => setFreeOnly(!freeOnly)}
+                  className={`shrink-0 rounded-full px-3.5 py-2 text-xs font-medium transition-colors min-h-[40px] active:scale-95 ${
+                    freeOnly
+                      ? "bg-success text-success-foreground"
+                      : "border bg-background text-muted-foreground hover:bg-success/10 hover:text-success"
                   }`}
                 >
-                  {cat}
+                  무료만 보기
                 </button>
-              ))}
-              <span className="mx-1 hidden h-5 w-px bg-border sm:block" />
-              <button
-                onClick={() => setFreeOnly(!freeOnly)}
-                className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
-                  freeOnly
-                    ? "bg-success text-success-foreground"
-                    : "border bg-background text-muted-foreground hover:bg-success/10 hover:text-success"
-                }`}
-              >
-                무료만 보기
-              </button>
-              <button
-                onClick={() => setOpenOnly(!openOnly)}
-                className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
-                  openOnly
-                    ? "bg-success text-success-foreground"
-                    : "border bg-background text-muted-foreground hover:bg-success/10 hover:text-success"
-                }`}
-              >
-                신청가능만 보기
-              </button>
+                <button
+                  onClick={() => setOpenOnly(!openOnly)}
+                  className={`shrink-0 rounded-full px-3.5 py-2 text-xs font-medium transition-colors min-h-[40px] active:scale-95 ${
+                    openOnly
+                      ? "bg-success text-success-foreground"
+                      : "border bg-background text-muted-foreground hover:bg-success/10 hover:text-success"
+                  }`}
+                >
+                  신청가능만 보기
+                </button>
+              </div>
             </div>
           </div>
 
@@ -113,7 +135,7 @@ const ProgramsPage = () => {
           {isLoading ? (
             <div className="rounded-xl border bg-card p-12 text-center text-muted-foreground">데이터를 불러오는 중...</div>
           ) : filtered.length > 0 ? (
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
               {filtered.map((p) => (
                 <ProgramCard key={p.id} program={p} />
               ))}

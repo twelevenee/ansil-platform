@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { useSearchParams, Link } from "react-router-dom";
-import { Send, ArrowLeft, ThumbsUp, ThumbsDown, ExternalLink, Home } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
+import { Send, ThumbsUp, ThumbsDown, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/Navbar";
 
@@ -92,16 +92,16 @@ function MessageBubble({
         {message.programs && (
           <div className="space-y-2">
             {message.programs.map((p) => (
-              <div key={p.name} className="flex items-center justify-between rounded-xl border bg-card p-3 shadow-sm">
-                <div className="min-w-0">
+              <div key={p.name} className="flex items-center justify-between gap-2 rounded-xl border bg-card p-3 shadow-sm">
+                <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-card-foreground">{p.name}</p>
                   <p className="text-xs text-muted-foreground">
                     {p.region} · <span className={p.cost === "무료" ? "text-success" : "text-muted-foreground"}>{p.cost}</span>
                   </p>
                 </div>
                 <a href={p.url} target="_blank" rel="noopener noreferrer">
-                  <Button size="sm" variant="outline" className="shrink-0 gap-1 text-xs text-primary hover:bg-primary-light">
-                    신청하기 <ExternalLink className="h-3 w-3" />
+                  <Button size="sm" variant="outline" className="shrink-0 gap-1 text-xs text-primary hover:bg-primary-light min-h-[44px] min-w-[44px]">
+                    신청 <ExternalLink className="h-3 w-3" />
                   </Button>
                 </a>
               </div>
@@ -114,24 +114,24 @@ function MessageBubble({
           <p className="text-xs text-muted-foreground">{message.disclaimer}</p>
         )}
 
-        {/* Feedback buttons */}
+        {/* Feedback buttons — 44px touch targets */}
         {message.role === "ai" && message.id !== "welcome" && onFeedback && (
           <div className="flex items-center gap-1">
             <button
               onClick={() => onFeedback(message.id, "up")}
-              className={`rounded-md p-1.5 transition-colors ${
+              className={`rounded-md p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors ${
                 message.feedback === "up" ? "bg-success/10 text-success" : "text-muted-foreground/40 hover:text-muted-foreground"
               }`}
             >
-              <ThumbsUp className="h-3.5 w-3.5" />
+              <ThumbsUp className="h-4 w-4" />
             </button>
             <button
               onClick={() => onFeedback(message.id, "down")}
-              className={`rounded-md p-1.5 transition-colors ${
+              className={`rounded-md p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors ${
                 message.feedback === "down" ? "bg-destructive/10 text-destructive" : "text-muted-foreground/40 hover:text-muted-foreground"
               }`}
             >
-              <ThumbsDown className="h-3.5 w-3.5" />
+              <ThumbsDown className="h-4 w-4" />
             </button>
           </div>
         )}
@@ -147,6 +147,7 @@ const ChatPage = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [chipsVisible, setChipsVisible] = useState(true);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const autoSentRef = useRef(false);
 
   const scrollToBottom = () => {
@@ -156,6 +157,19 @@ const ChatPage = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages, isTyping]);
+
+  // Handle mobile viewport resize (keyboard open/close)
+  useEffect(() => {
+    const handleResize = () => {
+      // Scroll to bottom when virtual keyboard appears
+      setTimeout(scrollToBottom, 100);
+    };
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", handleResize);
+      return () => window.visualViewport?.removeEventListener("resize", handleResize);
+    }
+  }, []);
 
   const sendMessage = useCallback(
     (text: string) => {
@@ -172,6 +186,11 @@ const ChatPage = () => {
       setChipsVisible(false);
       setIsTyping(true);
 
+      // Blur input on mobile to close keyboard after sending
+      if (window.matchMedia("(pointer: coarse)").matches) {
+        inputRef.current?.blur();
+      }
+
       setTimeout(() => {
         setIsTyping(false);
         setMessages((prev) => [...prev, mockAiResponse(text)]);
@@ -185,7 +204,6 @@ const ChatPage = () => {
     const q = searchParams.get("q");
     if (q && !autoSentRef.current) {
       autoSentRef.current = true;
-      // Small delay so the page renders first
       setTimeout(() => sendMessage(q), 300);
     }
   }, [searchParams, sendMessage]);
@@ -202,13 +220,13 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-background">
+    <div className="flex h-[100dvh] flex-col bg-background">
       <Navbar />
 
       {/* Chat area */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        <div className="flex-1 overflow-y-auto">
-          <div className="mx-auto max-w-3xl space-y-4 px-4 py-6">
+        <div className="flex-1 overflow-y-auto overscroll-contain">
+          <div className="mx-auto max-w-3xl space-y-4 px-4 py-4 pb-2 md:py-6">
             {messages.map((msg) => (
               <MessageBubble key={msg.id} message={msg} onFeedback={handleFeedback} />
             ))}
@@ -220,7 +238,7 @@ const ChatPage = () => {
                   <button
                     key={chip}
                     onClick={() => sendMessage(chip)}
-                    className="rounded-full border bg-card px-3.5 py-2 text-xs text-card-foreground transition-all hover:-translate-y-0.5 hover:shadow-md"
+                    className="rounded-full border bg-card px-3.5 py-2.5 text-xs text-card-foreground transition-all hover:-translate-y-0.5 hover:shadow-md active:scale-95 min-h-[44px]"
                   >
                     {chip}
                   </button>
@@ -233,21 +251,24 @@ const ChatPage = () => {
           </div>
         </div>
 
-        {/* Input — sticky bottom */}
-        <div className="border-t bg-card">
+        {/* Input — sticky bottom with safe area */}
+        <div className="border-t bg-card pb-[env(safe-area-inset-bottom)]">
           <form onSubmit={handleSubmit} className="mx-auto flex max-w-3xl items-center gap-2 px-4 py-3">
             <input
+              ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="궁금한 점을 물어보세요..."
-              className="flex-1 rounded-lg border bg-background px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary"
+              className="flex-1 rounded-lg border bg-background px-4 py-3 text-base outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary min-h-[44px]"
               disabled={isTyping}
+              enterKeyHint="send"
+              autoComplete="off"
             />
             <Button
               type="submit"
               size="icon"
               disabled={!input.trim() || isTyping}
-              className="shrink-0 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90"
+              className="shrink-0 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 min-h-[44px] min-w-[44px]"
             >
               <Send className="h-4 w-4" />
             </Button>

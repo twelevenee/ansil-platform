@@ -33,7 +33,6 @@ const RegionDetail = () => {
 
   const gap = gapAlerts[regionCity];
 
-  // Category counts
   const categoryCounts: Record<string, number> = {};
   programs.forEach((p) => {
     categoryCounts[p.category] = (categoryCounts[p.category] || 0) + 1;
@@ -49,14 +48,14 @@ const RegionDetail = () => {
     <div className="flex min-h-screen flex-col bg-background">
       <Navbar />
       <main className="flex-1">
-        <div className="container py-8 md:py-12">
-          <Link to="/" className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary">
+        <div className="container py-6 md:py-12">
+          <Link to="/" className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary min-h-[44px] md:mb-6">
             <ArrowLeft className="h-4 w-4" /> 전국 대시보드
           </Link>
 
-          <h1 className="mb-4 text-2xl font-bold text-secondary md:text-3xl">{regionCity} 지원제도 현황</h1>
+          <h1 className="mb-3 text-2xl font-bold text-secondary md:mb-4 md:text-3xl">{regionCity} 지원제도 현황</h1>
 
-          <div className="mb-6 flex flex-wrap items-center gap-3">
+          <div className="mb-4 flex flex-wrap items-center gap-3 md:mb-6">
             <span className="text-sm text-muted-foreground">
               총 <span className="font-bold text-primary">{programs.length}</span>개 제도
             </span>
@@ -71,7 +70,7 @@ const RegionDetail = () => {
           </div>
 
           {regionCity !== "서울특별시" && gap && (
-            <div className="mb-6 flex items-start gap-3 rounded-xl border border-accent bg-accent/10 p-4">
+            <div className="mb-4 flex items-start gap-3 rounded-xl border border-accent bg-accent/10 p-4 md:mb-6">
               <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
               <p className="text-sm text-card-foreground">
                 <span className="font-semibold">서울 대비 부족한 영역:</span> {gap}
@@ -79,26 +78,29 @@ const RegionDetail = () => {
             </div>
           )}
 
-          <div className="mb-6 flex flex-wrap gap-2">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                  activeCategory === cat
-                    ? "bg-primary text-primary-foreground"
-                    : "border bg-card text-muted-foreground hover:bg-primary-light hover:text-primary"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+          {/* Category filter — horizontal scroll on mobile */}
+          <div className="mb-4 -mx-4 px-4 md:mx-0 md:px-0 md:mb-6">
+            <div className="flex gap-2 overflow-x-auto pb-1 md:flex-wrap md:overflow-x-visible md:pb-0 scrollbar-hide">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors min-h-[40px] active:scale-95 ${
+                    activeCategory === cat
+                      ? "bg-primary text-primary-foreground"
+                      : "border bg-card text-muted-foreground hover:bg-primary-light hover:text-primary"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
 
           {isLoading ? (
             <div className="rounded-xl border bg-card p-12 text-center text-muted-foreground">데이터를 불러오는 중...</div>
           ) : filtered.length > 0 ? (
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
               {filtered.map((p) => (
                 <ProgramCard key={p.id} program={p} />
               ))}
@@ -109,7 +111,7 @@ const RegionDetail = () => {
             </div>
           )}
 
-          <div className="mt-12 rounded-xl bg-secondary p-6 text-center md:p-8">
+          <div className="mt-8 rounded-xl bg-secondary p-5 text-center md:mt-12 md:p-8">
             <p className="mb-4 text-sm font-medium text-secondary-foreground">
               이 지역 지원에 대해 더 궁금하면 AI에게 물어보세요
             </p>
@@ -119,9 +121,9 @@ const RegionDetail = () => {
                 value={aiQuery}
                 onChange={(e) => setAiQuery(e.target.value)}
                 placeholder={`${regionCity} 지원제도에 대해 물어보세요`}
-                className="border-0 bg-transparent shadow-none focus-visible:ring-0"
+                className="border-0 bg-transparent shadow-none focus-visible:ring-0 min-h-[44px]"
               />
-              <Button type="submit" className="shrink-0 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90">
+              <Button type="submit" className="shrink-0 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 min-h-[44px]">
                 질문하기
               </Button>
             </form>
