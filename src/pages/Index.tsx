@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { HeroSection } from "@/components/HeroSection";
+import { MapDashboard } from "@/components/MapDashboard";
 import { Footer } from "@/components/Footer";
 
 const Index = () => {
@@ -8,6 +9,7 @@ const Index = () => {
       <Navbar />
       <main className="flex-1">
         <HeroSection />
+        <MapDashboard />
       </main>
       <Footer />
     </div>
