@@ -48,11 +48,11 @@ const ProgramsPage = () => {
           {/* Filter bar */}
           <div className="mb-6 space-y-4 rounded-xl border bg-card p-4 shadow-sm md:p-5">
             {/* Row 1: Region + Search */}
-            <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <select
                 value={regionFilter}
                 onChange={(e) => setRegionFilter(e.target.value)}
-                className="rounded-lg border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+                className="w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none focus:border-primary sm:w-48"
               >
                 {filterRegions.map((r) => (
                   <option key={r.id} value={r.id}>{r.name}</option>
