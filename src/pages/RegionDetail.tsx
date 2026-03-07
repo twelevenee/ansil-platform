@@ -1,96 +1,14 @@
 import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Home, Shield, Heart, Activity, Users, ChevronDown, ChevronUp, ExternalLink, Phone, Search, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Search, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { regionData, mockPrograms, gapAlerts, categoryBadgeClasses, type Program } from "@/data/mockData";
-
-const categoryIcons: Record<string, React.ElementType> = {
-  주거안전: Home, 귀가안전: Shield, 생활지원: Heart, 건강: Activity, 커뮤니티: Users,
-};
+import { ProgramCard, categoryIcons } from "@/components/ProgramCard";
+import { regionData, mockPrograms, gapAlerts } from "@/data/mockData";
 
 const categories = ["전체", "주거안전", "귀가안전", "생활지원", "건강", "커뮤니티"];
-
-function ProgramCard({ program }: { program: Program }) {
-  const [expanded, setExpanded] = useState(false);
-  const Icon = categoryIcons[program.category] || Home;
-  const badgeClass = categoryBadgeClasses[program.category] || "bg-muted text-muted-foreground";
-
-  return (
-    <div className="flex flex-col rounded-xl border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
-      <div className="flex flex-1 flex-col p-5">
-        {/* Category tag */}
-        <div className="mb-3 flex items-center gap-1.5">
-          <Icon className="h-3.5 w-3.5" />
-          <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${badgeClass}`}>
-            {program.category}
-          </span>
-        </div>
-
-        {/* Title */}
-        <h3 className="mb-2 text-lg font-bold text-card-foreground">{program.name}</h3>
-
-        {/* Description — 2 lines */}
-        <p className="mb-4 line-clamp-2 text-sm text-muted-foreground">{program.supportDetail}</p>
-
-        {/* Badges */}
-        <div className="mb-4 flex flex-wrap gap-2">
-          <Badge variant="outline" className={program.costType === "free" ? "border-success text-success" : "border-border text-muted-foreground"}>
-            {program.cost}
-          </Badge>
-          <Badge variant="outline" className={program.status === "open" ? "border-success text-success" : "border-destructive text-destructive"}>
-            {program.status === "open" ? "신청가능" : "마감"}
-          </Badge>
-        </div>
-
-        {/* Buttons */}
-        <div className="mt-auto flex items-center gap-2">
-          <a href={program.applyUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
-            <Button size="sm" className="w-full gap-1 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90" disabled={program.status === "closed"}>
-              신청하기 <ExternalLink className="h-3.5 w-3.5" />
-            </Button>
-          </a>
-          <Button size="sm" variant="ghost" className="gap-1 text-muted-foreground" onClick={() => setExpanded(!expanded)}>
-            자세히 {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
-          </Button>
-        </div>
-      </div>
-
-      {/* Expanded detail */}
-      {expanded && (
-        <div className="border-t bg-muted/30 p-5 text-sm space-y-3">
-          <Detail label="신청 방법" value={program.howToApply} />
-          <Detail label="신청 기간" value={program.applyPeriod} />
-          <Detail label="대상 조건" value={program.targetCondition} />
-          <div>
-            <span className="font-medium text-card-foreground">문의처: </span>
-            <a href={`tel:${program.contact}`} className="inline-flex items-center gap-1 text-primary hover:underline">
-              <Phone className="h-3.5 w-3.5" /> {program.contact}
-            </a>
-          </div>
-          <div>
-            <span className="font-medium text-card-foreground">출처: </span>
-            <a href={program.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-              원문 보기 <ExternalLink className="inline h-3 w-3" />
-            </a>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function Detail({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <span className="font-medium text-card-foreground">{label}: </span>
-      <span className="text-muted-foreground">{value}</span>
-    </div>
-  );
-}
 
 const RegionDetail = () => {
   const { cityName } = useParams<{ cityName: string }>();
@@ -101,7 +19,6 @@ const RegionDetail = () => {
   const region = cityName ? regionData[cityName] : null;
   const programs = cityName ? mockPrograms[cityName] || [] : [];
   const gap = cityName ? gapAlerts[cityName] : null;
-
   const filtered = activeCategory === "전체" ? programs : programs.filter((p) => p.category === activeCategory);
 
   if (!region) {
@@ -127,12 +44,10 @@ const RegionDetail = () => {
       <Navbar />
       <main className="flex-1">
         <div className="container py-8 md:py-12">
-          {/* Back */}
           <Link to="/" className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary">
             <ArrowLeft className="h-4 w-4" /> 전국 대시보드
           </Link>
 
-          {/* Title + Summary */}
           <h1 className="mb-4 text-2xl font-bold text-secondary md:text-3xl">{region.name} 지원제도 현황</h1>
 
           <div className="mb-6 flex flex-wrap items-center gap-3">
@@ -149,7 +64,6 @@ const RegionDetail = () => {
             })}
           </div>
 
-          {/* Gap Alert */}
           {cityName !== "seoul" && gap && (
             <div className="mb-6 flex items-start gap-3 rounded-xl border border-accent bg-accent/10 p-4">
               <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
@@ -159,7 +73,6 @@ const RegionDetail = () => {
             </div>
           )}
 
-          {/* Category Filter Tabs */}
           <div className="mb-6 flex flex-wrap gap-2">
             {categories.map((cat) => (
               <button
@@ -176,7 +89,6 @@ const RegionDetail = () => {
             ))}
           </div>
 
-          {/* Cards Grid */}
           {filtered.length > 0 ? (
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {filtered.map((p) => (
@@ -189,7 +101,6 @@ const RegionDetail = () => {
             </div>
           )}
 
-          {/* AI Prompt */}
           <div className="mt-12 rounded-xl bg-secondary p-6 text-center md:p-8">
             <p className="mb-4 text-sm font-medium text-secondary-foreground">
               이 지역 지원에 대해 더 궁금하면 AI에게 물어보세요
