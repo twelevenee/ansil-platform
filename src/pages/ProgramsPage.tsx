@@ -72,6 +72,12 @@ const ProgramsPage = () => {
         return method.includes(methodFilter);
       });
     }
+    // Sort: programs with portal_url first
+    result = [...result].sort((a, b) => {
+      const aHas = a.portal_url ? 0 : 1;
+      const bHas = b.portal_url ? 0 : 1;
+      return aHas - bHas;
+    });
     return result;
   }, [programs, activeCategories, methodFilter]);
 
