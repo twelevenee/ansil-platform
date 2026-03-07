@@ -65,9 +65,8 @@ export function KoreaMap({ selectedRegion, onRegionClick, programCounts }: Korea
 
   const activeTooltip = hoveredRegion || tappedRegion;
 
-  // Map fill uses a gradient-like color interpolation based on intensity
-  // Using lavender hue for the choropleth
-  const getFill = (intensity: number) => `hsla(322, 28%, 66%, ${intensity})`;
+  // Rose-toned choropleth fill
+  const getFill = (intensity: number) => `hsla(345, 55%, 72%, ${intensity})`;
 
   return (
     <div className="relative w-full touch-manipulation">
@@ -89,7 +88,7 @@ export function KoreaMap({ selectedRegion, onRegionClick, programCounts }: Korea
               <path
                 d={region.d}
                 fill={getFill(intensity)}
-                stroke={isSelected ? "#4A7EC2" : isHovered ? "#C48DB0" : "hsl(var(--border))"}
+                stroke={isSelected ? "#D4637A" : isHovered ? "#E8889E" : "#FCEAEF"}
                 strokeWidth={isSelected ? 2.5 : isHovered ? 2 : 1}
                 className="cursor-pointer transition-all duration-200"
                 onMouseEnter={() => setHoveredRegion(region.id)}
@@ -108,8 +107,8 @@ export function KoreaMap({ selectedRegion, onRegionClick, programCounts }: Korea
                 cx={region.cx}
                 cy={region.cy}
                 r={count > 20 ? 14 : count > 10 ? 12 : 10}
-                fill="hsl(var(--card))"
-                stroke={isSelected ? "#4A7EC2" : "hsl(var(--border))"}
+                fill="white"
+                stroke={isSelected ? "#D4637A" : "#FCEAEF"}
                 strokeWidth={isSelected ? 1.5 : 0.8}
                 className="pointer-events-none"
                 opacity={0.95}
@@ -121,7 +120,7 @@ export function KoreaMap({ selectedRegion, onRegionClick, programCounts }: Korea
                 dominantBaseline="central"
                 fontSize={count > 20 ? 10 : 9}
                 fontWeight="700"
-                fill="#A06B8E"
+                fill="#D4637A"
                 className="pointer-events-none select-none"
               >
                 {count}
@@ -133,7 +132,7 @@ export function KoreaMap({ selectedRegion, onRegionClick, programCounts }: Korea
 
       {activeTooltip && (
         <div
-          className={`pointer-events-none absolute z-10 rounded-xl bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground shadow-lg ${
+          className={`pointer-events-none absolute z-10 rounded-xl bg-foreground px-3 py-1.5 text-xs font-medium text-white shadow-lg ${
             tappedRegion && !hoveredRegion
               ? "left-1/2 -translate-x-1/2 bottom-2"
               : ""
@@ -150,7 +149,7 @@ export function KoreaMap({ selectedRegion, onRegionClick, programCounts }: Korea
         >
           {regionNames[activeTooltip]}: {programCounts[activeTooltip] || 0}건
           {tappedRegion && !hoveredRegion && (
-            <span className="ml-1 text-secondary-foreground/60">· 다시 탭하여 선택</span>
+            <span className="ml-1 opacity-60">· 다시 탭하여 선택</span>
           )}
         </div>
       )}

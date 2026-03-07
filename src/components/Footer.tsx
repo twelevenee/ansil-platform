@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <footer className="border-t bg-muted py-8">
+    <footer className="border-t bg-rose-light/30 py-8">
       <div className="container space-y-2 text-center">
         <p className="text-xs text-muted-foreground">
           데이터 출처: 씽글벙글 서울, 공공데이터포털, 각 지자체 홈페이지

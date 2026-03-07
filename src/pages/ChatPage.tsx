@@ -57,9 +57,9 @@ function TypingIndicator() {
   return (
     <div className="flex items-start gap-2">
       <div className="flex items-center gap-1 rounded-2xl rounded-tl-sm bg-card border px-4 py-3 shadow-card">
-        <span className="h-2 w-2 animate-bounce rounded-full bg-lavender-mid/40" style={{ animationDelay: "0ms" }} />
-        <span className="h-2 w-2 animate-bounce rounded-full bg-rose-mid/40" style={{ animationDelay: "150ms" }} />
-        <span className="h-2 w-2 animate-bounce rounded-full bg-coral-mid/40" style={{ animationDelay: "300ms" }} />
+        <span className="h-2 w-2 animate-bounce rounded-full bg-rose-mid/40" style={{ animationDelay: "0ms" }} />
+        <span className="h-2 w-2 animate-bounce rounded-full bg-lav-mid/40" style={{ animationDelay: "150ms" }} />
+        <span className="h-2 w-2 animate-bounce rounded-full bg-peach-mid/40" style={{ animationDelay: "300ms" }} />
       </div>
     </div>
   );
@@ -80,7 +80,7 @@ function MessageBubble({
         <div
           className={`rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap ${
             isUser
-              ? "rounded-tr-sm bg-sky-light text-card-foreground"
+              ? "rounded-tr-sm bg-rose-light text-card-foreground"
               : "rounded-tl-sm border bg-card text-card-foreground shadow-card"
           }`}
         >
@@ -98,7 +98,7 @@ function MessageBubble({
                   </p>
                 </div>
                 <a href={p.url} target="_blank" rel="noopener noreferrer">
-                  <Button size="sm" variant="outline" className="shrink-0 gap-1 text-xs text-sky-deep hover:bg-sky-light min-h-[44px] min-w-[44px] rounded-xl">
+                  <Button size="sm" variant="outline" className="shrink-0 gap-1 text-xs text-rose-mid hover:bg-rose-light hover:text-rose-deep min-h-[44px] min-w-[44px] rounded-xl">
                     신청 <ExternalLink className="h-3 w-3" />
                   </Button>
                 </a>
@@ -247,7 +247,7 @@ const ChatPage = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="궁금한 점을 물어보세요..."
-              className="flex-1 rounded-xl border bg-background px-4 py-3 text-base outline-none transition-colors placeholder:text-muted-foreground focus:border-sky-mid focus:ring-1 focus:ring-sky-mid min-h-[44px]"
+              className="flex-1 rounded-xl border bg-background px-4 py-3 text-base outline-none transition-colors placeholder:text-muted-foreground focus:border-rose-mid focus:ring-1 focus:ring-rose-mid min-h-[44px]"
               disabled={isTyping}
               enterKeyHint="send"
               autoComplete="off"
@@ -256,7 +256,7 @@ const ChatPage = () => {
               type="submit"
               size="icon"
               disabled={!input.trim() || isTyping}
-              className="shrink-0 rounded-xl bg-gradient-primary text-white hover:opacity-90 min-h-[44px] min-w-[44px]"
+              className="shrink-0 rounded-xl bg-gradient-cta text-white hover:opacity-90 min-h-[44px] min-w-[44px]"
             >
               <Send className="h-4 w-4" />
             </Button>

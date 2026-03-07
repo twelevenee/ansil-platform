@@ -29,11 +29,11 @@ export function Navbar() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-card/95 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 border-b bg-white/85 backdrop-blur-md">
       <div className="container flex h-14 items-center justify-between md:h-16">
         <Link to="/" className="flex items-center gap-2">
-          <Home className="h-6 w-6 text-sky-deep" />
-          <span className="text-xl font-bold text-secondary">안심찾기</span>
+          <Home className="h-6 w-6 text-rose-mid" />
+          <span className="text-xl font-bold text-foreground">안심찾기</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
@@ -41,8 +41,8 @@ export function Navbar() {
             <Link
               key={item.href}
               to={item.href}
-              className={`rounded-xl px-5 py-2 text-sm font-medium transition-colors hover:bg-sky-light hover:text-sky-deep ${
-                location.pathname === item.href ? "bg-sky-light text-sky-deep" : "text-muted-foreground"
+              className={`rounded-xl px-5 py-2 text-sm font-medium transition-colors hover:bg-rose-light hover:text-rose-deep ${
+                location.pathname === item.href ? "bg-rose-light text-rose-deep" : "text-muted-foreground"
               }`}
             >
               {item.label}
@@ -80,10 +80,10 @@ export function Navbar() {
               key={item.href}
               to={item.href}
               onClick={() => setOpen(false)}
-              className={`flex items-center px-6 py-4 text-base font-medium transition-colors active:bg-sky-light ${
+              className={`flex items-center px-6 py-4 text-base font-medium transition-colors active:bg-rose-light ${
                 location.pathname === item.href
-                  ? "bg-sky-light text-sky-deep"
-                  : "text-muted-foreground hover:bg-sky-light hover:text-sky-deep"
+                  ? "bg-rose-light text-rose-deep"
+                  : "text-muted-foreground hover:bg-rose-light hover:text-rose-deep"
               }`}
             >
               {item.label}

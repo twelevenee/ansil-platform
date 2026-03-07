@@ -41,7 +41,7 @@ export function AISearchSection() {
             placeholder="어떤 도움이 필요하신가요?"
             className="border-0 bg-transparent text-base shadow-none focus-visible:ring-0 min-h-[44px]"
           />
-          <Button type="submit" className="shrink-0 rounded-xl bg-gradient-primary text-white hover:opacity-90 min-h-[44px]">
+          <Button type="submit" className="shrink-0 rounded-xl bg-gradient-cta text-white hover:opacity-90 min-h-[44px]">
             검색
           </Button>
         </form>

@@ -9,7 +9,7 @@ export const categoryIcons: Record<string, React.ElementType> = {
 
 const categoryBadgeClasses: Record<string, string> = {
   주거안전: "bg-sky-light text-sky-deep border border-sky-mid/30",
-  귀가안전: "bg-lavender-light text-lavender-deep border border-lavender-mid/30",
+  귀가안전: "bg-lav-light text-lav-deep border border-lav-mid/30",
   생활지원: "bg-rose-light text-rose-deep border border-rose-mid/30",
   건강: "bg-coral-light text-coral-deep border border-coral-mid/30",
   커뮤니티: "bg-peach-light text-peach-deep border border-peach-mid/30",
@@ -43,11 +43,13 @@ export function ProgramCard({ program }: { program: Program }) {
         <h3 className="mb-2 text-base font-bold text-card-foreground md:text-lg">{program.name}</h3>
         <p className="mb-4 line-clamp-2 text-sm text-muted-foreground">{program.support_detail}</p>
         <div className="mb-4 flex flex-wrap gap-2">
+          {/* 무료 = sky, 유료 = peach */}
           <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium border ${
             isFree ? "bg-sky-light text-sky-deep border-sky-mid/30" : "bg-peach-light text-peach-deep border-peach-mid/30"
           }`}>
             {program.cost}
           </span>
+          {/* 신청가능 = rose, 마감 = coral */}
           <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium border ${
             isOpen ? "bg-rose-light text-rose-deep border-rose-mid/30" : "bg-coral-light text-coral-deep border-coral-mid/30"
           }`}>
@@ -58,7 +60,7 @@ export function ProgramCard({ program }: { program: Program }) {
           <a href={program.apply_url || "#"} target="_blank" rel="noopener noreferrer" className="flex-1">
             <Button
               size="sm"
-              className="w-full gap-1 rounded-xl bg-gradient-primary text-white hover:opacity-90 min-h-[44px]"
+              className="w-full gap-1 rounded-xl bg-rose-mid text-white hover:bg-rose-deep min-h-[44px]"
               disabled={!isOpen}
             >
               신청하기 <ExternalLink className="h-3.5 w-3.5" />
@@ -67,7 +69,7 @@ export function ProgramCard({ program }: { program: Program }) {
           <Button
             size="sm"
             variant="ghost"
-            className="gap-1 text-muted-foreground min-h-[44px] min-w-[44px] hover:bg-lavender-light hover:text-lavender-deep"
+            className="gap-1 text-muted-foreground min-h-[44px] min-w-[44px] hover:bg-lav-light hover:text-lav-deep"
             onClick={() => setExpanded(!expanded)}
           >
             자세히 {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}

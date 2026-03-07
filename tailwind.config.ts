@@ -14,7 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['"Noto Sans KR"', 'sans-serif'],
+        sans: ['Pretendard', '"Noto Sans KR"', 'Inter', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -51,36 +51,36 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // 5 color families
+        // 5 pastel color families
         sky: {
-          light: "hsl(var(--sky-light))",
-          DEFAULT: "hsl(var(--sky-default))",
-          mid: "hsl(var(--sky-mid))",
-          deep: "hsl(var(--sky-deep))",
+          light: "#E8F0FA",
+          DEFAULT: "#C5D9F0",
+          mid: "#7BA4D9",
+          deep: "#4A7EC2",
         },
-        lavender: {
-          light: "hsl(var(--lavender-light))",
-          DEFAULT: "hsl(var(--lavender-default))",
-          mid: "hsl(var(--lavender-mid))",
-          deep: "hsl(var(--lavender-deep))",
+        lav: {
+          light: "#F4E6EF",
+          DEFAULT: "#E4C8DB",
+          mid: "#C48DB0",
+          deep: "#A06B8E",
         },
         rose: {
-          light: "hsl(var(--rose-light))",
-          DEFAULT: "hsl(var(--rose-default))",
-          mid: "hsl(var(--rose-mid))",
-          deep: "hsl(var(--rose-deep))",
+          light: "#FCEAEF",
+          DEFAULT: "#F2B8C4",
+          mid: "#E8889E",
+          deep: "#D4637A",
         },
         coral: {
-          light: "hsl(var(--coral-light))",
-          DEFAULT: "hsl(var(--coral-default))",
-          mid: "hsl(var(--coral-mid))",
-          deep: "hsl(var(--coral-deep))",
+          light: "#FFF0ED",
+          DEFAULT: "#F5C4BF",
+          mid: "#E8917F",
+          deep: "#D4705E",
         },
         peach: {
-          light: "hsl(var(--peach-light))",
-          DEFAULT: "hsl(var(--peach-default))",
-          mid: "hsl(var(--peach-mid))",
-          deep: "hsl(var(--peach-deep))",
+          light: "#FFF6F0",
+          DEFAULT: "#FCDBC4",
+          mid: "#F5A86E",
+          deep: "#E8904A",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -94,8 +94,8 @@ export default {
         },
       },
       boxShadow: {
-        card: "var(--shadow-card)",
-        "card-hover": "var(--shadow-card-hover)",
+        card: "0 2px 12px rgba(232, 136, 158, 0.08)",
+        "card-hover": "0 8px 30px rgba(232, 136, 158, 0.15)",
       },
       borderRadius: {
         lg: "var(--radius)",

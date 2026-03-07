@@ -9,7 +9,7 @@ const categoryIcons: Record<string, React.ElementType> = {
 
 const categoryBarClasses: Record<string, string> = {
   주거안전: "bg-sky-mid",
-  귀가안전: "bg-lavender-mid",
+  귀가안전: "bg-lav-mid",
   생활지원: "bg-rose-mid",
   건강: "bg-coral-mid",
   커뮤니티: "bg-peach-mid",
@@ -17,7 +17,7 @@ const categoryBarClasses: Record<string, string> = {
 
 const categoryTextClasses: Record<string, string> = {
   주거안전: "text-sky-deep",
-  귀가안전: "text-lavender-deep",
+  귀가안전: "text-lav-deep",
   생활지원: "text-rose-deep",
   건강: "text-coral-deep",
   커뮤니티: "text-peach-deep",
@@ -53,11 +53,11 @@ export function MapSidePanel({ selectedRegion, regionId }: MapSidePanelProps) {
                     <Icon className="h-4 w-4 text-muted-foreground" />
                     {cat}
                   </span>
-                  <span className={`font-semibold ${categoryTextClasses[cat] || "text-sky-deep"}`}>{count}건</span>
+                  <span className={`font-semibold ${categoryTextClasses[cat] || "text-rose-deep"}`}>{count}건</span>
                 </div>
                 <div className="h-2.5 w-full overflow-hidden rounded-full bg-muted">
                   <div
-                    className={`h-full rounded-full ${categoryBarClasses[cat] || "bg-sky-mid"} transition-all duration-700`}
+                    className={`h-full rounded-full ${categoryBarClasses[cat] || "bg-rose-mid"} transition-all duration-700`}
                     style={{ width: `${(count / maxVal) * 100}%` }}
                   />
                 </div>
@@ -76,7 +76,7 @@ export function MapSidePanel({ selectedRegion, regionId }: MapSidePanelProps) {
   return (
     <div className="flex h-full flex-col rounded-2xl border bg-card p-4 shadow-card md:p-6">
       <div className="mb-1">
-        <p className="text-xs font-medium text-sky-deep">선택된 지역</p>
+        <p className="text-xs font-medium text-rose-mid">선택된 지역</p>
         <h3 className="text-lg font-bold text-card-foreground md:text-xl">{selectedRegion.name}</h3>
       </div>
       <div className="mb-4 flex items-baseline gap-1 md:mb-5">
@@ -94,14 +94,14 @@ export function MapSidePanel({ selectedRegion, regionId }: MapSidePanelProps) {
                 <Icon className="h-4 w-4 text-muted-foreground" />
                 {cat}
               </span>
-              <span className={`text-sm font-semibold ${categoryTextClasses[cat] || "text-sky-deep"}`}>{count}건</span>
+              <span className={`text-sm font-semibold ${categoryTextClasses[cat] || "text-rose-deep"}`}>{count}건</span>
             </div>
           );
         })}
       </div>
 
       <Link to={`/region/${encodeURIComponent(selectedRegion.name)}`} className="mt-4 md:mt-5">
-        <Button className="w-full gap-2 rounded-xl bg-gradient-primary text-white hover:opacity-90 min-h-[48px]">
+        <Button className="w-full gap-2 rounded-xl bg-gradient-cta text-white hover:opacity-90 min-h-[48px]">
           이 지역 전체 보기
           <ArrowRight className="h-4 w-4" />
         </Button>

@@ -10,6 +10,24 @@ import { useRegionPrograms } from "@/hooks/usePrograms";
 
 const categories = ["전체", "주거안전", "귀가안전", "생활지원", "건강", "커뮤니티"];
 
+const categoryChipActive: Record<string, string> = {
+  전체: "bg-rose-mid text-white",
+  주거안전: "bg-sky-mid text-white",
+  귀가안전: "bg-lav-mid text-white",
+  생활지원: "bg-rose-mid text-white",
+  건강: "bg-coral-mid text-white",
+  커뮤니티: "bg-peach-mid text-white",
+};
+
+const categoryChipInactive: Record<string, string> = {
+  전체: "border bg-card text-muted-foreground hover:bg-rose-light hover:text-rose-deep",
+  주거안전: "border bg-card text-muted-foreground hover:bg-sky-light hover:text-sky-deep",
+  귀가안전: "border bg-card text-muted-foreground hover:bg-lav-light hover:text-lav-deep",
+  생활지원: "border bg-card text-muted-foreground hover:bg-rose-light hover:text-rose-deep",
+  건강: "border bg-card text-muted-foreground hover:bg-coral-light hover:text-coral-deep",
+  커뮤니티: "border bg-card text-muted-foreground hover:bg-peach-light hover:text-peach-deep",
+};
+
 const gapAlerts: Record<string, string> = {
   "대전광역시": "병원동행서비스, 주택관리서비스",
   "부산광역시": "안심택시, 커뮤니티 프로그램",
@@ -49,15 +67,15 @@ const RegionDetail = () => {
       <Navbar />
       <main className="flex-1">
         <div className="container py-6 md:py-12">
-          <Link to="/" className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary min-h-[44px] md:mb-6">
+          <Link to="/" className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-rose-deep min-h-[44px] md:mb-6">
             <ArrowLeft className="h-4 w-4" /> 전국 대시보드
           </Link>
 
-          <h1 className="mb-3 text-2xl font-bold text-secondary md:mb-4 md:text-3xl">{regionCity} 지원제도 현황</h1>
+          <h1 className="mb-3 text-2xl font-bold text-foreground md:mb-4 md:text-3xl">{regionCity} 지원제도 현황</h1>
 
           <div className="mb-4 flex flex-wrap items-center gap-3 md:mb-6">
             <span className="text-sm text-muted-foreground">
-              총 <span className="font-bold text-primary">{programs.length}</span>개 제도
+              총 <span className="font-bold text-rose-deep">{programs.length}</span>개 제도
             </span>
             {Object.entries(categoryCounts).map(([cat, count]) => {
               const Icon = categoryIcons[cat];
@@ -70,15 +88,14 @@ const RegionDetail = () => {
           </div>
 
           {regionCity !== "서울특별시" && gap && (
-            <div className="mb-4 flex items-start gap-3 rounded-xl border border-accent bg-accent/10 p-4 md:mb-6">
-              <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
+            <div className="mb-4 flex items-start gap-3 rounded-2xl border border-peach bg-peach-light p-4 md:mb-6">
+              <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-peach-deep" />
               <p className="text-sm text-card-foreground">
                 <span className="font-semibold">서울 대비 부족한 영역:</span> {gap}
               </p>
             </div>
           )}
 
-          {/* Category filter — horizontal scroll on mobile */}
           <div className="mb-4 -mx-4 px-4 md:mx-0 md:px-0 md:mb-6">
             <div className="flex gap-2 overflow-x-auto pb-1 md:flex-wrap md:overflow-x-visible md:pb-0 scrollbar-hide">
               {categories.map((cat) => (
@@ -87,8 +104,8 @@ const RegionDetail = () => {
                   onClick={() => setActiveCategory(cat)}
                   className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors min-h-[40px] active:scale-95 ${
                     activeCategory === cat
-                      ? "bg-primary text-primary-foreground"
-                      : "border bg-card text-muted-foreground hover:bg-primary-light hover:text-primary"
+                      ? categoryChipActive[cat]
+                      : categoryChipInactive[cat]
                   }`}
                 >
                   {cat}
@@ -98,7 +115,7 @@ const RegionDetail = () => {
           </div>
 
           {isLoading ? (
-            <div className="rounded-xl border bg-card p-12 text-center text-muted-foreground">데이터를 불러오는 중...</div>
+            <div className="rounded-2xl border bg-card p-12 text-center text-muted-foreground">데이터를 불러오는 중...</div>
           ) : filtered.length > 0 ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
               {filtered.map((p) => (
@@ -106,16 +123,16 @@ const RegionDetail = () => {
               ))}
             </div>
           ) : (
-            <div className="rounded-xl border bg-card p-12 text-center">
+            <div className="rounded-2xl border bg-card p-12 text-center">
               <p className="text-muted-foreground">해당 카테고리에 등록된 제도가 없습니다.</p>
             </div>
           )}
 
-          <div className="mt-8 rounded-xl bg-secondary p-5 text-center md:mt-12 md:p-8">
-            <p className="mb-4 text-sm font-medium text-secondary-foreground">
+          <div className="mt-8 rounded-2xl bg-gradient-cta p-5 text-center md:mt-12 md:p-8">
+            <p className="mb-4 text-sm font-medium text-white">
               이 지역 지원에 대해 더 궁금하면 AI에게 물어보세요
             </p>
-            <form onSubmit={handleAiSearch} className="mx-auto flex max-w-lg items-center gap-2 rounded-lg bg-card p-2">
+            <form onSubmit={handleAiSearch} className="mx-auto flex max-w-lg items-center gap-2 rounded-xl bg-card p-2">
               <Search className="ml-2 h-5 w-5 shrink-0 text-muted-foreground" />
               <Input
                 value={aiQuery}
@@ -123,7 +140,7 @@ const RegionDetail = () => {
                 placeholder={`${regionCity} 지원제도에 대해 물어보세요`}
                 className="border-0 bg-transparent shadow-none focus-visible:ring-0 min-h-[44px]"
               />
-              <Button type="submit" className="shrink-0 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 min-h-[44px]">
+              <Button type="submit" className="shrink-0 rounded-xl bg-rose-mid text-white hover:bg-rose-deep min-h-[44px]">
                 질문하기
               </Button>
             </form>

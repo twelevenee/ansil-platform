@@ -10,7 +10,7 @@ export function HeroSection() {
   const stats = [
     { icon: Heart, value: "390만+", label: "여성 1인가구", color: "text-rose-deep" },
     { icon: Shield, value: `${totalPrograms}+`, label: "전국 지원제도", color: "text-sky-deep" },
-    { icon: MapPin, value: `${totalRegions}개`, label: "광역시·도 커버", color: "text-lavender-deep" },
+    { icon: MapPin, value: `${totalRegions}개`, label: "광역시·도 커버", color: "text-lav-deep" },
   ];
 
   return (
@@ -20,7 +20,7 @@ export function HeroSection() {
 
       <div className="container relative">
         <div className="mx-auto max-w-2xl text-center">
-          <h1 className="mb-4 text-3xl font-bold leading-tight text-secondary md:text-4xl">
+          <h1 className="mb-4 text-3xl font-bold leading-tight text-foreground md:text-4xl">
             여성 1인가구 안심지원,
             <br />
             한눈에 보세요
