@@ -6,9 +6,19 @@ import { Input } from "@/components/ui/input";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ProgramCard, categoryIcons } from "@/components/ProgramCard";
-import { regionData, mockPrograms, gapAlerts } from "@/data/mockData";
+import { useRegionPrograms } from "@/hooks/usePrograms";
 
 const categories = ["전체", "주거안전", "귀가안전", "생활지원", "건강", "커뮤니티"];
+
+const gapAlerts: Record<string, string> = {
+  "대전광역시": "병원동행서비스, 주택관리서비스",
+  "부산광역시": "안심택시, 커뮤니티 프로그램",
+  "대구광역시": "귀가동행서비스, 긴급돌봄",
+  "인천광역시": "심리상담, 주택관리서비스",
+  "광주광역시": "안심택시, 병원동행서비스",
+  "울산광역시": "커뮤니티 프로그램, 심리상담",
+  "경기도": "긴급돌봄, 주택관리서비스",
+};
 
 const RegionDetail = () => {
   const { cityName } = useParams<{ cityName: string }>();
@@ -16,26 +26,22 @@ const RegionDetail = () => {
   const [activeCategory, setActiveCategory] = useState("전체");
   const [aiQuery, setAiQuery] = useState("");
 
-  const region = cityName ? regionData[cityName] : null;
-  const programs = cityName ? mockPrograms[cityName] || [] : [];
-  const gap = cityName ? gapAlerts[cityName] : null;
+  const regionCity = cityName ? decodeURIComponent(cityName) : "";
+  const { data: programs = [], isLoading } = useRegionPrograms(regionCity);
+
   const filtered = activeCategory === "전체" ? programs : programs.filter((p) => p.category === activeCategory);
 
-  if (!region) {
-    return (
-      <div className="flex min-h-screen flex-col bg-background">
-        <Navbar />
-        <main className="flex flex-1 items-center justify-center">
-          <p className="text-muted-foreground">지역을 찾을 수 없습니다.</p>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
+  const gap = gapAlerts[regionCity];
+
+  // Category counts
+  const categoryCounts: Record<string, number> = {};
+  programs.forEach((p) => {
+    categoryCounts[p.category] = (categoryCounts[p.category] || 0) + 1;
+  });
 
   const handleAiSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    const text = aiQuery.trim() || `${region.name} 지원제도 알려줘`;
+    const text = aiQuery.trim() || `${regionCity} 지원제도 알려줘`;
     navigate(`/chat?q=${encodeURIComponent(text)}`);
   };
 
@@ -48,23 +54,23 @@ const RegionDetail = () => {
             <ArrowLeft className="h-4 w-4" /> 전국 대시보드
           </Link>
 
-          <h1 className="mb-4 text-2xl font-bold text-secondary md:text-3xl">{region.name} 지원제도 현황</h1>
+          <h1 className="mb-4 text-2xl font-bold text-secondary md:text-3xl">{regionCity} 지원제도 현황</h1>
 
           <div className="mb-6 flex flex-wrap items-center gap-3">
             <span className="text-sm text-muted-foreground">
-              총 <span className="font-bold text-primary">{region.programCount}</span>개 제도
+              총 <span className="font-bold text-primary">{programs.length}</span>개 제도
             </span>
-            {Object.entries(region.categories).map(([cat, count]) => {
+            {Object.entries(categoryCounts).map(([cat, count]) => {
               const Icon = categoryIcons[cat];
-              return (
+              return Icon ? (
                 <span key={cat} className="flex items-center gap-1 text-xs text-muted-foreground">
                   <Icon className="h-3.5 w-3.5" /> {cat} {count}
                 </span>
-              );
+              ) : null;
             })}
           </div>
 
-          {cityName !== "seoul" && gap && (
+          {regionCity !== "서울특별시" && gap && (
             <div className="mb-6 flex items-start gap-3 rounded-xl border border-accent bg-accent/10 p-4">
               <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
               <p className="text-sm text-card-foreground">
@@ -89,7 +95,9 @@ const RegionDetail = () => {
             ))}
           </div>
 
-          {filtered.length > 0 ? (
+          {isLoading ? (
+            <div className="rounded-xl border bg-card p-12 text-center text-muted-foreground">데이터를 불러오는 중...</div>
+          ) : filtered.length > 0 ? (
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {filtered.map((p) => (
                 <ProgramCard key={p.id} program={p} />
@@ -110,7 +118,7 @@ const RegionDetail = () => {
               <Input
                 value={aiQuery}
                 onChange={(e) => setAiQuery(e.target.value)}
-                placeholder={`${region.name} 지원제도에 대해 물어보세요`}
+                placeholder={`${regionCity} 지원제도에 대해 물어보세요`}
                 className="border-0 bg-transparent shadow-none focus-visible:ring-0"
               />
               <Button type="submit" className="shrink-0 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90">

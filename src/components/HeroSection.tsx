@@ -1,15 +1,20 @@
 import { Heart, Shield, MapPin } from "lucide-react";
-
-const stats = [
-  { icon: Heart, value: "390만+", label: "여성 1인가구" },
-  { icon: Shield, value: "200+", label: "전국 지원제도" },
-  { icon: MapPin, value: "5개", label: "광역시 커버" },
-];
+import { useRegionStats } from "@/hooks/usePrograms";
 
 export function HeroSection() {
+  const { data } = useRegionStats();
+
+  const totalPrograms = data?.totalPrograms || 0;
+  const totalRegions = data?.stats ? Object.keys(data.stats).length : 0;
+
+  const stats = [
+    { icon: Heart, value: "390만+", label: "여성 1인가구" },
+    { icon: Shield, value: `${totalPrograms}+`, label: "전국 지원제도" },
+    { icon: MapPin, value: `${totalRegions}개`, label: "광역시·도 커버" },
+  ];
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-primary-light to-background py-16 md:py-24">
-      {/* Subtle decorative blobs */}
       <div className="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
       <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-accent/8 blur-3xl" />
 
@@ -24,7 +29,6 @@ export function HeroSection() {
             전국 지자체 지원제도를 모아서, AI가 나에게 맞는 걸 찾아드려요
           </p>
 
-          {/* Stat cards */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {stats.map((stat) => (
               <div
