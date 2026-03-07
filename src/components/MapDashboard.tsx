@@ -7,7 +7,6 @@ export function MapDashboard() {
   const [selectedRegionId, setSelectedRegionId] = useState<string | null>(null);
   const { data, isLoading } = useRegionStats();
 
-  // Map region_city names to map IDs
   const cityToId: Record<string, string> = {
     "서울특별시": "seoul", "부산광역시": "busan", "대구광역시": "daegu",
     "인천광역시": "incheon", "광주광역시": "gwangju", "대전광역시": "daejeon",
@@ -21,7 +20,6 @@ export function MapDashboard() {
     Object.entries(cityToId).map(([k, v]) => [v, k])
   );
 
-  // Build programCounts for map
   const programCounts: Record<string, number> = {};
   if (data?.stats) {
     for (const [city, stat] of Object.entries(data.stats)) {
@@ -47,7 +45,7 @@ export function MapDashboard() {
 
         <div className="flex flex-col gap-6 lg:flex-row">
           <div className="w-full lg:w-[65%]">
-            <div className="rounded-xl border bg-card p-4 shadow-sm md:p-6">
+            <div className="rounded-2xl border bg-card p-4 shadow-card md:p-6">
               {isLoading ? (
                 <div className="flex h-64 items-center justify-center text-muted-foreground">데이터를 불러오는 중...</div>
               ) : (

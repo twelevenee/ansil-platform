@@ -1,6 +1,5 @@
 import { useState, useCallback, useRef } from "react";
 
-// Simplified SVG paths for South Korea's 17 regions
 const regionPaths: { id: string; d: string; cx: number; cy: number }[] = [
   { id: "seoul", d: "M185,165 L200,158 L215,162 L218,175 L210,185 L195,188 L185,180Z", cx: 200, cy: 173 },
   { id: "incheon", d: "M160,160 L175,155 L185,165 L185,180 L175,190 L162,185 L155,172Z", cx: 170, cy: 173 },
@@ -53,7 +52,6 @@ export function KoreaMap({ selectedRegion, onRegionClick, programCounts }: Korea
   };
 
   const handleRegionClick = useCallback((regionId: string) => {
-    // On mobile, first tap shows tooltip, second tap selects
     const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
     if (isTouchDevice && tappedRegion !== regionId) {
       setTappedRegion(regionId);
@@ -67,6 +65,10 @@ export function KoreaMap({ selectedRegion, onRegionClick, programCounts }: Korea
 
   const activeTooltip = hoveredRegion || tappedRegion;
 
+  // Map fill uses a gradient-like color interpolation based on intensity
+  // Using lavender hue for the choropleth
+  const getFill = (intensity: number) => `hsla(322, 28%, 66%, ${intensity})`;
+
   return (
     <div className="relative w-full touch-manipulation">
       <svg
@@ -74,7 +76,6 @@ export function KoreaMap({ selectedRegion, onRegionClick, programCounts }: Korea
         className="w-full h-auto"
         onMouseMove={handleMouseMove}
       >
-        {/* Background */}
         <rect x="80" y="70" width="320" height="420" fill="transparent" />
 
         {regionPaths.map((region) => {
@@ -87,15 +88,14 @@ export function KoreaMap({ selectedRegion, onRegionClick, programCounts }: Korea
             <g key={region.id}>
               <path
                 d={region.d}
-                fill={`hsla(5, 72%, 66%, ${intensity})`}
-                stroke={isSelected ? "hsl(213, 52%, 25%)" : isHovered ? "hsl(5, 72%, 56%)" : "hsl(var(--border))"}
+                fill={getFill(intensity)}
+                stroke={isSelected ? "#4A7EC2" : isHovered ? "#C48DB0" : "hsl(var(--border))"}
                 strokeWidth={isSelected ? 2.5 : isHovered ? 2 : 1}
                 className="cursor-pointer transition-all duration-200"
                 onMouseEnter={() => setHoveredRegion(region.id)}
                 onMouseLeave={() => setHoveredRegion(null)}
                 onClick={() => handleRegionClick(region.id)}
               />
-              {/* Invisible larger touch target for small regions */}
               <circle
                 cx={region.cx}
                 cy={region.cy}
@@ -104,13 +104,12 @@ export function KoreaMap({ selectedRegion, onRegionClick, programCounts }: Korea
                 className="md:hidden cursor-pointer"
                 onClick={() => handleRegionClick(region.id)}
               />
-              {/* Count circle */}
               <circle
                 cx={region.cx}
                 cy={region.cy}
                 r={count > 20 ? 14 : count > 10 ? 12 : 10}
                 fill="hsl(var(--card))"
-                stroke={isSelected ? "hsl(213, 52%, 25%)" : "hsl(var(--border))"}
+                stroke={isSelected ? "#4A7EC2" : "hsl(var(--border))"}
                 strokeWidth={isSelected ? 1.5 : 0.8}
                 className="pointer-events-none"
                 opacity={0.95}
@@ -122,7 +121,7 @@ export function KoreaMap({ selectedRegion, onRegionClick, programCounts }: Korea
                 dominantBaseline="central"
                 fontSize={count > 20 ? 10 : 9}
                 fontWeight="700"
-                fill="hsl(5, 72%, 66%)"
+                fill="#A06B8E"
                 className="pointer-events-none select-none"
               >
                 {count}
@@ -132,10 +131,9 @@ export function KoreaMap({ selectedRegion, onRegionClick, programCounts }: Korea
         })}
       </svg>
 
-      {/* Tooltip — hover on desktop, tap on mobile */}
       {activeTooltip && (
         <div
-          className={`pointer-events-none absolute z-10 rounded-lg bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground shadow-lg ${
+          className={`pointer-events-none absolute z-10 rounded-xl bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground shadow-lg ${
             tappedRegion && !hoveredRegion
               ? "left-1/2 -translate-x-1/2 bottom-2"
               : ""

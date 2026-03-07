@@ -8,15 +8,15 @@ export function HeroSection() {
   const totalRegions = data?.stats ? Object.keys(data.stats).length : 0;
 
   const stats = [
-    { icon: Heart, value: "390만+", label: "여성 1인가구" },
-    { icon: Shield, value: `${totalPrograms}+`, label: "전국 지원제도" },
-    { icon: MapPin, value: `${totalRegions}개`, label: "광역시·도 커버" },
+    { icon: Heart, value: "390만+", label: "여성 1인가구", color: "text-rose-deep" },
+    { icon: Shield, value: `${totalPrograms}+`, label: "전국 지원제도", color: "text-sky-deep" },
+    { icon: MapPin, value: `${totalRegions}개`, label: "광역시·도 커버", color: "text-lavender-deep" },
   ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-primary-light to-background py-16 md:py-24">
-      <div className="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
-      <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-accent/8 blur-3xl" />
+    <section className="relative overflow-hidden bg-gradient-hero py-16 md:py-24">
+      <div className="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-sky-light/60 blur-3xl" />
+      <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-peach-light/60 blur-3xl" />
 
       <div className="container relative">
         <div className="mx-auto max-w-2xl text-center">
@@ -33,10 +33,10 @@ export function HeroSection() {
             {stats.map((stat) => (
               <div
                 key={stat.label}
-                className="group rounded-xl bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
+                className="group rounded-2xl bg-card p-6 shadow-card transition-all hover:-translate-y-1 hover:shadow-card-hover"
               >
-                <stat.icon className="mx-auto mb-3 h-7 w-7 text-primary" />
-                <p className="text-2xl font-bold text-primary md:text-3xl">
+                <stat.icon className={`mx-auto mb-3 h-7 w-7 ${stat.color}`} />
+                <p className={`text-2xl font-bold ${stat.color} md:text-3xl`}>
                   {stat.value}
                 </p>
                 <p className="mt-1 text-sm text-muted-foreground">

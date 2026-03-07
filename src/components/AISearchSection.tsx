@@ -23,17 +23,17 @@ export function AISearchSection() {
   };
 
   return (
-    <section className="bg-secondary py-12 md:py-20">
+    <section className="bg-gradient-ai py-12 md:py-20">
       <div className="container mx-auto max-w-2xl px-4 text-center">
-        <MessageCircle className="mx-auto mb-4 h-8 w-8 text-primary" />
-        <h2 className="mb-2 text-xl font-bold text-secondary-foreground md:text-3xl">
+        <MessageCircle className="mx-auto mb-4 h-8 w-8 text-white" />
+        <h2 className="mb-2 text-xl font-bold text-white md:text-3xl">
           나에게 맞는 지원제도, AI가 찾아드려요
         </h2>
-        <p className="mb-6 text-sm text-secondary-foreground/70 md:mb-8">
+        <p className="mb-6 text-sm text-white/70 md:mb-8">
           궁금한 점을 자유롭게 물어보세요
         </p>
 
-        <form onSubmit={handleSubmit} className="mb-6 flex items-center gap-2 rounded-lg bg-card p-2 shadow-lg">
+        <form onSubmit={handleSubmit} className="mb-6 flex items-center gap-2 rounded-xl bg-card p-2 shadow-card-hover">
           <Search className="ml-2 h-5 w-5 shrink-0 text-muted-foreground" />
           <Input
             value={query}
@@ -41,7 +41,7 @@ export function AISearchSection() {
             placeholder="어떤 도움이 필요하신가요?"
             className="border-0 bg-transparent text-base shadow-none focus-visible:ring-0 min-h-[44px]"
           />
-          <Button type="submit" className="shrink-0 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 min-h-[44px]">
+          <Button type="submit" className="shrink-0 rounded-xl bg-gradient-primary text-white hover:opacity-90 min-h-[44px]">
             검색
           </Button>
         </form>
@@ -51,7 +51,7 @@ export function AISearchSection() {
             <button
               key={q}
               onClick={() => go(q)}
-              className="rounded-full border border-secondary-foreground/20 bg-card px-4 py-2.5 text-sm text-card-foreground transition-all hover:-translate-y-0.5 hover:shadow-md active:scale-95 min-h-[44px]"
+              className="rounded-full border border-white/30 bg-white/15 px-4 py-2.5 text-sm text-white backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:bg-white/25 hover:shadow-md active:scale-95 min-h-[44px]"
             >
               {q}
             </button>

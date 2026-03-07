@@ -56,10 +56,10 @@ function mockAiResponse(userText: string): ChatMessage {
 function TypingIndicator() {
   return (
     <div className="flex items-start gap-2">
-      <div className="flex items-center gap-1 rounded-2xl rounded-tl-sm bg-card border px-4 py-3 shadow-sm">
-        <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground/40" style={{ animationDelay: "0ms" }} />
-        <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground/40" style={{ animationDelay: "150ms" }} />
-        <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground/40" style={{ animationDelay: "300ms" }} />
+      <div className="flex items-center gap-1 rounded-2xl rounded-tl-sm bg-card border px-4 py-3 shadow-card">
+        <span className="h-2 w-2 animate-bounce rounded-full bg-lavender-mid/40" style={{ animationDelay: "0ms" }} />
+        <span className="h-2 w-2 animate-bounce rounded-full bg-rose-mid/40" style={{ animationDelay: "150ms" }} />
+        <span className="h-2 w-2 animate-bounce rounded-full bg-coral-mid/40" style={{ animationDelay: "300ms" }} />
       </div>
     </div>
   );
@@ -77,30 +77,28 @@ function MessageBubble({
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div className={`max-w-[85%] md:max-w-[75%] space-y-3`}>
-        {/* Bubble */}
         <div
           className={`rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap ${
             isUser
-              ? "rounded-tr-sm bg-primary-light text-card-foreground"
-              : "rounded-tl-sm border bg-card text-card-foreground shadow-sm"
+              ? "rounded-tr-sm bg-sky-light text-card-foreground"
+              : "rounded-tl-sm border bg-card text-card-foreground shadow-card"
           }`}
         >
           {message.text}
         </div>
 
-        {/* Program recommendation cards */}
         {message.programs && (
           <div className="space-y-2">
             {message.programs.map((p) => (
-              <div key={p.name} className="flex items-center justify-between gap-2 rounded-xl border bg-card p-3 shadow-sm">
+              <div key={p.name} className="flex items-center justify-between gap-2 rounded-2xl border bg-card p-3 shadow-card">
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-card-foreground">{p.name}</p>
                   <p className="text-xs text-muted-foreground">
-                    {p.region} · <span className={p.cost === "무료" ? "text-success" : "text-muted-foreground"}>{p.cost}</span>
+                    {p.region} · <span className={p.cost === "무료" ? "text-sky-deep" : "text-peach-deep"}>{p.cost}</span>
                   </p>
                 </div>
                 <a href={p.url} target="_blank" rel="noopener noreferrer">
-                  <Button size="sm" variant="outline" className="shrink-0 gap-1 text-xs text-primary hover:bg-primary-light min-h-[44px] min-w-[44px]">
+                  <Button size="sm" variant="outline" className="shrink-0 gap-1 text-xs text-sky-deep hover:bg-sky-light min-h-[44px] min-w-[44px] rounded-xl">
                     신청 <ExternalLink className="h-3 w-3" />
                   </Button>
                 </a>
@@ -109,26 +107,24 @@ function MessageBubble({
           </div>
         )}
 
-        {/* Disclaimer */}
         {message.disclaimer && (
           <p className="text-xs text-muted-foreground">{message.disclaimer}</p>
         )}
 
-        {/* Feedback buttons — 44px touch targets */}
         {message.role === "ai" && message.id !== "welcome" && onFeedback && (
           <div className="flex items-center gap-1">
             <button
               onClick={() => onFeedback(message.id, "up")}
-              className={`rounded-md p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors ${
-                message.feedback === "up" ? "bg-success/10 text-success" : "text-muted-foreground/40 hover:text-muted-foreground"
+              className={`rounded-xl p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors ${
+                message.feedback === "up" ? "bg-sky-light text-sky-deep" : "text-muted-foreground/40 hover:text-muted-foreground"
               }`}
             >
               <ThumbsUp className="h-4 w-4" />
             </button>
             <button
               onClick={() => onFeedback(message.id, "down")}
-              className={`rounded-md p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors ${
-                message.feedback === "down" ? "bg-destructive/10 text-destructive" : "text-muted-foreground/40 hover:text-muted-foreground"
+              className={`rounded-xl p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors ${
+                message.feedback === "down" ? "bg-coral-light text-coral-deep" : "text-muted-foreground/40 hover:text-muted-foreground"
               }`}
             >
               <ThumbsDown className="h-4 w-4" />
@@ -158,13 +154,10 @@ const ChatPage = () => {
     scrollToBottom();
   }, [messages, isTyping]);
 
-  // Handle mobile viewport resize (keyboard open/close)
   useEffect(() => {
     const handleResize = () => {
-      // Scroll to bottom when virtual keyboard appears
       setTimeout(scrollToBottom, 100);
     };
-
     if (window.visualViewport) {
       window.visualViewport.addEventListener("resize", handleResize);
       return () => window.visualViewport?.removeEventListener("resize", handleResize);
@@ -186,7 +179,6 @@ const ChatPage = () => {
       setChipsVisible(false);
       setIsTyping(true);
 
-      // Blur input on mobile to close keyboard after sending
       if (window.matchMedia("(pointer: coarse)").matches) {
         inputRef.current?.blur();
       }
@@ -199,7 +191,6 @@ const ChatPage = () => {
     [isTyping]
   );
 
-  // Auto-send query param
   useEffect(() => {
     const q = searchParams.get("q");
     if (q && !autoSentRef.current) {
@@ -223,7 +214,6 @@ const ChatPage = () => {
     <div className="flex h-[100dvh] flex-col bg-background">
       <Navbar />
 
-      {/* Chat area */}
       <div className="flex flex-1 flex-col overflow-hidden">
         <div className="flex-1 overflow-y-auto overscroll-contain">
           <div className="mx-auto max-w-3xl space-y-4 px-4 py-4 pb-2 md:py-6">
@@ -231,14 +221,13 @@ const ChatPage = () => {
               <MessageBubble key={msg.id} message={msg} onFeedback={handleFeedback} />
             ))}
 
-            {/* Example chips — only after welcome, before first user message */}
             {chipsVisible && messages.length === 1 && (
               <div className="flex flex-wrap gap-2 pl-0">
                 {exampleChips.map((chip) => (
                   <button
                     key={chip}
                     onClick={() => sendMessage(chip)}
-                    className="rounded-full border bg-card px-3.5 py-2.5 text-xs text-card-foreground transition-all hover:-translate-y-0.5 hover:shadow-md active:scale-95 min-h-[44px]"
+                    className="rounded-full border bg-card px-3.5 py-2.5 text-xs text-card-foreground transition-all hover:-translate-y-0.5 hover:shadow-card-hover active:scale-95 min-h-[44px]"
                   >
                     {chip}
                   </button>
@@ -251,7 +240,6 @@ const ChatPage = () => {
           </div>
         </div>
 
-        {/* Input — sticky bottom with safe area */}
         <div className="border-t bg-card pb-[env(safe-area-inset-bottom)]">
           <form onSubmit={handleSubmit} className="mx-auto flex max-w-3xl items-center gap-2 px-4 py-3">
             <input
@@ -259,7 +247,7 @@ const ChatPage = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="궁금한 점을 물어보세요..."
-              className="flex-1 rounded-lg border bg-background px-4 py-3 text-base outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary min-h-[44px]"
+              className="flex-1 rounded-xl border bg-background px-4 py-3 text-base outline-none transition-colors placeholder:text-muted-foreground focus:border-sky-mid focus:ring-1 focus:ring-sky-mid min-h-[44px]"
               disabled={isTyping}
               enterKeyHint="send"
               autoComplete="off"
@@ -268,7 +256,7 @@ const ChatPage = () => {
               type="submit"
               size="icon"
               disabled={!input.trim() || isTyping}
-              className="shrink-0 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 min-h-[44px] min-w-[44px]"
+              className="shrink-0 rounded-xl bg-gradient-primary text-white hover:opacity-90 min-h-[44px] min-w-[44px]"
             >
               <Send className="h-4 w-4" />
             </Button>
