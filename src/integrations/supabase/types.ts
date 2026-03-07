@@ -14,6 +14,104 @@ export type Database = {
   }
   public: {
     Tables: {
+      chat_logs: {
+        Row: {
+          created_at: string
+          id: string
+          matched_program_ids: string[] | null
+          message: string
+          role: string
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          matched_program_ids?: string[] | null
+          message: string
+          role: string
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          matched_program_ids?: string[] | null
+          message?: string
+          role?: string
+          session_id?: string
+        }
+        Relationships: []
+      }
+      feedback: {
+        Row: {
+          chat_log_id: string | null
+          comment: string | null
+          created_at: string
+          id: string
+          program_id: string | null
+          rating: number | null
+        }
+        Insert: {
+          chat_log_id?: string | null
+          comment?: string | null
+          created_at?: string
+          id?: string
+          program_id?: string | null
+          rating?: number | null
+        }
+        Update: {
+          chat_log_id?: string | null
+          comment?: string | null
+          created_at?: string
+          id?: string
+          program_id?: string | null
+          rating?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedback_chat_log_id_fkey"
+            columns: ["chat_log_id"]
+            isOneToOne: false
+            referencedRelation: "chat_logs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feedback_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      program_embeddings: {
+        Row: {
+          content: string
+          created_at: string
+          embedding: string | null
+          id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          embedding?: string | null
+          id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          embedding?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "program_embeddings_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       programs: {
         Row: {
           apply_period: string | null
@@ -88,7 +186,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      match_programs: {
+        Args: {
+          match_count?: number
+          match_threshold?: number
+          query_embedding: string
+        }
+        Returns: {
+          content: string
+          id: string
+          similarity: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
