@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { ProgramCard, categoryIcons } from "@/components/ProgramCard";
 import { useRegionPrograms } from "@/hooks/usePrograms";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { RegionRadarChart } from "@/components/RegionRadarChart";
 
 const categories = ["전체", "주거안전", "귀가안전", "생활지원", "건강", "커뮤니티"];
 
