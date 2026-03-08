@@ -150,6 +150,18 @@ const ko = {
   "analytics.source": "데이터 출처: 공공데이터포털, 각 지자체 홈페이지, 찾기쉬운 생활법령정보",
   "analytics.updated": "최종 업데이트: 2026년 3월",
 
+  // Safety Facilities
+  "safety.tab_title": "안심시설",
+  "safety.tab_programs": "지원제도",
+  "safety.lockers": "안심택배함",
+  "safety.guardians": "안심지킴이집",
+  "safety.operating": "운영중",
+  "safety.closed": "미운영",
+  "safety.weekday_hours": "평일",
+  "safety.total_facilities": "안심시설",
+  "safety.places_suffix": "곳",
+  "safety.no_facilities": "이 지역에 등록된 안심시설이 없습니다.",
+
   // NotFound
   "notfound.title": "404",
   "notfound.message": "페이지를 찾을 수 없습니다",
