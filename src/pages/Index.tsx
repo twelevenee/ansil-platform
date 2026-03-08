@@ -10,8 +10,8 @@ const Index = () => {
       <Navbar />
       <main className="flex-1">
         <HeroSection />
-        <MapDashboard />
         <AISearchSection />
+        <MapDashboard />
       </main>
       <Footer />
     </div>
