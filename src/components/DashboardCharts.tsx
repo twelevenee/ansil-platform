@@ -170,7 +170,7 @@ export function DashboardCharts() {
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={stackedData} margin={{ left: 10, right: 10, top: 10, bottom: 30 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                        <XAxis dataKey="name" tick={{ fontSize: 10, angle: -30 }} interval={0} height={50} />
+                        <XAxis dataKey="name" tick={{ fontSize: 10 }} interval={0} height={50} />
                         <YAxis tick={{ fontSize: 11 }} />
                         <Tooltip />
                         <Legend wrapperStyle={{ fontSize: 11 }} />
