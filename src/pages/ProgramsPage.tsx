@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer";
 import { ProgramCard } from "@/components/ProgramCard";
 import { PortalCards } from "@/components/PortalCards";
 import { usePrograms, useRegionCities } from "@/hooks/usePrograms";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const categoryList = [
   { key: "주거안전", icon: Home },
@@ -37,6 +38,7 @@ const categoryChipInactive: Record<string, string> = {
 };
 
 const ProgramsPage = () => {
+  const { t } = useLanguage();
   const [regionFilter, setRegionFilter] = useState("all");
   const [activeCategories, setActiveCategories] = useState<string[]>([]);
   const [methodFilter, setMethodFilter] = useState("전체");
@@ -72,7 +74,6 @@ const ProgramsPage = () => {
         return method.includes(methodFilter);
       });
     }
-    // Sort: programs with portal_url first
     result = [...result].sort((a, b) => {
       const aHas = a.portal_url ? 0 : 1;
       const bHas = b.portal_url ? 0 : 1;
@@ -93,9 +94,8 @@ const ProgramsPage = () => {
       <Navbar />
       <main className="flex-1">
         <div className="container py-6 md:py-12">
-          <h1 className="mb-4 text-2xl font-bold text-foreground md:mb-6 md:text-3xl">전체 지원제도</h1>
+          <h1 className="mb-4 text-2xl font-bold text-foreground md:mb-6 md:text-3xl">{t("programs.title")}</h1>
 
-          {/* Portal cards */}
           <PortalCards />
 
           <div className="mb-6 space-y-3 rounded-2xl border bg-card p-4 shadow-card md:space-y-4 md:p-5">
@@ -105,7 +105,7 @@ const ProgramsPage = () => {
                 onChange={(e) => setRegionFilter(e.target.value)}
                 className="w-full rounded-xl border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary min-h-[44px] sm:w-48"
               >
-                <option value="all">전체 지역</option>
+                <option value="all">{t("programs.all_regions")}</option>
                 {cities.map((c) => (
                   <option key={c} value={c}>{c}</option>
                 ))}
@@ -117,7 +117,7 @@ const ProgramsPage = () => {
                 className="w-full rounded-xl border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary min-h-[44px] sm:w-36"
               >
                 {applyMethodList.map((m) => (
-                  <option key={m} value={m}>{m === "전체" ? "전체 신청방법" : m}</option>
+                  <option key={m} value={m}>{m === "전체" ? t("programs.all_methods") : m}</option>
                 ))}
               </select>
 
@@ -126,7 +126,7 @@ const ProgramsPage = () => {
                 <Input
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="제도명 또는 내용 검색"
+                  placeholder={t("programs.search_placeholder")}
                   className="pl-9 min-h-[44px] rounded-xl"
                 />
               </div>
@@ -138,7 +138,7 @@ const ProgramsPage = () => {
                 onClick={() => setFiltersExpanded(!filtersExpanded)}
               >
                 <SlidersHorizontal className="h-4 w-4" />
-                필터
+                {t("programs.filter")}
                 {activeFilterCount > 0 && (
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                     {activeFilterCount}
@@ -172,7 +172,7 @@ const ProgramsPage = () => {
                       : "border bg-sky-light text-sky-deep hover:bg-sky-mid/20"
                   }`}
                 >
-                  무료만 보기
+                  {t("programs.free_only")}
                 </button>
                 <button
                   onClick={() => setOpenOnly(!openOnly)}
@@ -182,18 +182,18 @@ const ProgramsPage = () => {
                       : "border bg-rose-light text-rose-deep hover:bg-rose-mid/20"
                   }`}
                 >
-                  신청가능만 보기
+                  {t("programs.open_only")}
                 </button>
               </div>
             </div>
           </div>
 
           <p className="mb-5 text-sm text-muted-foreground">
-            총 <span className="font-bold text-primary">{filtered.length}</span>건의 지원제도
+            {t("programs.total_count")} <span className="font-bold text-primary">{filtered.length}</span>{t("programs.count_suffix")}
           </p>
 
           {isLoading ? (
-            <div className="rounded-2xl border bg-card p-12 text-center text-muted-foreground">데이터를 불러오는 중...</div>
+            <div className="rounded-2xl border bg-card p-12 text-center text-muted-foreground">{t("map.loading")}</div>
           ) : filtered.length > 0 ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
               {filtered.map((p) => (
@@ -202,7 +202,7 @@ const ProgramsPage = () => {
             </div>
           ) : (
             <div className="rounded-2xl border bg-card p-12 text-center">
-              <p className="text-muted-foreground">검색 조건에 맞는 제도가 없습니다.</p>
+              <p className="text-muted-foreground">{t("programs.no_results")}</p>
             </div>
           )}
         </div>

@@ -6,6 +6,7 @@ import { Navbar } from "@/components/Navbar";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import ReactMarkdown from "react-markdown";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface RecommendedProgram {
   id: string;
@@ -30,19 +31,6 @@ interface ChatMessage {
   chat_log_id?: string | null;
 }
 
-const welcomeMessage: ChatMessage = {
-  id: "welcome",
-  role: "assistant",
-  content: "안녕하세요! 여성 1인가구 안심지원 AI **안심이**입니다 🏠\n\n거주 지역과 상황을 알려주시면 맞춤 지원제도를 찾아드릴게요.",
-};
-
-const exampleChips = [
-  "서울에서 받을 수 있는 안심홈 지원은?",
-  "1인가구 생활비 지원 프로그램 알려줘",
-  "야간 귀가 안전 서비스가 뭐가 있어?",
-  "혼자 아플 때 도움받을 수 있는 서비스는?",
-];
-
 const categoryBadgeColors: Record<string, string> = {
   주거안전: "bg-sky-light text-sky-deep",
   귀가안전: "bg-lav-light text-lav-deep",
@@ -60,14 +48,14 @@ function getSessionId(): string {
   return sid;
 }
 
-function TypingIndicator() {
+function TypingIndicator({ label }: { label: string }) {
   return (
     <div className="flex items-start gap-2">
       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-rose-mid to-peach-mid">
         <MessageCircle className="h-4 w-4 text-white" />
       </div>
       <div className="flex items-center gap-1 rounded-2xl rounded-tl-sm border bg-card px-4 py-3 shadow-card">
-        <span className="text-xs text-muted-foreground mr-2">찾고 있어요...</span>
+        <span className="text-xs text-muted-foreground mr-2">{label}</span>
         <span className="h-2 w-2 animate-bounce rounded-full bg-lav-mid" style={{ animationDelay: "0ms" }} />
         <span className="h-2 w-2 animate-bounce rounded-full bg-rose-mid" style={{ animationDelay: "150ms" }} />
         <span className="h-2 w-2 animate-bounce rounded-full bg-peach-mid" style={{ animationDelay: "300ms" }} />
@@ -76,7 +64,7 @@ function TypingIndicator() {
   );
 }
 
-function ProgramCard({ program }: { program: RecommendedProgram }) {
+function ProgramCard({ program, applyLabel, sourceLabel }: { program: RecommendedProgram; applyLabel: string; sourceLabel: string }) {
   const badgeClass = categoryBadgeColors[program.category] || "bg-muted text-muted-foreground";
   const phone = program.contact?.match(/[\d-]{7,}/)?.[0];
 
@@ -99,7 +87,7 @@ function ProgramCard({ program }: { program: RecommendedProgram }) {
         {program.apply_url && (
           <a href={program.apply_url} target="_blank" rel="noopener noreferrer"
             className="inline-flex min-h-[36px] items-center gap-1 rounded-lg bg-rose-mid px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-rose-deep">
-            신청하기 <ExternalLink className="h-3 w-3" />
+            {applyLabel} <ExternalLink className="h-3 w-3" />
           </a>
         )}
         {phone && (
@@ -111,7 +99,7 @@ function ProgramCard({ program }: { program: RecommendedProgram }) {
         {program.source_url && (
           <a href={program.source_url} target="_blank" rel="noopener noreferrer"
             className="text-[10px] text-muted-foreground underline hover:text-foreground">
-            출처
+            {sourceLabel}
           </a>
         )}
       </div>
@@ -122,9 +110,13 @@ function ProgramCard({ program }: { program: RecommendedProgram }) {
 function MessageBubble({
   message,
   onFeedback,
+  applyLabel,
+  sourceLabel,
 }: {
   message: ChatMessage;
   onFeedback?: (id: string, type: "up" | "down") => void;
+  applyLabel: string;
+  sourceLabel: string;
 }) {
   const isUser = message.role === "user";
 
@@ -181,7 +173,7 @@ function MessageBubble({
         {message.recommended_programs && message.recommended_programs.length > 0 && (
           <div className="space-y-2">
             {message.recommended_programs.map((p) => (
-              <ProgramCard key={p.id} program={p} />
+              <ProgramCard key={p.id} program={p} applyLabel={applyLabel} sourceLabel={sourceLabel} />
             ))}
           </div>
         )}
@@ -213,6 +205,14 @@ function MessageBubble({
 
 const ChatPage = () => {
   const [searchParams] = useSearchParams();
+  const { t } = useLanguage();
+
+  const welcomeMessage: ChatMessage = {
+    id: "welcome",
+    role: "assistant",
+    content: t("chat.welcome"),
+  };
+
   const [messages, setMessages] = useState<ChatMessage[]>([welcomeMessage]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -221,6 +221,8 @@ const ChatPage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const autoSentRef = useRef(false);
   const sessionId = useRef(getSessionId());
+
+  const exampleChips = [t("chat.chip1"), t("chat.chip2"), t("chat.chip3"), t("chat.chip4")];
 
   const scrollToBottom = () => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -271,15 +273,15 @@ const ChatPage = () => {
       } catch (e: any) {
         console.error("Chat error:", e);
         toast({
-          title: "오류",
-          description: "죄송합니다. 잠시 후 다시 시도해주세요.",
+          title: t("chat.error_title"),
+          description: t("chat.error"),
           variant: "destructive",
         });
       } finally {
         setIsTyping(false);
       }
     },
-    [isTyping]
+    [isTyping, t]
   );
 
   useEffect(() => {
@@ -320,7 +322,7 @@ const ChatPage = () => {
         <div className="flex-1 overflow-y-auto overscroll-contain">
           <div className="mx-auto max-w-3xl space-y-4 px-4 py-4 pb-2 md:py-6">
             {messages.map((msg) => (
-              <MessageBubble key={msg.id} message={msg} onFeedback={handleFeedback} />
+              <MessageBubble key={msg.id} message={msg} onFeedback={handleFeedback} applyLabel={t("chat.apply")} sourceLabel={t("chat.source")} />
             ))}
 
             {chipsVisible && messages.length === 1 && (
@@ -337,7 +339,7 @@ const ChatPage = () => {
               </div>
             )}
 
-            {isTyping && <TypingIndicator />}
+            {isTyping && <TypingIndicator label={t("chat.typing")} />}
             <div ref={bottomRef} />
           </div>
         </div>
@@ -348,7 +350,7 @@ const ChatPage = () => {
               ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="궁금한 점을 물어보세요..."
+              placeholder={t("chat.placeholder")}
               className="min-h-[44px] flex-1 rounded-xl border bg-background px-4 py-3 text-base outline-none transition-colors placeholder:text-muted-foreground focus:border-rose-mid focus:ring-1 focus:ring-rose-mid"
               disabled={isTyping}
               enterKeyHint="send"
