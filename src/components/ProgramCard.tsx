@@ -57,7 +57,7 @@ export function ProgramCard({ program }: { program: Program }) {
   const portalUrl = (program as any).portal_url as string | null;
 
   return (
-    <div className="flex flex-col rounded-2xl border bg-card shadow-card transition-all hover:-translate-y-1 hover:shadow-card-hover">
+    <div className="group flex flex-col rounded-2xl border bg-card shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card-hover active:scale-[0.98]">
       <div className="flex flex-1 flex-col p-4 md:p-5">
         <div className="mb-3 flex items-center gap-1.5">
           <Icon className="h-3.5 w-3.5 text-muted-foreground" />

@@ -37,10 +37,13 @@ export function HeroSection() {
             {stats.map((stat) => (
               <div
                 key={stat.label}
-                className="group rounded-2xl bg-card p-5 shadow-card transition-all hover:-translate-y-1 hover:shadow-card-hover md:p-6"
+                className="group rounded-2xl bg-card p-5 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card-hover cursor-default md:p-6"
               >
-                <stat.icon className={`mx-auto mb-3 h-7 w-7 ${stat.color}`} />
-                <p className={`text-xl font-bold ${stat.color} md:text-2xl`}>
+                <div className="relative mb-3 mx-auto w-fit">
+                  <div className={`absolute inset-0 rounded-full blur-md opacity-0 group-hover:opacity-30 transition-opacity duration-300 ${stat.color.replace('text-', 'bg-')}`} />
+                  <stat.icon className={`relative h-7 w-7 ${stat.color} transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`} />
+                </div>
+                <p className={`text-xl font-bold ${stat.color} md:text-2xl transition-transform duration-300 group-hover:scale-105`}>
                   {stat.value}
                 </p>
                 <p className="mt-1 text-xs text-muted-foreground md:text-sm">
