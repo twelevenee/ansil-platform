@@ -11,6 +11,7 @@ import ProgramsPage from "./pages/ProgramsPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import NotFound from "./pages/NotFound";
 import { LanguageProvider } from "./contexts/LanguageContext";
+import { ChatFab } from "./components/ChatFab";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ChatFab />
       </BrowserRouter>
     </TooltipProvider>
     </LanguageProvider>
