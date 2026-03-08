@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Home, Shield, Heart, Activity, Users, ArrowRight, BarChart3 } from "lucide-react";
+import { Home, Shield, Heart, Activity, Users, ArrowRight, BarChart3, Package, Store } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNationalCategoryStats } from "@/hooks/usePrograms";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getFacilitiesByRegion } from "@/data/safetyFacilities";
 
 const categoryIcons: Record<string, React.ElementType> = {
   주거안전: Home, 귀가안전: Shield, 생활지원: Heart, 건강: Activity, 커뮤니티: Users,
@@ -32,6 +34,7 @@ interface MapSidePanelProps {
 export function MapSidePanel({ selectedRegion, regionId }: MapSidePanelProps) {
   const { data: nationalCategories } = useNationalCategoryStats();
   const { t } = useLanguage();
+  const [activeTab, setActiveTab] = useState<"programs" | "facilities">("programs");
 
   if (!selectedRegion) {
     const cats = nationalCategories || {};
@@ -75,32 +78,110 @@ export function MapSidePanel({ selectedRegion, regionId }: MapSidePanelProps) {
     );
   }
 
+  const { lockers, guardians } = getFacilitiesByRegion(selectedRegion.name);
+
   return (
     <div className="flex h-full flex-col rounded-2xl border bg-card p-4 shadow-card md:p-6">
       <div className="mb-1">
         <p className="text-xs font-medium text-rose-mid">{t("map.selected_region")}</p>
         <h3 className="text-lg font-bold text-card-foreground md:text-xl">{selectedRegion.name}</h3>
       </div>
-      <div className="mb-4 flex items-baseline gap-1 md:mb-5">
+      <div className="mb-3 flex items-baseline gap-1 md:mb-4">
         <span className="text-2xl font-bold text-rose-deep md:text-3xl">{selectedRegion.total}</span>
         <span className="text-sm text-muted-foreground">{t("map.programs_count")}</span>
       </div>
 
-      <div className="flex flex-1 flex-col gap-2 md:gap-3">
-        <p className="text-sm font-medium text-muted-foreground">{t("map.category_status")}</p>
-        {Object.entries(selectedRegion.categories).map(([cat, count]) => {
-          const Icon = categoryIcons[cat] || Home;
-          return (
-            <div key={cat} className="flex items-center justify-between rounded-xl bg-muted/50 px-3 py-2.5 min-h-[44px]">
-              <span className="flex items-center gap-2 text-sm text-card-foreground">
-                <Icon className="h-4 w-4 text-muted-foreground" />
-                {cat}
-              </span>
-              <span className={`text-sm font-semibold ${categoryTextClasses[cat] || "text-rose-deep"}`}>{count}{t("map.count_suffix")}</span>
-            </div>
-          );
-        })}
+      {/* Tabs */}
+      <div className="mb-3 flex rounded-xl bg-muted/50 p-1">
+        <button
+          onClick={() => setActiveTab("programs")}
+          className={`flex-1 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors min-h-[36px] ${
+            activeTab === "programs" ? "bg-card text-card-foreground shadow-sm" : "text-muted-foreground"
+          }`}
+        >
+          {t("safety.tab_programs")}
+        </button>
+        <button
+          onClick={() => setActiveTab("facilities")}
+          className={`flex-1 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors min-h-[36px] ${
+            activeTab === "facilities" ? "bg-card text-card-foreground shadow-sm" : "text-muted-foreground"
+          }`}
+        >
+          {t("safety.tab_title")}
+        </button>
       </div>
+
+      {activeTab === "programs" ? (
+        <div className="flex flex-1 flex-col gap-2 md:gap-3">
+          <p className="text-sm font-medium text-muted-foreground">{t("map.category_status")}</p>
+          {Object.entries(selectedRegion.categories).map(([cat, count]) => {
+            const Icon = categoryIcons[cat] || Home;
+            return (
+              <div key={cat} className="flex items-center justify-between rounded-xl bg-muted/50 px-3 py-2.5 min-h-[44px]">
+                <span className="flex items-center gap-2 text-sm text-card-foreground">
+                  <Icon className="h-4 w-4 text-muted-foreground" />
+                  {cat}
+                </span>
+                <span className={`text-sm font-semibold ${categoryTextClasses[cat] || "text-rose-deep"}`}>{count}{t("map.count_suffix")}</span>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="flex flex-1 flex-col overflow-hidden">
+          {/* Summary */}
+          <div className="mb-3 flex gap-2">
+            <div className="flex items-center gap-1.5 rounded-full bg-sky-light px-3 py-1.5 text-xs font-medium text-sky-deep">
+              <Package className="h-3.5 w-3.5" />
+              {t("safety.lockers")} {lockers.length}{t("safety.places_suffix")}
+            </div>
+            <div className="flex items-center gap-1.5 rounded-full bg-rose-light px-3 py-1.5 text-xs font-medium text-rose-deep">
+              <Store className="h-3.5 w-3.5" />
+              {t("safety.guardians")} {guardians.length}{t("safety.places_suffix")}
+            </div>
+          </div>
+
+          {/* Scrollable list */}
+          <div className="flex-1 overflow-y-auto -mx-1 px-1 space-y-1.5" style={{ maxHeight: "260px" }}>
+            {lockers.map((l, i) => (
+              <div key={`l-${i}`} className="flex items-start gap-2.5 rounded-xl bg-muted/30 px-3 py-2.5 min-h-[44px]">
+                <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-sky-mid" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-card-foreground truncate">{l.시설명}</p>
+                  <p className="text-xs text-muted-foreground truncate">{l.소재지도로명주소 || l.소재지지번주소}</p>
+                  <p className="text-[10px] text-muted-foreground">
+                    {t("safety.weekday_hours")}: {l.평일운영시작시각}~{l.평일운영종료시각}
+                  </p>
+                </div>
+              </div>
+            ))}
+            {guardians.map((g, i) => (
+              <div key={`g-${i}`} className="flex items-start gap-2.5 rounded-xl bg-muted/30 px-3 py-2.5 min-h-[44px]">
+                <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-rose-mid" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-card-foreground truncate">{g.점포명}</p>
+                  <p className="text-xs text-muted-foreground truncate">{g.소재지도로명주소 || g.소재지지번주소}</p>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
+                      g.운영여부 === "Y"
+                        ? "bg-sky-light text-sky-deep"
+                        : "bg-muted text-muted-foreground"
+                    }`}>
+                      {g.운영여부 === "Y" ? t("safety.operating") : t("safety.closed")}
+                    </span>
+                    {g.여성안심지킴이집전화번호 && (
+                      <span className="text-[10px] text-muted-foreground">📞 {g.여성안심지킴이집전화번호}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+            {lockers.length === 0 && guardians.length === 0 && (
+              <p className="py-8 text-center text-sm text-muted-foreground">{t("safety.no_facilities")}</p>
+            )}
+          </div>
+        </div>
+      )}
 
       <Link to={`/region/${encodeURIComponent(selectedRegion.name)}`} className="mt-4 md:mt-5">
         <Button className="w-full gap-2 rounded-xl bg-gradient-cta text-white hover:opacity-90 min-h-[48px]">

@@ -1,6 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { getFacilitiesByRegion } from "@/data/safetyFacilities";
+import type { SafetyLocker, GuardianHouse } from "@/data/safetyFacilities";
 
 export interface RegionMarker {
   name: string;
@@ -77,8 +79,11 @@ export function LeafletMap({ selectedRegion, onRegionClick, programCounts }: Lea
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
+  const facilityLayersRef = useRef<L.LayerGroup[]>([]);
 
-  // Merge dynamic counts
+  const [showLockers, setShowLockers] = useState(true);
+  const [showGuardians, setShowGuardians] = useState(true);
+
   const mergedRegions = regions.map((r) => ({
     ...r,
     count: programCounts?.[r.name] ?? 0,
@@ -109,12 +114,11 @@ export function LeafletMap({ selectedRegion, onRegionClick, programCounts }: Lea
     };
   }, []);
 
-  // Update markers when data or selection changes
+  // Update region markers
   useEffect(() => {
     const map = mapInstanceRef.current;
     if (!map) return;
 
-    // Clear old markers
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
 
@@ -122,10 +126,10 @@ export function LeafletMap({ selectedRegion, onRegionClick, programCounts }: Lea
       const isSelected = selectedRegion === region.name;
       const marker = L.marker([region.lat, region.lng], {
         icon: createIcon({ ...region }, isSelected),
+        zIndexOffset: 1000,
       });
 
       marker.on("click", () => onRegionClick(region.name));
-
       marker.on("mouseover", function () {
         const el = this.getElement();
         if (el) {
@@ -146,9 +150,100 @@ export function LeafletMap({ selectedRegion, onRegionClick, programCounts }: Lea
     });
   }, [mergedRegions, selectedRegion, onRegionClick]);
 
+  // Update facility markers when region or toggles change
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    if (!map) return;
+
+    // Clear old facility layers
+    facilityLayersRef.current.forEach((lg) => lg.remove());
+    facilityLayersRef.current = [];
+
+    if (!selectedRegion) return;
+
+    const { lockers, guardians } = getFacilitiesByRegion(selectedRegion);
+
+    if (showLockers) {
+      const lockerGroup = L.layerGroup();
+      lockers.forEach((l) => {
+        const lat = parseFloat(l.위도);
+        const lng = parseFloat(l.경도);
+        if (isNaN(lat) || isNaN(lng)) return;
+        const circle = L.circleMarker([lat, lng], {
+          radius: 5,
+          fillColor: "#7BA4D9",
+          color: "#4A7EC2",
+          weight: 1,
+          fillOpacity: 0.7,
+        });
+        circle.bindPopup(`
+          <div style="font-family:Pretendard,sans-serif;font-size:13px;line-height:1.5;min-width:180px">
+            <strong style="color:#4A7EC2">📦 ${l.시설명}</strong><br/>
+            <span style="color:#6B7280">${l.소재지도로명주소 || l.소재지지번주소}</span><br/>
+            ${l.관리기관전화번호 ? `<span>📞 ${l.관리기관전화번호}</span><br/>` : ""}
+            <span style="font-size:11px;color:#6B7280">평일 ${l.평일운영시작시각}~${l.평일운영종료시각}</span>
+          </div>
+        `);
+        circle.addTo(lockerGroup);
+      });
+      lockerGroup.addTo(map);
+      facilityLayersRef.current.push(lockerGroup);
+    }
+
+    if (showGuardians) {
+      const guardianGroup = L.layerGroup();
+      guardians.forEach((g) => {
+        const lat = parseFloat(g.위도);
+        const lng = parseFloat(g.경도);
+        if (isNaN(lat) || isNaN(lng)) return;
+        const circle = L.circleMarker([lat, lng], {
+          radius: 5,
+          fillColor: "#E8889E",
+          color: "#D4637A",
+          weight: 1,
+          fillOpacity: 0.7,
+        });
+        circle.bindPopup(`
+          <div style="font-family:Pretendard,sans-serif;font-size:13px;line-height:1.5;min-width:180px">
+            <strong style="color:#D4637A">🏪 ${g.점포명}</strong><br/>
+            <span style="color:#6B7280">${g.소재지도로명주소 || g.소재지지번주소}</span><br/>
+            ${g.여성안심지킴이집전화번호 ? `<span>📞 ${g.여성안심지킴이집전화번호}</span><br/>` : ""}
+            <span style="font-size:11px;color:#6B7280">관할: ${g.관할경찰서명}</span>
+          </div>
+        `);
+        circle.addTo(guardianGroup);
+      });
+      guardianGroup.addTo(map);
+      facilityLayersRef.current.push(guardianGroup);
+    }
+  }, [selectedRegion, showLockers, showGuardians]);
+
   return (
     <div className="relative w-full overflow-hidden rounded-2xl">
       <div ref={mapRef} className="h-[400px] w-full md:h-[500px] lg:h-[550px]" />
+
+      {/* Legend / Toggle */}
+      <div className="absolute right-3 top-3 z-[1000] flex flex-col gap-1.5 rounded-xl bg-card/95 p-2.5 shadow-card backdrop-blur-sm border border-border/50">
+        <button
+          onClick={() => setShowLockers((v) => !v)}
+          className={`flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors min-h-[32px] ${
+            showLockers ? "bg-sky-light text-sky-deep" : "text-muted-foreground hover:bg-muted"
+          }`}
+        >
+          <span className="inline-block h-2.5 w-2.5 rounded-full bg-sky-mid" />
+          안심택배함
+        </button>
+        <button
+          onClick={() => setShowGuardians((v) => !v)}
+          className={`flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors min-h-[32px] ${
+            showGuardians ? "bg-rose-light text-rose-deep" : "text-muted-foreground hover:bg-muted"
+          }`}
+        >
+          <span className="inline-block h-2.5 w-2.5 rounded-full bg-rose-mid" />
+          안심지킴이집
+        </button>
+      </div>
+
       <style>{`
         .leaflet-marker-custom { background: none !important; border: none !important; }
       `}</style>

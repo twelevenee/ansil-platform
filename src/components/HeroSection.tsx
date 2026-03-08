@@ -1,6 +1,7 @@
-import { Heart, Shield, MapPin } from "lucide-react";
+import { Heart, Shield, MapPin, Store } from "lucide-react";
 import { useRegionStats } from "@/hooks/usePrograms";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { totalFacilities } from "@/data/safetyFacilities";
 
 export function HeroSection() {
   const { data } = useRegionStats();
@@ -13,6 +14,7 @@ export function HeroSection() {
     { icon: Heart, value: "390만+", label: t("hero.stat_women"), color: "text-rose-deep" },
     { icon: Shield, value: `${totalPrograms}+`, label: t("hero.stat_programs"), color: "text-sky-deep" },
     { icon: MapPin, value: `${totalRegions}개`, label: t("hero.stat_regions"), color: "text-lav-deep" },
+    { icon: Store, value: `${totalFacilities.toLocaleString()}+`, label: t("safety.total_facilities"), color: "text-coral-deep" },
   ];
 
   return (
@@ -31,17 +33,17 @@ export function HeroSection() {
             {t("hero.subtitle")}
           </p>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
             {stats.map((stat) => (
               <div
                 key={stat.label}
-                className="group rounded-2xl bg-card p-6 shadow-card transition-all hover:-translate-y-1 hover:shadow-card-hover"
+                className="group rounded-2xl bg-card p-5 shadow-card transition-all hover:-translate-y-1 hover:shadow-card-hover md:p-6"
               >
                 <stat.icon className={`mx-auto mb-3 h-7 w-7 ${stat.color}`} />
-                <p className={`text-2xl font-bold ${stat.color} md:text-3xl`}>
+                <p className={`text-xl font-bold ${stat.color} md:text-2xl`}>
                   {stat.value}
                 </p>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <p className="mt-1 text-xs text-muted-foreground md:text-sm">
                   {stat.label}
                 </p>
               </div>

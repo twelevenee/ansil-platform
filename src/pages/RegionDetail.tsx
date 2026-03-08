@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Search, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Search, AlertTriangle, Package, Store } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Navbar } from "@/components/Navbar";
@@ -9,6 +9,7 @@ import { ProgramCard, categoryIcons } from "@/components/ProgramCard";
 import { useRegionPrograms } from "@/hooks/usePrograms";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { RegionRadarChart } from "@/components/RegionRadarChart";
+import { getFacilitiesByRegion } from "@/data/safetyFacilities";
 
 const categories = ["전체", "주거안전", "귀가안전", "생활지원", "건강", "커뮤니티"];
 
@@ -68,6 +69,8 @@ const RegionDetail = () => {
     categoryCounts[p.category] = (categoryCounts[p.category] || 0) + 1;
   });
 
+  const { lockers, guardians } = getFacilitiesByRegion(regionCity);
+
   const handleAiSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const text = aiQuery.trim() || `${regionCity} ${t("region.ai_default_suffix")}`;
@@ -85,7 +88,7 @@ const RegionDetail = () => {
 
           <h1 className="mb-3 text-2xl font-bold text-foreground md:mb-4 md:text-3xl">{regionCity} {t("region.status_suffix")}</h1>
 
-          <div className="mb-4 flex flex-wrap items-center gap-3 md:mb-6">
+          <div className="mb-2 flex flex-wrap items-center gap-3 md:mb-3">
             <span className="text-sm text-muted-foreground">
               {t("region.total")} <span className="font-bold text-rose-deep">{programs.length}</span>{t("region.count_suffix")}
             </span>
@@ -97,6 +100,18 @@ const RegionDetail = () => {
                 </span>
               ) : null;
             })}
+          </div>
+
+          {/* Safety Facility Counts */}
+          <div className="mb-4 flex flex-wrap items-center gap-2 md:mb-6">
+            <div className="flex items-center gap-1.5 rounded-full bg-sky-light px-3 py-1.5 text-xs font-medium text-sky-deep">
+              <Package className="h-3.5 w-3.5" />
+              {t("safety.lockers")} {lockers.length}{t("safety.places_suffix")}
+            </div>
+            <div className="flex items-center gap-1.5 rounded-full bg-rose-light px-3 py-1.5 text-xs font-medium text-rose-deep">
+              <Store className="h-3.5 w-3.5" />
+              {t("safety.guardians")} {guardians.length}{t("safety.places_suffix")}
+            </div>
           </div>
 
           {regionCity !== "서울특별시" && gap && (

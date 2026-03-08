@@ -150,6 +150,18 @@ const ko = {
   "analytics.source": "데이터 출처: 공공데이터포털, 각 지자체 홈페이지, 찾기쉬운 생활법령정보",
   "analytics.updated": "최종 업데이트: 2026년 3월",
 
+  // Safety Facilities
+  "safety.tab_title": "안심시설",
+  "safety.tab_programs": "지원제도",
+  "safety.lockers": "안심택배함",
+  "safety.guardians": "안심지킴이집",
+  "safety.operating": "운영중",
+  "safety.closed": "미운영",
+  "safety.weekday_hours": "평일",
+  "safety.total_facilities": "안심시설",
+  "safety.places_suffix": "곳",
+  "safety.no_facilities": "이 지역에 등록된 안심시설이 없습니다.",
+
   // NotFound
   "notfound.title": "404",
   "notfound.message": "페이지를 찾을 수 없습니다",
@@ -288,6 +300,17 @@ const en: Record<TranslationKey, string> = {
   "analytics.source": "Data: Public Data Portal, Local gov websites, Easy Law Info",
   "analytics.updated": "Last updated: March 2026",
 
+  "safety.tab_title": "Safety Facilities",
+  "safety.tab_programs": "Programs",
+  "safety.lockers": "Safety Lockers",
+  "safety.guardians": "Guardian Houses",
+  "safety.operating": "Operating",
+  "safety.closed": "Closed",
+  "safety.weekday_hours": "Weekday",
+  "safety.total_facilities": "Safety Facilities",
+  "safety.places_suffix": " places",
+  "safety.no_facilities": "No safety facilities registered in this region.",
+
   "notfound.title": "404",
   "notfound.message": "Oops! Page not found",
   "notfound.back": "Return to Home",
@@ -423,6 +446,17 @@ const vi: Record<TranslationKey, string> = {
   "analytics.source": "Nguồn: Cổng dữ liệu công, Trang web chính quyền",
   "analytics.updated": "Cập nhật: Tháng 3/2026",
 
+  "safety.tab_title": "Cơ sở an toàn",
+  "safety.tab_programs": "Chương trình",
+  "safety.lockers": "Tủ gửi đồ an toàn",
+  "safety.guardians": "Nhà bảo vệ an toàn",
+  "safety.operating": "Đang hoạt động",
+  "safety.closed": "Ngừng hoạt động",
+  "safety.weekday_hours": "Ngày thường",
+  "safety.total_facilities": "Cơ sở an toàn",
+  "safety.places_suffix": " nơi",
+  "safety.no_facilities": "Không có cơ sở an toàn nào trong khu vực này.",
+
   "notfound.title": "404",
   "notfound.message": "Không tìm thấy trang",
   "notfound.back": "Về trang chủ",
@@ -557,6 +591,17 @@ const zh: Record<TranslationKey, string> = {
   "analytics.donut_title": "费用分布",
   "analytics.source": "数据来源：公共数据门户、各地方政府网站、生活法令信息",
   "analytics.updated": "最后更新：2026年3月",
+
+  "safety.tab_title": "安心设施",
+  "safety.tab_programs": "支援制度",
+  "safety.lockers": "安心快递柜",
+  "safety.guardians": "安心守护站",
+  "safety.operating": "运营中",
+  "safety.closed": "未运营",
+  "safety.weekday_hours": "工作日",
+  "safety.total_facilities": "安心设施",
+  "safety.places_suffix": "处",
+  "safety.no_facilities": "该地区暂无登记的安心设施。",
 
   "notfound.title": "404",
   "notfound.message": "页面未找到",
