@@ -118,44 +118,12 @@ export function DashboardCharts() {
           {t("analytics.section_subtitle")}
         </p>
 
-        <Tabs defaultValue="lollipop" className="w-full">
-          <TabsList className="mx-auto mb-6 grid w-full max-w-2xl grid-cols-2 gap-1 md:grid-cols-4">
-            <TabsTrigger value="lollipop" className="text-xs md:text-sm">{t("analytics.tab_lollipop")}</TabsTrigger>
+        <Tabs defaultValue="stacked" className="w-full">
+          <TabsList className="mx-auto mb-6 grid w-full max-w-2xl grid-cols-3 gap-1">
             <TabsTrigger value="stacked" className="text-xs md:text-sm">{t("analytics.tab_stacked")}</TabsTrigger>
             <TabsTrigger value="radar" className="text-xs md:text-sm">{t("analytics.tab_radar")}</TabsTrigger>
             <TabsTrigger value="treemap" className="text-xs md:text-sm">{t("analytics.tab_treemap")}</TabsTrigger>
           </TabsList>
-
-          {/* Tab 1: Lollipop */}
-          <TabsContent value="lollipop">
-            <Card className="rounded-2xl shadow-card">
-              <CardHeader>
-                <CardTitle className="text-lg">{t("analytics.lollipop_title")}</CardTitle>
-                <CardDescription>{t("analytics.lollipop_desc")}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto -mx-2 md:mx-0">
-                  <div style={{ minWidth: 500, height: Math.max(400, lollipopData.length * 36 + 60) }}>
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={lollipopData} layout="vertical" margin={{ left: 10, right: 50, top: 10, bottom: 10 }}>
-                        <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="hsl(var(--border))" />
-                        <XAxis type="number" tick={{ fontSize: 11 }} />
-                        <YAxis dataKey="name" type="category" width={60} tick={{ fontSize: 11 }} />
-                        <Tooltip formatter={(v: number) => [`${v}건`, "제도 수"]} />
-                        <ReferenceLine x={avg} stroke="#CBD5E1" strokeDasharray="5 5"
-                          label={{ value: `평균 ${avg}`, position: "insideTopRight", fontSize: 10, fill: "#94A3B8" }} />
-                        <Bar dataKey="count" barSize={10} radius={[0, 6, 6, 0]}>
-                          {lollipopData.map((d, i) => (
-                            <Cell key={i} fill={d.count >= avg ? "#E8917F" : "#CBD5E1"} />
-                          ))}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
 
           {/* Tab 2: Stacked Bar */}
           <TabsContent value="stacked">
