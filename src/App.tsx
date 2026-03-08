@@ -8,11 +8,13 @@ import RegionDetail from "./pages/RegionDetail";
 import ChatPage from "./pages/ChatPage";
 import ProgramsPage from "./pages/ProgramsPage";
 import NotFound from "./pages/NotFound";
+import { LanguageProvider } from "./contexts/LanguageContext";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <LanguageProvider>
     <TooltipProvider>
       <Toaster />
       <Sonner />
