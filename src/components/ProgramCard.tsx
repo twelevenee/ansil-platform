@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Home, Shield, Heart, ShoppingBag, Users, ChevronDown, ChevronUp, ExternalLink, Phone, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
 import type { Program } from "@/hooks/usePrograms";
 
 export const categoryIcons: Record<string, React.ElementType> = {
@@ -47,6 +48,7 @@ function Detail({ label, value }: { label: string; value: string }) {
 
 export function ProgramCard({ program }: { program: Program }) {
   const [expanded, setExpanded] = useState(false);
+  const { t } = useLanguage();
   const Icon = categoryIcons[program.category] || Home;
   const badgeClass = categoryBadgeClasses[program.category] || "bg-muted text-muted-foreground";
   const isFree = program.cost === "무료";
@@ -74,7 +76,7 @@ export function ProgramCard({ program }: { program: Program }) {
           <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium border ${
             isOpen ? "bg-rose-light text-rose-deep border-rose-mid/30" : "bg-coral-light text-coral-deep border-coral-mid/30"
           }`}>
-            {isOpen ? "신청가능" : "마감"}
+            {isOpen ? t("card.open") : t("card.closed")}
           </span>
           {applyMethod && (
             <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium border ${getApplyMethodColor(applyMethod)}`}>
@@ -89,7 +91,7 @@ export function ProgramCard({ program }: { program: Program }) {
               className="w-full gap-1 rounded-xl bg-rose-mid text-white hover:bg-rose-deep min-h-[44px]"
               disabled={!isOpen}
             >
-              신청하기 <ExternalLink className="h-3.5 w-3.5" />
+              {t("card.apply")} <ExternalLink className="h-3.5 w-3.5" />
             </Button>
           </a>
           {portalUrl && (
@@ -109,20 +111,20 @@ export function ProgramCard({ program }: { program: Program }) {
             className="gap-1 text-muted-foreground min-h-[44px] min-w-[44px] hover:bg-lav-light hover:text-lav-deep"
             onClick={() => setExpanded(!expanded)}
           >
-            자세히 {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+            {t("card.details")} {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
           </Button>
         </div>
       </div>
       {expanded && (
         <div className="border-t bg-muted/30 p-4 text-sm space-y-3 md:p-5">
-          <Detail label="신청 방법" value={program.how_to_apply} />
-          {applyMethod && <Detail label="신청 유형" value={applyMethod} />}
-          {program.apply_period && <Detail label="신청 기간" value={program.apply_period} />}
-          {program.target_age && <Detail label="대상 연령" value={program.target_age} />}
-          <Detail label="대상" value={`${program.target_gender || ''} ${program.target_household || ''}`} />
+          <Detail label={t("card.apply_method")} value={program.how_to_apply} />
+          {applyMethod && <Detail label={t("card.apply_type")} value={applyMethod} />}
+          {program.apply_period && <Detail label={t("card.apply_period")} value={program.apply_period} />}
+          {program.target_age && <Detail label={t("card.target_age")} value={program.target_age} />}
+          <Detail label={t("card.target")} value={`${program.target_gender || ''} ${program.target_household || ''}`} />
           {program.contact && (
             <div>
-              <span className="font-medium text-card-foreground">문의처: </span>
+              <span className="font-medium text-card-foreground">{t("card.contact")}: </span>
               <a href={`tel:${program.contact}`} className="inline-flex items-center gap-1 text-sky-deep hover:underline min-h-[44px]">
                 <Phone className="h-3.5 w-3.5" /> {program.contact}
               </a>
@@ -130,9 +132,9 @@ export function ProgramCard({ program }: { program: Program }) {
           )}
           {program.source_url && (
             <div>
-              <span className="font-medium text-card-foreground">출처: </span>
+              <span className="font-medium text-card-foreground">{t("card.source")}: </span>
               <a href={program.source_url} target="_blank" rel="noopener noreferrer" className="text-sky-deep hover:underline">
-                원문 보기 <ExternalLink className="inline h-3 w-3" />
+                {t("card.view_source")} <ExternalLink className="inline h-3 w-3" />
               </a>
             </div>
           )}

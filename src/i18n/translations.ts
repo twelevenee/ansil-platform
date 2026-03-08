@@ -83,6 +83,42 @@ const ko = {
   "footer.source": "데이터 출처: 씽글벙글 서울, 공공데이터포털, 각 지자체 홈페이지",
   "footer.disclaimer": "이 서비스는 AI 기반으로 제공되며, 정확한 자격 여부는 해당 기관에 직접 확인해주세요.",
   "footer.copyright": "© 2026 안심찾기. All rights reserved.",
+
+  // ProgramCard
+  "card.apply": "신청하기",
+  "card.details": "자세히",
+  "card.open": "신청가능",
+  "card.closed": "마감",
+  "card.apply_method": "신청 방법",
+  "card.apply_type": "신청 유형",
+  "card.apply_period": "신청 기간",
+  "card.target_age": "대상 연령",
+  "card.target": "대상",
+  "card.contact": "문의처",
+  "card.source": "출처",
+  "card.view_source": "원문 보기",
+
+  // PortalCards
+  "portal.title": "🔗 통합 포털 바로가기",
+  "portal.go": "바로가기",
+
+  // RegionDetail
+  "region.back": "전국 대시보드",
+  "region.status_suffix": "지원제도 현황",
+  "region.total": "총",
+  "region.count_suffix": "개 제도",
+  "region.gap_title": "서울 대비 부족한 영역:",
+  "region.all": "전체",
+  "region.no_results": "해당 카테고리에 등록된 제도가 없습니다.",
+  "region.ai_prompt": "이 지역 지원에 대해 더 궁금하면 AI에게 물어보세요",
+  "region.ai_placeholder_suffix": "지원제도에 대해 물어보세요",
+  "region.ai_ask": "질문하기",
+  "region.ai_default_suffix": "지원제도 알려줘",
+
+  // NotFound
+  "notfound.title": "404",
+  "notfound.message": "페이지를 찾을 수 없습니다",
+  "notfound.back": "홈으로 돌아가기",
 } as const;
 
 export type TranslationKey = keyof typeof ko;
@@ -155,6 +191,38 @@ const en: Record<TranslationKey, string> = {
   "footer.source": "Data: Seoul Singlebungle, Public Data Portal, Local gov websites",
   "footer.disclaimer": "This AI-powered service is for reference only. Please verify eligibility with the relevant agency.",
   "footer.copyright": "© 2026 SafeFind. All rights reserved.",
+
+  "card.apply": "Apply",
+  "card.details": "Details",
+  "card.open": "Open",
+  "card.closed": "Closed",
+  "card.apply_method": "How to apply",
+  "card.apply_type": "Apply type",
+  "card.apply_period": "Apply period",
+  "card.target_age": "Target age",
+  "card.target": "Target",
+  "card.contact": "Contact",
+  "card.source": "Source",
+  "card.view_source": "View original",
+
+  "portal.title": "🔗 Quick Portal Links",
+  "portal.go": "Visit",
+
+  "region.back": "National Dashboard",
+  "region.status_suffix": "Support Programs",
+  "region.total": "Total",
+  "region.count_suffix": " programs",
+  "region.gap_title": "Areas lacking compared to Seoul:",
+  "region.all": "All",
+  "region.no_results": "No programs in this category.",
+  "region.ai_prompt": "Have more questions? Ask our AI assistant",
+  "region.ai_placeholder_suffix": "Ask about support programs",
+  "region.ai_ask": "Ask",
+  "region.ai_default_suffix": "Tell me about support programs",
+
+  "notfound.title": "404",
+  "notfound.message": "Oops! Page not found",
+  "notfound.back": "Return to Home",
 };
 
 const vi: Record<TranslationKey, string> = {
@@ -225,6 +293,38 @@ const vi: Record<TranslationKey, string> = {
   "footer.source": "Dữ liệu: Seoul Singlebungle, Cổng dữ liệu công, Trang web chính quyền",
   "footer.disclaimer": "Dịch vụ AI chỉ mang tính tham khảo. Vui lòng xác nhận với cơ quan liên quan.",
   "footer.copyright": "© 2026 SafeFind. All rights reserved.",
+
+  "card.apply": "Đăng ký",
+  "card.details": "Chi tiết",
+  "card.open": "Đang mở",
+  "card.closed": "Đã đóng",
+  "card.apply_method": "Cách đăng ký",
+  "card.apply_type": "Loại đăng ký",
+  "card.apply_period": "Thời gian đăng ký",
+  "card.target_age": "Độ tuổi",
+  "card.target": "Đối tượng",
+  "card.contact": "Liên hệ",
+  "card.source": "Nguồn",
+  "card.view_source": "Xem gốc",
+
+  "portal.title": "🔗 Cổng thông tin",
+  "portal.go": "Truy cập",
+
+  "region.back": "Bảng điều khiển quốc gia",
+  "region.status_suffix": "Chương trình hỗ trợ",
+  "region.total": "Tổng",
+  "region.count_suffix": " chương trình",
+  "region.gap_title": "Thiếu so với Seoul:",
+  "region.all": "Tất cả",
+  "region.no_results": "Không có chương trình trong danh mục này.",
+  "region.ai_prompt": "Có thêm câu hỏi? Hỏi trợ lý AI",
+  "region.ai_placeholder_suffix": "Hỏi về chương trình hỗ trợ",
+  "region.ai_ask": "Hỏi",
+  "region.ai_default_suffix": "Cho tôi biết về chương trình hỗ trợ",
+
+  "notfound.title": "404",
+  "notfound.message": "Không tìm thấy trang",
+  "notfound.back": "Về trang chủ",
 };
 
 const zh: Record<TranslationKey, string> = {
@@ -295,6 +395,38 @@ const zh: Record<TranslationKey, string> = {
   "footer.source": "数据来源：首尔Singlebungle、公共数据门户、各地方政府网站",
   "footer.disclaimer": "本服务基于AI提供，具体资格请向相关机构确认。",
   "footer.copyright": "© 2026 安心搜. All rights reserved.",
+
+  "card.apply": "申请",
+  "card.details": "详情",
+  "card.open": "可申请",
+  "card.closed": "已截止",
+  "card.apply_method": "申请方式",
+  "card.apply_type": "申请类型",
+  "card.apply_period": "申请期间",
+  "card.target_age": "对象年龄",
+  "card.target": "对象",
+  "card.contact": "咨询处",
+  "card.source": "来源",
+  "card.view_source": "查看原文",
+
+  "portal.title": "🔗 综合门户快捷入口",
+  "portal.go": "前往",
+
+  "region.back": "全国面板",
+  "region.status_suffix": "支援制度现况",
+  "region.total": "共",
+  "region.count_suffix": "项制度",
+  "region.gap_title": "与首尔相比不足的领域：",
+  "region.all": "全部",
+  "region.no_results": "该类别暂无制度。",
+  "region.ai_prompt": "还有疑问？问问AI助手",
+  "region.ai_placeholder_suffix": "咨询支援制度",
+  "region.ai_ask": "提问",
+  "region.ai_default_suffix": "告诉我支援制度",
+
+  "notfound.title": "404",
+  "notfound.message": "页面未找到",
+  "notfound.back": "返回首页",
 };
 
 export const translations: Record<Language, Record<TranslationKey, string>> = {

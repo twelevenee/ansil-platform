@@ -1,5 +1,6 @@
 import { ExternalLink, MapPin } from "lucide-react";
 import { usePortals } from "@/hooks/usePortals";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const regionColors: Record<string, string> = {
   서울: "bg-sky-light text-sky-deep",
@@ -10,12 +11,13 @@ const regionColors: Record<string, string> = {
 
 export function PortalCards() {
   const { data: portals = [], isLoading } = usePortals();
+  const { t } = useLanguage();
 
   if (isLoading || portals.length === 0) return null;
 
   return (
     <section className="mb-8">
-      <h2 className="mb-4 text-lg font-bold text-foreground md:text-xl">🔗 통합 포털 바로가기</h2>
+      <h2 className="mb-4 text-lg font-bold text-foreground md:text-xl">{t("portal.title")}</h2>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {portals.map((portal) => (
           <a
@@ -38,7 +40,7 @@ export function PortalCards() {
               <p className="text-xs text-muted-foreground line-clamp-2">{portal.description}</p>
             )}
             <span className="mt-auto inline-flex items-center gap-1 text-xs font-medium text-sky-deep">
-              바로가기 <ExternalLink className="h-3 w-3" />
+              {t("portal.go")} <ExternalLink className="h-3 w-3" />
             </span>
           </a>
         ))}
