@@ -1,3 +1,4 @@
+// Language context provider
 import { createContext, useContext, useState, useCallback, ReactNode } from "react";
 import { translations, Language, TranslationKey } from "@/i18n/translations";
 
