@@ -35,6 +35,9 @@ const ko = {
   "ai.chip3": "대전 지원제도",
   "ai.chip4": "혼자 병원 가기 힘들어요",
 
+  // Floating action button
+  "fab.help": "도움이 필요하신가요?",
+
   // Map
   "map.title": "전국 지도로 한눈에",
   "map.subtitle": "관심 지역을 클릭하면 해당 지역의 지원제도를 확인할 수 있어요",
