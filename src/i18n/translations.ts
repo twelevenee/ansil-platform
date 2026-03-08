@@ -453,6 +453,8 @@ const zh: Record<TranslationKey, string> = {
   "ai.chip3": "大田支援制度",
   "ai.chip4": "一个人生病时的帮助",
 
+  "fab.help": "需要帮助吗？",
+
   "map.title": "全国地图一览",
   "map.subtitle": "点击地区查看支援制度",
   "map.loading": "正在加载数据...",
