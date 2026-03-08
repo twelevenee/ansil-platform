@@ -300,6 +300,17 @@ const en: Record<TranslationKey, string> = {
   "analytics.source": "Data: Public Data Portal, Local gov websites, Easy Law Info",
   "analytics.updated": "Last updated: March 2026",
 
+  "safety.tab_title": "Safety Facilities",
+  "safety.tab_programs": "Programs",
+  "safety.lockers": "Safety Lockers",
+  "safety.guardians": "Guardian Houses",
+  "safety.operating": "Operating",
+  "safety.closed": "Closed",
+  "safety.weekday_hours": "Weekday",
+  "safety.total_facilities": "Safety Facilities",
+  "safety.places_suffix": " places",
+  "safety.no_facilities": "No safety facilities registered in this region.",
+
   "notfound.title": "404",
   "notfound.message": "Oops! Page not found",
   "notfound.back": "Return to Home",
