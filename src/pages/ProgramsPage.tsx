@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
-import { Search, SlidersHorizontal, Home, Shield, Heart, ShoppingBag, Users } from "lucide-react";
+import { Search, SlidersHorizontal, Home, Shield, Heart, ShoppingBag, Users, MapPin, MousePointerClick } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/Navbar";
