@@ -115,18 +115,30 @@ export function MapSidePanel({ selectedRegion, regionId }: MapSidePanelProps) {
       {activeTab === "programs" ? (
         <div className="flex flex-1 flex-col gap-2 md:gap-3">
           <p className="text-sm font-medium text-muted-foreground">{t("map.category_status")}</p>
-          {Object.entries(selectedRegion.categories).map(([cat, count]) => {
-            const Icon = categoryIcons[cat] || Home;
-            return (
-              <div key={cat} className="flex items-center justify-between rounded-xl bg-muted/50 px-3 py-2.5 min-h-[44px]">
-                <span className="flex items-center gap-2 text-sm text-card-foreground">
-                  <Icon className="h-4 w-4 text-muted-foreground" />
-                  {CAT_LABEL_KEY[cat] ? t(CAT_LABEL_KEY[cat]) : cat}
-                </span>
-                <span className={`text-sm font-semibold ${categoryTextClasses[cat] || "text-rose-deep"}`}>{count}{t("map.count_suffix")}</span>
-              </div>
-            );
-          })}
+          {(() => {
+            const entries = Object.entries(selectedRegion.categories);
+            const maxVal = Math.max(...entries.map(([, c]) => c), 1);
+            return entries.map(([cat, count]) => {
+              const Icon = categoryIcons[cat] || Home;
+              return (
+                <div key={cat} className="space-y-1.5">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="flex items-center gap-2 font-medium text-card-foreground">
+                      <Icon className="h-4 w-4 text-muted-foreground" />
+                      {CAT_LABEL_KEY[cat] ? t(CAT_LABEL_KEY[cat]) : cat}
+                    </span>
+                    <span className={`font-semibold ${categoryTextClasses[cat] || "text-rose-deep"}`}>{count}{t("map.count_suffix")}</span>
+                  </div>
+                  <div className="h-2.5 w-full overflow-hidden rounded-full bg-muted">
+                    <div
+                      className={`h-full rounded-full ${categoryBarClasses[cat] || "bg-rose-mid"} transition-all duration-700`}
+                      style={{ width: `${(count / maxVal) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            });
+          })()}
         </div>
       ) : (
         <div className="flex flex-1 flex-col overflow-hidden">
