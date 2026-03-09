@@ -49,7 +49,7 @@ export function Navbar() {
                 <Link
                   key={item.href}
                   to={item.href}
-                  className={`flex items-center gap-1.5 rounded-xl px-5 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary ${
+                  className={`flex items-center gap-1.5 rounded-xl px-5 py-2 text-sm font-medium whitespace-nowrap transition-colors hover:bg-primary/10 hover:text-primary ${
                     isActive ? "bg-primary/10 text-primary" : "text-muted-foreground"
                   }`}
                 >
