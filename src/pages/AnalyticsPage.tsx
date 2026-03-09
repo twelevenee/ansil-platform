@@ -491,15 +491,15 @@ const AnalyticsPage = () => {
             </Card>
           </div>
 
+          {/* SAI Ranking */}
+          <SAIRankingSection saiData={saiData} t={t} />
+
           {/* Heatmap - Region Selector */}
           <HeatmapSection
             heatmapRegions={heatmapRegions}
             maxCatCount={maxCatCount}
             t={t}
           />
-
-          {/* SAI Ranking */}
-          <SAIRankingSection saiData={saiData} t={t} />
           {/* Source */}
           <div className="rounded-2xl bg-rose-light/50 p-5 text-center text-sm text-muted-foreground">
             <p>{t("analytics.source")}</p>
