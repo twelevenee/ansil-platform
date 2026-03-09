@@ -84,7 +84,6 @@ export function LeafletMap({ selectedRegion, onRegionClick, programCounts }: Lea
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
-  const polygonLayerRef = useRef<L.LayerGroup | null>(null);
   const facilityLayersRef = useRef<L.LayerGroup[]>([]);
 
   const [showLockers, setShowLockers] = useState(true);
