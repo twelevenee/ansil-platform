@@ -153,7 +153,7 @@ const AnalyticsPage = () => {
                             <Cell key={i} fill={entry.color} />
                           ))}
                         </Pie>
-                        <Tooltip formatter={(v: number, name: string) => [`${v}건`, name]} />
+                        <Tooltip formatter={(v: number, name: string) => [`${v}${t("analytics.count_suffix")}`, name]} />
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
