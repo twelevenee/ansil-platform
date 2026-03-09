@@ -133,7 +133,7 @@ function MessageBubble({
       <div className="max-w-[85%] space-y-2.5 md:max-w-[72%]">
         {/* 안심이 이름 표시 (봇 메시지만) */}
         {!isUser && (
-          <span className="ml-1 text-xs font-semibold text-muted-foreground">안심이</span>
+          <span className="ml-1 text-xs font-semibold text-muted-foreground">ANSIL</span>
         )}
 
         {message.is_emergency && (

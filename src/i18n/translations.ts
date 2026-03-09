@@ -14,7 +14,7 @@ const ko = {
   "nav.ai_chat": "AI 상담",
   "nav.map": "지도",
   "nav.programs": "지원제도",
-  "nav.home": "안심찾기",
+  "nav.home": "안실 ANSIL",
   "nav.menu_open": "메뉴 열기",
   "nav.menu_close": "메뉴 닫기",
   "nav.analytics": "현황분석",
@@ -73,8 +73,8 @@ const ko = {
   "cat.community": "커뮤니티",
 
   // Chat
-  "chat.welcome": "안녕하세요! 여성 1인가구 안심지원 AI **안심이**입니다 🏠\n\n거주 지역과 상황을 알려주시면 맞춤 지원제도를 찾아드릴게요.",
-  "chat.typing": "안심이가 답변을 준비하고 있어요 ✨",
+  "chat.welcome": "안녕하세요! 여성 1인가구 안심지원 AI **안실(ANSIL)**입니다 🏠\n\n거주 지역과 상황을 알려주시면 맞춤 지원제도를 찾아드릴게요.",
+  "chat.typing": "안실이 답변을 준비하고 있어요 ✨",
   "chat.placeholder": "궁금한 점을 물어보세요...",
   "chat.error": "죄송합니다. 잠시 후 다시 시도해주세요.",
   "chat.error_title": "오류",
@@ -88,7 +88,7 @@ const ko = {
   // Footer
   "footer.source": "데이터 출처: 씽글벙글 서울, 공공데이터포털, 각 지자체 홈페이지",
   "footer.disclaimer": "이 서비스는 AI 기반으로 제공되며, 정확한 자격 여부는 해당 기관에 직접 확인해주세요.",
-  "footer.copyright": "© 2026 안심찾기. All rights reserved.",
+  "footer.copyright": "© 2026 안실 ANSIL. All rights reserved.",
 
   // ProgramCard
   "card.apply": "신청하기",
@@ -288,7 +288,7 @@ const en: Record<TranslationKey, string> = {
   "cat.living": "Living Support",
   "cat.community": "Community",
 
-  "chat.welcome": "Hello! I'm **Ansimi**, your AI safety support assistant 🏠\n\nTell me your region and situation, and I'll find the right programs for you.",
+  "chat.welcome": "Hello! I'm **ANSIL**, your AI safety support assistant 🏠\n\nTell me your region and situation, and I'll find the right programs for you.",
   "chat.typing": "Searching...",
   "chat.placeholder": "Ask me anything...",
   "chat.error": "Sorry, please try again later.",
@@ -489,7 +489,7 @@ const vi: Record<TranslationKey, string> = {
   "cat.living": "Hỗ trợ sinh hoạt",
   "cat.community": "Cộng đồng",
 
-  "chat.welcome": "Xin chào! Tôi là **Ansimi**, trợ lý AI hỗ trợ an toàn 🏠\n\nHãy cho tôi biết khu vực và tình huống của bạn, tôi sẽ tìm chương trình phù hợp.",
+  "chat.welcome": "Xin chào! Tôi là **ANSIL**, trợ lý AI hỗ trợ an toàn 🏠\n\nHãy cho tôi biết khu vực và tình huống của bạn, tôi sẽ tìm chương trình phù hợp.",
   "chat.typing": "Đang tìm kiếm...",
   "chat.placeholder": "Hỏi tôi bất cứ điều gì...",
   "chat.error": "Xin lỗi, vui lòng thử lại sau.",
@@ -891,7 +891,7 @@ const uz: Record<TranslationKey, string> = {
   "cat.living": "Turmush yordami",
   "cat.community": "Jamoa",
 
-  "chat.welcome": "Salom! Men **Ansimi**, AI xavfsizlik yordamchisiman 🏠\n\nHududingiz va vaziyatingizni ayting, men sizga mos dasturlarni topaman.",
+  "chat.welcome": "Salom! Men **ANSIL**, AI xavfsizlik yordamchisiman 🏠\n\nHududingiz va vaziyatingizni ayting, men sizga mos dasturlarni topaman.",
   "chat.typing": "Qidirilmoqda...",
   "chat.placeholder": "Savolingizni bering...",
   "chat.error": "Kechirasiz, keyinroq urinib ko'ring.",
