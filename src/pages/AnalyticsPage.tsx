@@ -205,7 +205,7 @@ const AnalyticsPage = () => {
                       <div key={d.name} className="flex items-center gap-2 text-xs text-muted-foreground">
                         <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: d.color }} />
                         <span>{d.name}</span>
-                        <span className="font-medium text-foreground">{d.value}건</span>
+                        <span className="font-medium text-foreground">{d.value}{t("analytics.count_suffix")}</span>
                       </div>
                     ))}
                   </div>
