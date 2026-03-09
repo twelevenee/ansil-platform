@@ -288,7 +288,7 @@ const en: Record<TranslationKey, string> = {
   "cat.living": "Living Support",
   "cat.community": "Community",
 
-  "chat.welcome": "Hello! I'm **Ansimi**, your AI safety support assistant 🏠\n\nTell me your region and situation, and I'll find the right programs for you.",
+  "chat.welcome": "Hello! I'm **ANSIL**, your AI safety support assistant 🏠\n\nTell me your region and situation, and I'll find the right programs for you.",
   "chat.typing": "Searching...",
   "chat.placeholder": "Ask me anything...",
   "chat.error": "Sorry, please try again later.",
