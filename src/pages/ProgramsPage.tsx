@@ -107,26 +107,34 @@ const ProgramsPage = () => {
 
           <div className="mb-6 space-y-3 rounded-2xl border bg-card p-4 shadow-card md:space-y-4 md:p-5">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <select
-                value={regionFilter}
-                onChange={(e) => setRegionFilter(e.target.value)}
-                className="w-full rounded-xl border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary min-h-[44px] sm:w-48"
-              >
-                <option value="all">{t("programs.all_regions")}</option>
-                {cities.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
+              <Select value={regionFilter} onValueChange={setRegionFilter}>
+                <SelectTrigger className="w-full rounded-xl border-border/60 bg-background px-3 py-2.5 text-sm shadow-sm min-h-[44px] sm:w-52 focus:ring-primary/30 focus:border-primary transition-colors">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-primary/60" />
+                    <SelectValue placeholder={t("programs.all_regions")} />
+                  </div>
+                </SelectTrigger>
+                <SelectContent className="rounded-xl border-border/60 shadow-lg">
+                  <SelectItem value="all" className="rounded-lg">{t("programs.all_regions")}</SelectItem>
+                  {cities.map((c) => (
+                    <SelectItem key={c} value={c} className="rounded-lg">{c}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-              <select
-                value={methodFilter}
-                onChange={(e) => setMethodFilter(e.target.value)}
-                className="w-full rounded-xl border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary min-h-[44px] sm:w-36"
-              >
-                {applyMethodList.map((m) => (
-                  <option key={m.value} value={m.value === "전체" ? "all" : m.value}>{t(m.labelKey)}</option>
-                ))}
-              </select>
+              <Select value={methodFilter} onValueChange={setMethodFilter}>
+                <SelectTrigger className="w-full rounded-xl border-border/60 bg-background px-3 py-2.5 text-sm shadow-sm min-h-[44px] sm:w-44 focus:ring-primary/30 focus:border-primary transition-colors">
+                  <div className="flex items-center gap-2">
+                    <MousePointerClick className="h-4 w-4 text-primary/60" />
+                    <SelectValue />
+                  </div>
+                </SelectTrigger>
+                <SelectContent className="rounded-xl border-border/60 shadow-lg">
+                  {applyMethodList.map((m) => (
+                    <SelectItem key={m.value} value={m.value === "전체" ? "all" : m.value} className="rounded-lg">{t(m.labelKey)}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
