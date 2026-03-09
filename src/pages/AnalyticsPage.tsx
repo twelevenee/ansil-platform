@@ -194,7 +194,7 @@ const AnalyticsPage = () => {
                             <Cell key={i} fill={entry.color} />
                           ))}
                         </Pie>
-                        <Tooltip formatter={(v: number, name: string) => [`${v}${t("analytics.count_suffix")}`, name]} />
+                        <Tooltip content={<ChartTooltip valueFormatter={(v: number, name: string) => [`${v}${t("analytics.count_suffix")}`, name]} />} />
                         <text x="50%" y="46%" textAnchor="middle" dominantBaseline="central"
                           className="fill-foreground text-xl font-bold">{freePct}%</text>
                         <text x="50%" y="58%" textAnchor="middle" dominantBaseline="central"
