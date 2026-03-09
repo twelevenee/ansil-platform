@@ -79,7 +79,7 @@ const AnalyticsPage = () => {
       { name: t("analytics.paid"), value: paid, color: "hsl(345, 55%, 72%)" },
       { name: t("analytics.other"), value: unknown, color: "hsl(220, 9%, 80%)" },
     ].filter(d => d.value > 0);
-  }, [programs]);
+  }, [programs, t]);
 
   // Category distribution donut
   const catDonutData = useMemo(() => {
@@ -140,7 +140,7 @@ const AnalyticsPage = () => {
             {/* Category Distribution */}
             <Card className="rounded-2xl border-none shadow-card">
               <CardHeader className="pb-2">
-                <CardTitle className="text-base font-semibold">{t("analytics.cat_distribution")}</CardTitle>
+                <CardTitle className="text-base font-semibold">{t("analytics.category_distribution")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center gap-4">
@@ -153,7 +153,7 @@ const AnalyticsPage = () => {
                             <Cell key={i} fill={entry.color} />
                           ))}
                         </Pie>
-                        <Tooltip formatter={(v: number, name: string) => [`${v}건`, name]} />
+                        <Tooltip formatter={(v: number, name: string) => [`${v}${t("analytics.count_suffix")}`, name]} />
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
@@ -167,7 +167,7 @@ const AnalyticsPage = () => {
                             <Icon className="h-3 w-3" />
                             <span className="font-medium">{d.name}</span>
                           </div>
-                          <span className="text-muted-foreground">{d.value}건</span>
+                          <span className="text-muted-foreground">{d.value}{t("analytics.count_suffix")}</span>
                         </div>
                       );
                     })}
@@ -192,11 +192,11 @@ const AnalyticsPage = () => {
                             <Cell key={i} fill={entry.color} />
                           ))}
                         </Pie>
-                        <Tooltip formatter={(v: number, name: string) => [`${v}건`, name]} />
+                        <Tooltip formatter={(v: number, name: string) => [`${v}${t("analytics.count_suffix")}`, name]} />
                         <text x="50%" y="46%" textAnchor="middle" dominantBaseline="central"
                           className="fill-foreground text-xl font-bold">{freePct}%</text>
                         <text x="50%" y="58%" textAnchor="middle" dominantBaseline="central"
-                          className="fill-muted-foreground" style={{ fontSize: 10 }}>무료</text>
+                          className="fill-muted-foreground" style={{ fontSize: 10 }}>{t("analytics.free")}</text>
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
@@ -205,7 +205,7 @@ const AnalyticsPage = () => {
                       <div key={d.name} className="flex items-center gap-2 text-xs text-muted-foreground">
                         <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: d.color }} />
                         <span>{d.name}</span>
-                        <span className="font-medium text-foreground">{d.value}건</span>
+                        <span className="font-medium text-foreground">{d.value}{t("analytics.count_suffix")}</span>
                       </div>
                     ))}
                   </div>
@@ -225,7 +225,7 @@ const AnalyticsPage = () => {
                 <table className="w-full min-w-[520px] border-collapse text-xs md:text-sm">
                   <thead>
                     <tr>
-                      <th className="p-2 text-left font-medium text-muted-foreground">지역</th>
+                      <th className="p-2 text-left font-medium text-muted-foreground">{t("analytics.region")}</th>
                       {CAT_META.map(cat => {
                         const Icon = cat.icon;
                         return (

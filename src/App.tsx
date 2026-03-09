@@ -10,7 +10,7 @@ import ChatPage from "./pages/ChatPage";
 import ProgramsPage from "./pages/ProgramsPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import NotFound from "./pages/NotFound";
-import { LanguageProvider } from "./contexts/LanguageContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ChatFab } from "./components/ChatFab";
 
 const queryClient = new QueryClient();
