@@ -88,7 +88,7 @@ const ko = {
   // Footer
   "footer.source": "데이터 출처: 씽글벙글 서울, 공공데이터포털, 각 지자체 홈페이지",
   "footer.disclaimer": "이 서비스는 AI 기반으로 제공되며, 정확한 자격 여부는 해당 기관에 직접 확인해주세요.",
-  "footer.copyright": "© 2026 안심찾기. All rights reserved.",
+  "footer.copyright": "© 2026 안실 ANSIL. All rights reserved.",
 
   // ProgramCard
   "card.apply": "신청하기",
