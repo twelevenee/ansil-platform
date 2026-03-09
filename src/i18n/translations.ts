@@ -25,7 +25,7 @@ const ko = {
   "hero.subtitle": "전국 지자체 지원제도를 모아서, AI가 나에게 맞는 걸 찾아드려요",
   "hero.stat_women": "여성 1인가구",
   "hero.stat_programs": "전국 지원제도",
-  "hero.stat_regions": "광역시·도 커버",
+  "hero.stat_regions": "광역시·도 대상",
 
   // AI Search
   "ai.title": "나에게 맞는 지원제도, AI가 찾아드려요",
