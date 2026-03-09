@@ -147,7 +147,7 @@ const ko = {
   "analytics.stat_free": "무료 비율",
   "analytics.stat_open": "신청가능 비율",
   "analytics.heatmap_title": "우리 지역에 빠진 지원은?",
-  "analytics.heatmap_desc": "✕ 표시가 있는 곳은 아직 해당 분야 지원제도가 없는 지역이에요",
+  "analytics.heatmap_desc": "✕ 는 해당하는 지원 제도가 없음을 뜻해요",
   "analytics.donut_title": "비용 분포",
   "analytics.free": "무료",
   "analytics.paid": "유료",
