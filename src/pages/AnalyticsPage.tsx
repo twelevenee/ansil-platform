@@ -242,123 +242,15 @@ const AnalyticsPage = () => {
             </Card>
           </div>
 
-          {/* Heatmap */}
-          <Card className="mb-8 rounded-2xl border-none shadow-card">
-            <CardHeader>
-              <CardTitle className="text-base font-semibold">{t("analytics.heatmap_title")}</CardTitle>
-              <CardDescription className="text-xs">{t("analytics.heatmap_desc")}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="overflow-x-auto -mx-2 md:mx-0">
-                <table className="w-full min-w-[520px] border-collapse text-xs md:text-sm">
-                  <thead>
-                    <tr>
-                      <th className="p-2 text-left font-medium text-muted-foreground">{t("analytics.region")}</th>
-                      {CAT_META.map(cat => {
-                        const Icon = cat.icon;
-                        return (
-                          <th key={cat.key} className="p-2 text-center">
-                            <div className="flex flex-col items-center gap-0.5">
-                              <Icon className="h-3.5 w-3.5 text-muted-foreground" />
-                              <span className="font-medium text-muted-foreground text-[10px] md:text-xs">{t(CAT_LABEL_KEY[cat.key])}</span>
-                            </div>
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {heatmapRegions.map(region => (
-                      <tr key={region.region_city} className="border-t border-border/30">
-                        <td className="p-2 font-medium text-foreground">{shorten(region.region_city)}</td>
-                        {CAT_META.map(cat => {
-                          const val = Number(region[STAT_MAP[cat.key] as keyof typeof region]);
-                          const intensity = maxCatCount > 0 ? val / maxCatCount : 0;
-                          // Use each category's own color for the heatmap cells
-                          const baseColor = cat.hsl;
-                          return (
-                            <td key={cat.key} className="p-1.5 text-center">
-                              {val === 0 ? (
-                                <div className="mx-auto flex h-8 w-11 items-center justify-center rounded-lg border border-dashed border-muted-foreground/20 text-muted-foreground/40 text-[10px] md:h-9 md:w-14">
-                                  ✕
-                                </div>
-                              ) : (
-                                <div
-                                  className="mx-auto flex h-8 w-11 items-center justify-center rounded-lg text-xs font-medium md:h-9 md:w-14 transition-colors"
-                                  style={{
-                                    backgroundColor: baseColor.replace(")", `, ${0.12 + intensity * 0.55})`).replace("hsl", "hsla"),
-                                    color: intensity > 0.45 ? "#fff" : "hsl(0, 0%, 18%)",
-                                  }}
-                                  title={`${shorten(region.region_city)} × ${t(CAT_LABEL_KEY[cat.key])} = ${val}${t("common.count_suffix")}`}
-                                >
-                                  {val}
-                                </div>
-                              )}
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
+          {/* Heatmap - Region Selector */}
+          <HeatmapSection
+            heatmapRegions={heatmapRegions}
+            maxCatCount={maxCatCount}
+            t={t}
+          />
 
-          {/* SAI Ranking Table */}
-          <Card className="mb-8 rounded-2xl border-none shadow-card">
-            <CardHeader>
-              <CardTitle className="text-base font-semibold">{t("analytics.sai_ranking_title")}</CardTitle>
-              <CardDescription className="text-xs">{t("analytics.sai_ranking_desc")}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="overflow-x-auto -mx-2 md:mx-0">
-                <table className="w-full min-w-[400px] border-collapse text-xs md:text-sm">
-                  <thead>
-                    <tr>
-                      <th className="p-2 text-left font-medium text-muted-foreground">#</th>
-                      <th className="p-2 text-left font-medium text-muted-foreground">{t("analytics.sai_col_region")}</th>
-                      <th className="p-2 text-center font-medium text-muted-foreground">{t("analytics.sai_col_index")}</th>
-                      <th className="p-2 text-center font-medium text-muted-foreground">{t("analytics.sai_col_grade")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {saiData.rows.map((row, i) => {
-                      const grade = row.sai >= 80
-                        ? { label: t("analytics.sai_grade_very_high"), bg: "bg-sky-light", text: "text-sky-deep" }
-                        : row.sai >= 60
-                        ? { label: t("analytics.sai_grade_normal"), bg: "bg-peach-light", text: "text-peach-deep" }
-                        : row.sai >= 40
-                        ? { label: t("analytics.sai_grade_low"), bg: "bg-coral-light", text: "text-coral-deep" }
-                        : { label: t("analytics.sai_grade_very_low"), bg: "bg-rose-light", text: "text-rose-deep" };
-                      return (
-                        <tr key={row.region} className="border-t border-border/30">
-                          <td className="p-2 text-muted-foreground">{i + 1}</td>
-                          <td className="p-2 font-medium text-foreground">{shorten(row.region)}</td>
-                          <td className="p-2 text-center">
-                            <div className="flex items-center justify-center gap-2">
-                              <div className="hidden h-2 w-16 overflow-hidden rounded-full bg-muted md:block">
-                                <div
-                                  className="h-full rounded-full bg-coral-mid transition-all duration-700"
-                                  style={{ width: `${row.sai}%` }}
-                                />
-                              </div>
-                              <span className="font-semibold text-foreground">{row.sai}</span>
-                            </div>
-                          </td>
-                          <td className="p-2 text-center">
-                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${grade.bg} ${grade.text}`}>
-                              {grade.label}
-                            </span>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
+          {/* SAI Ranking */}
+          <SAIRankingSection saiData={saiData} t={t} />
           {/* Source */}
           <div className="rounded-2xl bg-rose-light/50 p-5 text-center text-sm text-muted-foreground">
             <p>{t("analytics.source")}</p>
