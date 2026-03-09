@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -8,7 +8,7 @@ import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 import { ChartTooltip } from "@/components/ui/chart-tooltip";
-import { FileText, MapPin, Gift, CheckCircle, Home, Shield, ShoppingBag, Heart, Users, TrendingUp } from "lucide-react";
+import { FileText, MapPin, Gift, CheckCircle, Home, Shield, ShoppingBag, Heart, Users, TrendingUp, Trophy, TrendingDown, ChevronDown, ChevronUp, Check, X } from "lucide-react";
 
 const CAT_META: { key: string; icon: React.ElementType; chipActive: string; chipInactive: string; hsl: string }[] = [
   { key: "주거안전", icon: Home, chipActive: "bg-sky-mid text-white", chipInactive: "bg-sky-light text-sky-deep border border-sky-mid/30", hsl: "hsl(213, 55%, 67%)" },
@@ -47,6 +47,255 @@ function useRegionStatsRPC() {
     },
   });
 }
+
+function getGrade(sai: number, t: (k: string) => string) {
+  if (sai >= 80) return { label: t("analytics.sai_grade_very_high"), bg: "bg-sky-light", text: "text-sky-deep" };
+  if (sai >= 60) return { label: t("analytics.sai_grade_normal"), bg: "bg-peach-light", text: "text-peach-deep" };
+  if (sai >= 40) return { label: t("analytics.sai_grade_low"), bg: "bg-coral-light", text: "text-coral-deep" };
+  return { label: t("analytics.sai_grade_very_low"), bg: "bg-rose-light", text: "text-rose-deep" };
+}
+
+function SAIRankingRow({ row, rank, t }: { row: { region: string; sai: number }; rank: number; t: (k: string) => string }) {
+  const grade = getGrade(row.sai, t);
+  return (
+    <div className="flex items-center gap-3 rounded-xl bg-muted/40 px-3 py-2.5 min-h-[44px]">
+      <span className="w-6 text-center text-xs font-medium text-muted-foreground">{rank}</span>
+      <span className="flex-1 text-sm font-medium text-foreground">{shorten(row.region)}</span>
+      <div className="flex items-center gap-2">
+        <div className="hidden h-2 w-14 overflow-hidden rounded-full bg-muted md:block">
+          <div className="h-full rounded-full bg-coral-mid transition-all duration-700" style={{ width: `${row.sai}%` }} />
+        </div>
+        <span className="w-8 text-right text-sm font-semibold text-foreground">{row.sai}</span>
+      </div>
+      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${grade.bg} ${grade.text}`}>
+        {grade.label}
+      </span>
+    </div>
+  );
+}
+
+function SAIRankingSection({ saiData, t }: { saiData: { rows: { region: string; sai: number }[]; avg: number }; t: (k: string) => string }) {
+  const [showAll, setShowAll] = useState(false);
+  const top5 = saiData.rows.slice(0, 5);
+  const bottom5 = saiData.rows.slice(-5).reverse();
+  const highest = saiData.rows[0];
+  const lowest = saiData.rows[saiData.rows.length - 1];
+
+  return (
+    <Card className="mb-8 rounded-2xl border-none shadow-card">
+      <CardHeader>
+        <CardTitle className="text-base font-semibold">{t("analytics.sai_ranking_title")}</CardTitle>
+        <CardDescription className="text-xs">{t("analytics.sai_ranking_desc")}</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-5">
+        {/* 3 Summary Cards */}
+        <div className="grid grid-cols-3 gap-2 md:gap-3">
+          <div className="rounded-xl bg-sky-light/60 p-3 text-center">
+            <Trophy className="mx-auto mb-1.5 h-4 w-4 text-sky-deep" />
+            <p className="text-[10px] text-muted-foreground">{t("analytics.sai_highest")}</p>
+            {highest && (
+              <>
+                <p className="text-sm font-bold text-sky-deep">{shorten(highest.region)}</p>
+                <p className="text-lg font-bold text-sky-deep">{highest.sai}</p>
+              </>
+            )}
+          </div>
+          <div className="rounded-xl bg-muted/60 p-3 text-center">
+            <TrendingUp className="mx-auto mb-1.5 h-4 w-4 text-foreground" />
+            <p className="text-[10px] text-muted-foreground">{t("analytics.sai_national_avg")}</p>
+            <p className="text-lg font-bold text-foreground">{saiData.avg}</p>
+          </div>
+          <div className="rounded-xl bg-rose-light/60 p-3 text-center">
+            <TrendingDown className="mx-auto mb-1.5 h-4 w-4 text-rose-deep" />
+            <p className="text-[10px] text-muted-foreground">{t("analytics.sai_lowest")}</p>
+            {lowest && (
+              <>
+                <p className="text-sm font-bold text-rose-deep">{shorten(lowest.region)}</p>
+                <p className="text-lg font-bold text-rose-deep">{lowest.sai}</p>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Top 5 / Bottom 5 */}
+        <div className="grid gap-4 md:grid-cols-2">
+          <div>
+            <p className="mb-2 text-xs font-semibold text-muted-foreground">{t("analytics.sai_top5")}</p>
+            <div className="space-y-1.5">
+              {top5.map((row, i) => <SAIRankingRow key={row.region} row={row} rank={i + 1} t={t} />)}
+            </div>
+          </div>
+          <div>
+            <p className="mb-2 text-xs font-semibold text-muted-foreground">{t("analytics.sai_bottom5")}</p>
+            <div className="space-y-1.5">
+              {bottom5.map((row) => {
+                const rank = saiData.rows.findIndex(r => r.region === row.region) + 1;
+                return <SAIRankingRow key={row.region} row={row} rank={rank} t={t} />;
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Collapsible full list */}
+        <div>
+          <button
+            onClick={() => setShowAll(!showAll)}
+            className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-muted/40 py-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted/60 min-h-[40px]"
+          >
+            {showAll ? t("analytics.sai_hide_all") : t("analytics.sai_view_all").replace("{count}", String(saiData.rows.length))}
+            {showAll ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+          </button>
+          {showAll && (
+            <div className="mt-3 space-y-1.5">
+              {saiData.rows.map((row, i) => <SAIRankingRow key={row.region} row={row} rank={i + 1} t={t} />)}
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function HeatmapSection({
+  heatmapRegions,
+  maxCatCount,
+  t,
+}: {
+  heatmapRegions: any[];
+  maxCatCount: number;
+  t: (k: string) => string;
+}) {
+  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+  const [showCompare, setShowCompare] = useState(false);
+
+  const selectedData = heatmapRegions.find(r => r.region_city === selectedRegion);
+
+  return (
+    <Card className="mb-8 rounded-2xl border-none shadow-card">
+      <CardHeader>
+        <CardTitle className="text-base font-semibold">{t("analytics.heatmap_title")}</CardTitle>
+        <CardDescription className="text-xs">{t("analytics.heatmap_desc")}</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* Region selector chips */}
+        <div className="flex flex-wrap gap-1.5">
+          {heatmapRegions.map(region => (
+            <button
+              key={region.region_city}
+              onClick={() => setSelectedRegion(selectedRegion === region.region_city ? null : region.region_city)}
+              className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors min-h-[32px] ${
+                selectedRegion === region.region_city
+                  ? "bg-rose-mid text-white"
+                  : "bg-muted/50 text-muted-foreground hover:bg-muted"
+              }`}
+            >
+              {shorten(region.region_city)}
+            </button>
+          ))}
+        </div>
+
+        {/* Selected region card view */}
+        {selectedData ? (
+          <div className="grid grid-cols-2 gap-2 md:grid-cols-5 md:gap-3">
+            {CAT_META.map(cat => {
+              const val = Number(selectedData[STAT_MAP[cat.key] as keyof typeof selectedData]);
+              const Icon = cat.icon;
+              const hasSupport = val > 0;
+              return (
+                <div
+                  key={cat.key}
+                  className={`rounded-xl p-3 text-center transition-colors ${
+                    hasSupport ? cat.chipInactive : "border border-dashed border-muted-foreground/20 bg-muted/20"
+                  }`}
+                >
+                  <Icon className={`mx-auto mb-1.5 h-5 w-5 ${hasSupport ? "" : "text-muted-foreground/40"}`} />
+                  <p className="text-xs font-medium">{t(CAT_LABEL_KEY[cat.key])}</p>
+                  {hasSupport ? (
+                    <p className="mt-1 text-lg font-bold">{val}<span className="text-xs font-normal">{t("analytics.count_suffix")}</span></p>
+                  ) : (
+                    <p className="mt-1 text-xs text-muted-foreground/50">{t("analytics.heatmap_no_support")}</p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="rounded-xl bg-muted/30 py-8 text-center">
+            <MapPin className="mx-auto mb-2 h-6 w-6 text-muted-foreground/40" />
+            <p className="text-sm text-muted-foreground">{t("analytics.heatmap_select_region")}</p>
+            <p className="mt-0.5 text-xs text-muted-foreground/60">{t("analytics.heatmap_select_desc")}</p>
+          </div>
+        )}
+
+        {/* Expandable comparison matrix */}
+        <div>
+          <button
+            onClick={() => setShowCompare(!showCompare)}
+            className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-muted/40 py-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted/60 min-h-[40px]"
+          >
+            {showCompare ? t("analytics.heatmap_hide_compare") : t("analytics.heatmap_compare_all")}
+            {showCompare ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+          </button>
+          {showCompare && (
+            <div className="mt-3 overflow-x-auto -mx-2 md:mx-0">
+              <table className="w-full min-w-[520px] border-collapse text-xs md:text-sm">
+                <thead>
+                  <tr>
+                    <th className="p-2 text-left font-medium text-muted-foreground">{t("analytics.region")}</th>
+                    {CAT_META.map(cat => {
+                      const Icon = cat.icon;
+                      return (
+                        <th key={cat.key} className="p-2 text-center">
+                          <div className="flex flex-col items-center gap-0.5">
+                            <Icon className="h-3.5 w-3.5 text-muted-foreground" />
+                            <span className="font-medium text-muted-foreground text-[10px] md:text-xs">{t(CAT_LABEL_KEY[cat.key])}</span>
+                          </div>
+                        </th>
+                      );
+                    })}
+                  </tr>
+                </thead>
+                <tbody>
+                  {heatmapRegions.map(region => (
+                    <tr key={region.region_city} className="border-t border-border/30">
+                      <td className="p-2 font-medium text-foreground">{shorten(region.region_city)}</td>
+                      {CAT_META.map(cat => {
+                        const val = Number(region[STAT_MAP[cat.key] as keyof typeof region]);
+                        const intensity = maxCatCount > 0 ? val / maxCatCount : 0;
+                        const baseColor = cat.hsl;
+                        return (
+                          <td key={cat.key} className="p-1.5 text-center">
+                            {val === 0 ? (
+                              <div className="mx-auto flex h-8 w-11 items-center justify-center rounded-lg border border-dashed border-muted-foreground/20 text-muted-foreground/40 text-[10px] md:h-9 md:w-14">
+                                ✕
+                              </div>
+                            ) : (
+                              <div
+                                className="mx-auto flex h-8 w-11 items-center justify-center rounded-lg text-xs font-medium md:h-9 md:w-14 transition-colors"
+                                style={{
+                                  backgroundColor: baseColor.replace(")", `, ${0.12 + intensity * 0.55})`).replace("hsl", "hsla"),
+                                  color: intensity > 0.45 ? "#fff" : "hsl(0, 0%, 18%)",
+                                }}
+                                title={`${shorten(region.region_city)} × ${t(CAT_LABEL_KEY[cat.key])} = ${val}${t("common.count_suffix")}`}
+                              >
+                                {val}
+                              </div>
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 
 const AnalyticsPage = () => {
   const { t } = useLanguage();
@@ -242,123 +491,15 @@ const AnalyticsPage = () => {
             </Card>
           </div>
 
-          {/* Heatmap */}
-          <Card className="mb-8 rounded-2xl border-none shadow-card">
-            <CardHeader>
-              <CardTitle className="text-base font-semibold">{t("analytics.heatmap_title")}</CardTitle>
-              <CardDescription className="text-xs">{t("analytics.heatmap_desc")}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="overflow-x-auto -mx-2 md:mx-0">
-                <table className="w-full min-w-[520px] border-collapse text-xs md:text-sm">
-                  <thead>
-                    <tr>
-                      <th className="p-2 text-left font-medium text-muted-foreground">{t("analytics.region")}</th>
-                      {CAT_META.map(cat => {
-                        const Icon = cat.icon;
-                        return (
-                          <th key={cat.key} className="p-2 text-center">
-                            <div className="flex flex-col items-center gap-0.5">
-                              <Icon className="h-3.5 w-3.5 text-muted-foreground" />
-                              <span className="font-medium text-muted-foreground text-[10px] md:text-xs">{t(CAT_LABEL_KEY[cat.key])}</span>
-                            </div>
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {heatmapRegions.map(region => (
-                      <tr key={region.region_city} className="border-t border-border/30">
-                        <td className="p-2 font-medium text-foreground">{shorten(region.region_city)}</td>
-                        {CAT_META.map(cat => {
-                          const val = Number(region[STAT_MAP[cat.key] as keyof typeof region]);
-                          const intensity = maxCatCount > 0 ? val / maxCatCount : 0;
-                          // Use each category's own color for the heatmap cells
-                          const baseColor = cat.hsl;
-                          return (
-                            <td key={cat.key} className="p-1.5 text-center">
-                              {val === 0 ? (
-                                <div className="mx-auto flex h-8 w-11 items-center justify-center rounded-lg border border-dashed border-muted-foreground/20 text-muted-foreground/40 text-[10px] md:h-9 md:w-14">
-                                  ✕
-                                </div>
-                              ) : (
-                                <div
-                                  className="mx-auto flex h-8 w-11 items-center justify-center rounded-lg text-xs font-medium md:h-9 md:w-14 transition-colors"
-                                  style={{
-                                    backgroundColor: baseColor.replace(")", `, ${0.12 + intensity * 0.55})`).replace("hsl", "hsla"),
-                                    color: intensity > 0.45 ? "#fff" : "hsl(0, 0%, 18%)",
-                                  }}
-                                  title={`${shorten(region.region_city)} × ${t(CAT_LABEL_KEY[cat.key])} = ${val}${t("common.count_suffix")}`}
-                                >
-                                  {val}
-                                </div>
-                              )}
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
+          {/* Heatmap - Region Selector */}
+          <HeatmapSection
+            heatmapRegions={heatmapRegions}
+            maxCatCount={maxCatCount}
+            t={t}
+          />
 
-          {/* SAI Ranking Table */}
-          <Card className="mb-8 rounded-2xl border-none shadow-card">
-            <CardHeader>
-              <CardTitle className="text-base font-semibold">{t("analytics.sai_ranking_title")}</CardTitle>
-              <CardDescription className="text-xs">{t("analytics.sai_ranking_desc")}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="overflow-x-auto -mx-2 md:mx-0">
-                <table className="w-full min-w-[400px] border-collapse text-xs md:text-sm">
-                  <thead>
-                    <tr>
-                      <th className="p-2 text-left font-medium text-muted-foreground">#</th>
-                      <th className="p-2 text-left font-medium text-muted-foreground">{t("analytics.sai_col_region")}</th>
-                      <th className="p-2 text-center font-medium text-muted-foreground">{t("analytics.sai_col_index")}</th>
-                      <th className="p-2 text-center font-medium text-muted-foreground">{t("analytics.sai_col_grade")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {saiData.rows.map((row, i) => {
-                      const grade = row.sai >= 80
-                        ? { label: t("analytics.sai_grade_very_high"), bg: "bg-sky-light", text: "text-sky-deep" }
-                        : row.sai >= 60
-                        ? { label: t("analytics.sai_grade_normal"), bg: "bg-peach-light", text: "text-peach-deep" }
-                        : row.sai >= 40
-                        ? { label: t("analytics.sai_grade_low"), bg: "bg-coral-light", text: "text-coral-deep" }
-                        : { label: t("analytics.sai_grade_very_low"), bg: "bg-rose-light", text: "text-rose-deep" };
-                      return (
-                        <tr key={row.region} className="border-t border-border/30">
-                          <td className="p-2 text-muted-foreground">{i + 1}</td>
-                          <td className="p-2 font-medium text-foreground">{shorten(row.region)}</td>
-                          <td className="p-2 text-center">
-                            <div className="flex items-center justify-center gap-2">
-                              <div className="hidden h-2 w-16 overflow-hidden rounded-full bg-muted md:block">
-                                <div
-                                  className="h-full rounded-full bg-coral-mid transition-all duration-700"
-                                  style={{ width: `${row.sai}%` }}
-                                />
-                              </div>
-                              <span className="font-semibold text-foreground">{row.sai}</span>
-                            </div>
-                          </td>
-                          <td className="p-2 text-center">
-                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${grade.bg} ${grade.text}`}>
-                              {grade.label}
-                            </span>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
+          {/* SAI Ranking */}
+          <SAIRankingSection saiData={saiData} t={t} />
           {/* Source */}
           <div className="rounded-2xl bg-rose-light/50 p-5 text-center text-sm text-muted-foreground">
             <p>{t("analytics.source")}</p>
