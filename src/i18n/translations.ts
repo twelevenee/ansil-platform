@@ -126,8 +126,8 @@ const ko = {
   "region.radar_gap": "서울 대비 가장 큰 격차",
 
   // Analytics
-  "analytics.section_title": "지역별 분석",
-  "analytics.section_subtitle": "우리 동네는 어떤 지원이 있을까요?",
+  "analytics.section_title": "지역별 지원 구조 비교",
+  "analytics.section_subtitle": "여러 지역의 지원 구조를 비교해보세요",
   "analytics.tab_lollipop": "지역 비교",
   "analytics.tab_stacked": "카테고리별",
   "analytics.tab_radar": "레이더",
