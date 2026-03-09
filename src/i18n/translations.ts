@@ -607,6 +607,12 @@ const zh: Record<TranslationKey, string> = {
   "analytics.heatmap_title": "哪里缺什么？",
   "analytics.heatmap_desc": "地区×类别热力图 · ✕=0项",
   "analytics.donut_title": "费用分布",
+  "analytics.free": "免费",
+  "analytics.paid": "付费",
+  "analytics.other": "其他",
+  "analytics.category_distribution": "类别分布",
+  "analytics.region": "地区",
+  "analytics.count_suffix": "项",
   "analytics.source": "数据来源：公共数据门户、各地方政府网站、生活法令信息",
   "analytics.updated": "最后更新：2026年3月",
 
