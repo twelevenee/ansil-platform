@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Send, ThumbsUp, ThumbsDown, ExternalLink, AlertTriangle } from "lucide-react";
-import ansimiAvatar from "@/assets/ansimi-avatar.png";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/Navbar";
 import { toast } from "@/hooks/use-toast";
@@ -53,7 +52,7 @@ function getSessionId(): string {
 function TypingIndicator({ label }: { label: string }) {
   return (
     <div className="flex items-start gap-2">
-      <img src={ansimiAvatar} alt="안심이" className="h-8 w-8 shrink-0 rounded-full object-cover" />
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-rose-light text-lg">👩🏻‍💻</span>
       <div className="flex items-center gap-1 rounded-2xl rounded-tl-sm border bg-card px-4 py-3 shadow-card">
         <span className="text-xs text-muted-foreground mr-2">{label}</span>
         <span className="h-2 w-2 animate-bounce rounded-full bg-lav-mid" style={{ animationDelay: "0ms" }} />
@@ -129,7 +128,7 @@ function MessageBubble({
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"} gap-2`}>
       {!isUser && (
-        <img src={ansimiAvatar} alt="안심이" className="h-8 w-8 shrink-0 rounded-full object-cover mt-1" />
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-rose-light text-lg mt-1">👩🏻‍💻</span>
       )}
       <div className="max-w-[85%] space-y-3 md:max-w-[75%]">
         {message.is_emergency && (
