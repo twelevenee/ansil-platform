@@ -140,7 +140,7 @@ const AnalyticsPage = () => {
             {/* Category Distribution */}
             <Card className="rounded-2xl border-none shadow-card">
               <CardHeader className="pb-2">
-                <CardTitle className="text-base font-semibold">카테고리 분포</CardTitle>
+                <CardTitle className="text-base font-semibold">{t("analytics.category_distribution")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center gap-4">
