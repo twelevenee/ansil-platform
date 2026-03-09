@@ -11,12 +11,13 @@ import {
   Treemap, ResponsiveContainer, ReferenceLine, Cell,
 } from "recharts";
 
+// Pastel palette: Sky, Lavender, Rose, Coral, Peach
 const CAT_COLORS: Record<string, string> = {
-  주거안전: "#E8917F",
-  귀가안전: "#4A7EC2",
-  생활지원: "#F5A86E",
-  건강: "#4CAF82",
-  커뮤니티: "#C48DB0",
+  주거안전: "#E8917F",   // coral-mid
+  귀가안전: "#7BA4D9",   // sky-mid
+  생활지원: "#F5A86E",   // peach-mid
+  건강: "#E8889E",       // rose-mid
+  커뮤니티: "#C48DB0",   // lav-mid
 };
 const CAT_KEYS = ["주거안전", "귀가안전", "생활지원", "건강", "커뮤니티"];
 const STAT_MAP: Record<string, string> = {
@@ -184,9 +185,9 @@ export function DashboardCharts() {
                         <PolarAngleAxis dataKey="category" tick={{ fontSize: 12 }} />
                         <PolarRadiusAxis tick={{ fontSize: 10 }} />
                         <Radar name={shorten(region1)} dataKey={region1}
-                          stroke="#E8917F" fill="#E8917F" fillOpacity={0.4} strokeWidth={2} />
+                          stroke="#E8889E" fill="#E8889E" fillOpacity={0.4} strokeWidth={2} />
                         <Radar name={shorten(region2)} dataKey={region2}
-                          stroke="#4A7EC2" fill="#4A7EC2" fillOpacity={0.3} strokeWidth={2} />
+                          stroke="#7BA4D9" fill="#7BA4D9" fillOpacity={0.3} strokeWidth={2} />
                         <Legend wrapperStyle={{ fontSize: 12 }} />
                         <Tooltip />
                       </RadarChart>
