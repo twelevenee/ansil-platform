@@ -60,6 +60,31 @@ const AnalyticsPage = () => {
   const openCount = programs.filter(p => p.status === "신청가능").length;
   const openPct = totalPrograms ? Math.round((openCount / totalPrograms) * 100) : 0;
 
+  // SAI calculation
+  const saiData = useMemo(() => {
+    const regionMap: Record<string, typeof programs> = {};
+    programs.forEach(p => {
+      if (!regionMap[p.region_city]) regionMap[p.region_city] = [];
+      regionMap[p.region_city].push(p);
+    });
+    const maxCount = Math.max(...Object.values(regionMap).map(arr => arr.length), 1);
+
+    const rows = Object.entries(regionMap).map(([region, progs]) => {
+      const total = progs.length;
+      const scaleScore = (total / maxCount) * 100;
+      const freeScore = total ? (progs.filter(p => p.cost === "무료").length / total) * 100 : 0;
+      const availableScore = total ? (progs.filter(p => p.status === "신청가능").length / total) * 100 : 0;
+      const uniqueCats = new Set(progs.map(p => p.category)).size;
+      const diversityScore = (uniqueCats / 5) * 100;
+      const sai = Math.round(scaleScore * 0.4 + freeScore * 0.2 + availableScore * 0.2 + diversityScore * 0.2);
+      return { region, sai };
+    });
+
+    rows.sort((a, b) => b.sai - a.sai);
+    const avg = rows.length ? Math.round(rows.reduce((s, r) => s + r.sai, 0) / rows.length) : 0;
+    return { rows, avg };
+  }, [programs]);
+
   const heatmapRegions = useMemo(() =>
     [...stats].sort((a, b) => Number(b.total_count) - Number(a.total_count)),
     [stats]);
