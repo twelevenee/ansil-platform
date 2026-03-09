@@ -967,6 +967,8 @@ const uz: Record<TranslationKey, string> = {
   "analytics.stat_regions": "Hududlar",
   "analytics.stat_free": "Bepul dasturlar",
   "analytics.stat_open": "Ariza uchun ochiq",
+  "analytics.sai_desc": "Hajm, bepullik, mavjudlik va xilma-xillik bo'yicha umumiy indeks.",
+  "analytics.program_structure_title": "Dastur tuzilmasi",
   "analytics.heatmap_title": "Qayerda kam?",
   "analytics.heatmap_desc": "Hudud × Kategoriya · ✕ = 0 dastur",
   "analytics.donut_title": "Xarajat taqsimoti",
