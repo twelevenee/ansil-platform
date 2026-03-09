@@ -139,11 +139,49 @@ export function LeafletMap({ selectedRegion, onRegionClick, programCounts }: Lea
     };
   }, []);
 
-  // Update region markers
+  // Update region polygons and markers
   useEffect(() => {
     const map = mapInstanceRef.current;
     if (!map) return;
 
+    // Clear old polygons
+    if (polygonLayerRef.current) {
+      polygonLayerRef.current.remove();
+    }
+    const polyGroup = L.layerGroup();
+
+    mergedRegions.forEach((region) => {
+      const coords = regionPolygons[region.name];
+      if (!coords) return;
+      const isSelected = selectedRegion === region.name;
+
+      const polygon = L.polygon(coords, {
+        color: isSelected ? "#D4637A" : "transparent",
+        weight: isSelected ? 2 : 0,
+        fillColor: isSelected ? "#D4637A" : "#E8889E",
+        fillOpacity: isSelected ? 0.15 : 0,
+        className: "cursor-pointer",
+      });
+
+      polygon.on("click", () => onRegionClick(region.name));
+      polygon.on("mouseover", () => {
+        if (selectedRegion !== region.name) {
+          polygon.setStyle({ fillOpacity: 0.08, color: "#E8889E", weight: 1 });
+        }
+      });
+      polygon.on("mouseout", () => {
+        if (selectedRegion !== region.name) {
+          polygon.setStyle({ fillOpacity: 0, color: "transparent", weight: 0 });
+        }
+      });
+
+      polygon.addTo(polyGroup);
+    });
+
+    polyGroup.addTo(map);
+    polygonLayerRef.current = polyGroup;
+
+    // Clear old markers
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
 
