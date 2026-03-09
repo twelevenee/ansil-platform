@@ -7,6 +7,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
+import { ChartTooltip } from "@/components/ui/chart-tooltip";
 import { FileText, MapPin, Gift, CheckCircle, Home, Shield, ShoppingBag, Heart, Users } from "lucide-react";
 
 const CAT_META: { key: string; icon: React.ElementType; chipActive: string; chipInactive: string; hsl: string }[] = [
