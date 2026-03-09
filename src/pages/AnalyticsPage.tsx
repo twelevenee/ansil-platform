@@ -175,7 +175,6 @@ function HeatmapSection({
     <Card className="mb-8 rounded-2xl border-none shadow-card">
       <CardHeader>
         <CardTitle className="text-base font-semibold">{t("analytics.heatmap_title")}</CardTitle>
-        <CardDescription className="text-xs">{t("analytics.heatmap_desc")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Region selector chips */}
