@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CAT_LABEL_KEY } from "@/utils/categoryMap";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
@@ -67,14 +68,14 @@ export function RegionRadarChart({ regionCity }: { regionCity: string }) {
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart data={radarData}>
                 <PolarGrid stroke="hsl(var(--border))" />
-                <PolarAngleAxis dataKey="category" tick={{ fontSize: 11 }} />
+                <PolarAngleAxis dataKey="category" tick={{ fontSize: 11 }} tickFormatter={(value: string) => CAT_LABEL_KEY[value] ? t(CAT_LABEL_KEY[value]) : value} />
                 <PolarRadiusAxis tick={{ fontSize: 9 }} />
                 <Radar name={regionCity.replace(/특별시|광역시|특별자치시|특별자치도|도$/g, "")}
                   dataKey="region" stroke="#E8917F" fill="#E8917F" fillOpacity={0.5} strokeWidth={2} />
-                <Radar name="서울" dataKey="seoul"
+                <Radar name={t("common.seoul")} dataKey="seoul"
                   stroke="#CBD5E1" fill="#CBD5E1" fillOpacity={0.15} strokeWidth={1.5} strokeDasharray="5 5" />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Tooltip />
+                <Tooltip formatter={(v: number, name: string) => [v, name]} />
               </RadarChart>
             </ResponsiveContainer>
           </div>
@@ -82,14 +83,14 @@ export function RegionRadarChart({ regionCity }: { regionCity: string }) {
         {analysis && (
           <div className="mt-4 space-y-1 text-sm text-muted-foreground">
             <p>
-              {t("region.radar_strongest")}: <span className="font-semibold text-foreground">{analysis.strongest.category}</span> ({analysis.strongest.region}건)
+              {t("region.radar_strongest")}: <span className="font-semibold text-foreground">{CAT_LABEL_KEY[analysis.strongest.category] ? t(CAT_LABEL_KEY[analysis.strongest.category]) : analysis.strongest.category}</span> ({analysis.strongest.region}{t("common.count_suffix")})
               {" / "}
-              {t("region.radar_weakest")}: <span className="font-semibold text-foreground">{analysis.weakest.category}</span> ({analysis.weakest.region}건)
+              {t("region.radar_weakest")}: <span className="font-semibold text-foreground">{CAT_LABEL_KEY[analysis.weakest.category] ? t(CAT_LABEL_KEY[analysis.weakest.category]) : analysis.weakest.category}</span> ({analysis.weakest.region}{t("common.count_suffix")})
             </p>
             {analysis.maxGap.seoul > analysis.maxGap.region && (
               <p>
-                {t("region.radar_gap")}: <span className="font-semibold text-coral-deep">{analysis.maxGap.category}</span>
-                {" "}(서울 {analysis.maxGap.seoul}건 vs {analysis.maxGap.region}건)
+                {t("region.radar_gap")}: <span className="font-semibold text-coral-deep">{CAT_LABEL_KEY[analysis.maxGap.category] ? t(CAT_LABEL_KEY[analysis.maxGap.category]) : analysis.maxGap.category}</span>
+                {" "}({t("common.seoul")} {analysis.maxGap.seoul}{t("common.count_suffix")} vs {analysis.maxGap.region}{t("common.count_suffix")})
               </p>
             )}
           </div>

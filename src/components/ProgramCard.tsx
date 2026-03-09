@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Home, Shield, Heart, ShoppingBag, Users, ChevronDown, ChevronUp, ExternalLink, Phone, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CAT_LABEL_KEY } from "@/utils/categoryMap";
 import type { Program } from "@/hooks/usePrograms";
 
 export const categoryIcons: Record<string, React.ElementType> = {
@@ -62,7 +63,7 @@ export function ProgramCard({ program }: { program: Program }) {
         <div className="mb-3 flex items-center gap-1.5">
           <Icon className="h-3.5 w-3.5 text-muted-foreground" />
           <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${badgeClass}`}>
-            {program.category}
+            {CAT_LABEL_KEY[program.category] ? t(CAT_LABEL_KEY[program.category]) : program.category}
           </span>
         </div>
         <h3 className="mb-2 text-base font-bold text-card-foreground md:text-lg">{program.name}</h3>
@@ -71,7 +72,7 @@ export function ProgramCard({ program }: { program: Program }) {
           <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium border ${
             isFree ? "bg-sky-light text-sky-deep border-sky-mid/30" : "bg-peach-light text-peach-deep border-peach-mid/30"
           }`}>
-            {program.cost}
+            {isFree ? t("common.free") : program.cost}
           </span>
           <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium border ${
             isOpen ? "bg-rose-light text-rose-deep border-rose-mid/30" : "bg-coral-light text-coral-deep border-coral-mid/30"

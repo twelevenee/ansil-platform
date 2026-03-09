@@ -187,6 +187,19 @@ const ko = {
   "chat.emergency_police": "경찰 112",
   "chat.emergency_women": "여성긴급전화 1366",
 
+  // Apply methods
+  "method.online": "온라인",
+  "method.phone": "전화",
+  "method.app": "앱",
+  "method.visit": "방문",
+
+  // Common
+  "common.free": "무료",
+  "common.count_suffix": "건",
+  "common.region_count_suffix": "개 지역",
+  "common.seoul": "서울",
+  "common.jurisdiction": "관할",
+
   // NotFound
   "notfound.title": "404",
   "notfound.message": "페이지를 찾을 수 없습니다",
@@ -356,6 +369,17 @@ const en: Record<TranslationKey, string> = {
   "chat.emergency_police": "Police 112",
   "chat.emergency_women": "Women's Hotline 1366",
 
+  "method.online": "Online",
+  "method.phone": "Phone",
+  "method.app": "App",
+  "method.visit": "In-person",
+
+  "common.free": "Free",
+  "common.count_suffix": "",
+  "common.region_count_suffix": " regions",
+  "common.seoul": "Seoul",
+  "common.jurisdiction": "Jurisdiction",
+
   "notfound.title": "404",
   "notfound.message": "Oops! Page not found",
   "notfound.back": "Return to Home",
@@ -521,6 +545,17 @@ const vi: Record<TranslationKey, string> = {
   "chat.emergency_label": "Liên hệ khẩn cấp:",
   "chat.emergency_police": "Cảnh sát 112",
   "chat.emergency_women": "Đường dây nóng phụ nữ 1366",
+
+  "method.online": "Trực tuyến",
+  "method.phone": "Điện thoại",
+  "method.app": "Ứng dụng",
+  "method.visit": "Trực tiếp",
+
+  "common.free": "Miễn phí",
+  "common.count_suffix": "",
+  "common.region_count_suffix": " khu vực",
+  "common.seoul": "Seoul",
+  "common.jurisdiction": "Quản lý",
 
   "notfound.title": "404",
   "notfound.message": "Không tìm thấy trang",
@@ -688,6 +723,17 @@ const zh: Record<TranslationKey, string> = {
   "chat.emergency_police": "警察 112",
   "chat.emergency_women": "女性紧急电话 1366",
 
+  "method.online": "在线",
+  "method.phone": "电话",
+  "method.app": "应用",
+  "method.visit": "现场",
+
+  "common.free": "免费",
+  "common.count_suffix": "个",
+  "common.region_count_suffix": "个地区",
+  "common.seoul": "首尔",
+  "common.jurisdiction": "管辖",
+
   "notfound.title": "404",
   "notfound.message": "页面未找到",
   "notfound.back": "返回首页",
@@ -854,6 +900,17 @@ const uz: Record<TranslationKey, string> = {
   "chat.emergency_police": "Politsiya 112",
   "chat.emergency_women": "Ayollar shoshilinch xati 1366",
 
+  "method.online": "Onlayn",
+  "method.phone": "Telefon",
+  "method.app": "Ilova",
+  "method.visit": "Shaxsan",
+
+  "common.free": "Bepul",
+  "common.count_suffix": "",
+  "common.region_count_suffix": " hudud",
+  "common.seoul": "Seul",
+  "common.jurisdiction": "Boshqaruv",
+
   "notfound.title": "404",
   "notfound.message": "Sahifa topilmadi",
   "notfound.back": "Bosh sahifaga qaytish",
@@ -1019,6 +1076,17 @@ const mn: Record<TranslationKey, string> = {
   "chat.emergency_label": "Яаралтай холбоо барих:",
   "chat.emergency_police": "Цагдаа 112",
   "chat.emergency_women": "Эмэгтэйчүүдийн яаралтай утас 1366",
+
+  "method.online": "Онлайн",
+  "method.phone": "Утас",
+  "method.app": "Апп",
+  "method.visit": "Биечлэн",
+
+  "common.free": "Үнэгүй",
+  "common.count_suffix": "",
+  "common.region_count_suffix": " бүс нутаг",
+  "common.seoul": "Сөүл",
+  "common.jurisdiction": "Харьяа",
 
   "notfound.title": "404",
   "notfound.message": "Хуудас олдсонгүй",

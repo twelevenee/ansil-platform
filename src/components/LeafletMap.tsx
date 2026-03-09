@@ -184,7 +184,7 @@ export function LeafletMap({ selectedRegion, onRegionClick, programCounts }: Lea
             <strong style="color:#4A7EC2">📦 ${l.시설명}</strong><br/>
             <span style="color:#6B7280">${l.소재지도로명주소 || l.소재지지번주소}</span><br/>
             ${l.관리기관전화번호 ? `<span>📞 ${l.관리기관전화번호}</span><br/>` : ""}
-            <span style="font-size:11px;color:#6B7280">평일 ${l.평일운영시작시각}~${l.평일운영종료시각}</span>
+            <span style="font-size:11px;color:#6B7280">${t("safety.weekday_hours")} ${l.평일운영시작시각}~${l.평일운영종료시각}</span>
           </div>
         `);
         circle.addTo(lockerGroup);
@@ -211,7 +211,7 @@ export function LeafletMap({ selectedRegion, onRegionClick, programCounts }: Lea
             <strong style="color:#D4637A">🏪 ${g.점포명}</strong><br/>
             <span style="color:#6B7280">${g.소재지도로명주소 || g.소재지지번주소}</span><br/>
             ${g.여성안심지킴이집전화번호 ? `<span>📞 ${g.여성안심지킴이집전화번호}</span><br/>` : ""}
-            <span style="font-size:11px;color:#6B7280">관할: ${g.관할경찰서명}</span>
+            <span style="font-size:11px;color:#6B7280">${t("common.jurisdiction")}: ${g.관할경찰서명}</span>
           </div>
         `);
         circle.addTo(guardianGroup);

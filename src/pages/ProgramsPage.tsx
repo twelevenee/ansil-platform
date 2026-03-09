@@ -8,6 +8,8 @@ import { ProgramCard } from "@/components/ProgramCard";
 import { PortalCards } from "@/components/PortalCards";
 import { usePrograms, useRegionCities } from "@/hooks/usePrograms";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CAT_LABEL_KEY } from "@/utils/categoryMap";
+import type { TranslationKey } from "@/i18n/translations";
 
 const categoryList = [
   { key: "주거안전", icon: Home },
@@ -17,9 +19,13 @@ const categoryList = [
   { key: "커뮤니티", icon: Users },
 ];
 
-const regionList = ["전체", "서울특별시", "경기도", "인천광역시", "대구광역시", "광주광역시", "울산광역시"];
-
-const applyMethodList = ["전체", "온라인", "전화", "앱", "방문"];
+const applyMethodList: { value: string; labelKey: TranslationKey }[] = [
+  { value: "전체", labelKey: "programs.all_methods" },
+  { value: "온라인", labelKey: "method.online" },
+  { value: "전화", labelKey: "method.phone" },
+  { value: "앱", labelKey: "method.app" },
+  { value: "방문", labelKey: "method.visit" },
+];
 
 const categoryChipActive: Record<string, string> = {
   주거안전: "bg-sky-mid text-white",
@@ -41,7 +47,7 @@ const ProgramsPage = () => {
   const { t } = useLanguage();
   const [regionFilter, setRegionFilter] = useState("all");
   const [activeCategories, setActiveCategories] = useState<string[]>([]);
-  const [methodFilter, setMethodFilter] = useState("전체");
+  const [methodFilter, setMethodFilter] = useState("all");
   const [freeOnly, setFreeOnly] = useState(false);
   const [openOnly, setOpenOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -67,7 +73,7 @@ const ProgramsPage = () => {
     if (activeCategories.length > 0) {
       result = result.filter((p) => activeCategories.includes(p.category));
     }
-    if (methodFilter !== "전체") {
+    if (methodFilter !== "all") {
       result = result.filter((p) => {
         const method = (p as any).apply_method as string | null;
         if (!method) return false;
@@ -87,7 +93,7 @@ const ProgramsPage = () => {
     (freeOnly ? 1 : 0) +
     (openOnly ? 1 : 0) +
     (regionFilter !== "all" ? 1 : 0) +
-    (methodFilter !== "전체" ? 1 : 0);
+    (methodFilter !== "all" ? 1 : 0);
 
   return (
     <div className="flex min-h-screen flex-col bg-background pb-14 md:pb-0">
@@ -117,7 +123,7 @@ const ProgramsPage = () => {
                 className="w-full rounded-xl border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary min-h-[44px] sm:w-36"
               >
                 {applyMethodList.map((m) => (
-                  <option key={m} value={m}>{m === "전체" ? t("programs.all_methods") : m}</option>
+                  <option key={m.value} value={m.value === "전체" ? "all" : m.value}>{t(m.labelKey)}</option>
                 ))}
               </select>
 
@@ -160,7 +166,7 @@ const ProgramsPage = () => {
                     }`}
                   >
                     <CatIcon className="h-3.5 w-3.5" />
-                    {key}
+                    {t(CAT_LABEL_KEY[key])}
                   </button>
                 ))}
                 <span className="mx-0.5 hidden h-8 w-px self-center bg-border sm:block" />

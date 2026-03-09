@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { ProgramCard, categoryIcons } from "@/components/ProgramCard";
 import { useRegionPrograms } from "@/hooks/usePrograms";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CAT_LABEL_KEY } from "@/utils/categoryMap";
 import { RegionRadarChart } from "@/components/RegionRadarChart";
 import { getFacilitiesByRegion } from "@/data/safetyFacilities";
 
@@ -96,7 +97,7 @@ const RegionDetail = () => {
               const Icon = categoryIcons[cat];
               return Icon ? (
                 <span key={cat} className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <Icon className="h-3.5 w-3.5" /> {cat} {count}
+                  <Icon className="h-3.5 w-3.5" /> {CAT_LABEL_KEY[cat] ? t(CAT_LABEL_KEY[cat]) : cat} {count}
                 </span>
               ) : null;
             })}

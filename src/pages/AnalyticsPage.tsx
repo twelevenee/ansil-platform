@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CAT_LABEL_KEY } from "@/utils/categoryMap";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -116,8 +117,8 @@ const AnalyticsPage = () => {
           {/* Key Stats */}
           <div className="mb-8 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
             {[
-              { icon: FileText, label: t("analytics.stat_total"), value: totalPrograms, suffix: "건", bg: "bg-sky-light", iconColor: "text-sky-deep", valueColor: "text-sky-deep" },
-              { icon: MapPin, label: t("analytics.stat_regions"), value: totalRegions, suffix: "개 지역", bg: "bg-lav-light", iconColor: "text-lav-deep", valueColor: "text-lav-deep" },
+              { icon: FileText, label: t("analytics.stat_total"), value: totalPrograms, suffix: t("common.count_suffix"), bg: "bg-sky-light", iconColor: "text-sky-deep", valueColor: "text-sky-deep" },
+              { icon: MapPin, label: t("analytics.stat_regions"), value: totalRegions, suffix: t("common.region_count_suffix"), bg: "bg-lav-light", iconColor: "text-lav-deep", valueColor: "text-lav-deep" },
               { icon: Gift, label: t("analytics.stat_free"), value: freePct, suffix: "%", bg: "bg-rose-light", iconColor: "text-rose-deep", valueColor: "text-rose-deep" },
               { icon: CheckCircle, label: t("analytics.stat_open"), value: openPct, suffix: "%", bg: "bg-peach-light", iconColor: "text-peach-deep", valueColor: "text-peach-deep" },
             ].map((item, i) => (
@@ -165,7 +166,7 @@ const AnalyticsPage = () => {
                         <div key={d.name} className="flex items-center gap-2 text-xs">
                           <div className={`flex items-center gap-1 rounded-full px-2 py-0.5 ${meta.chipInactive}`}>
                             <Icon className="h-3 w-3" />
-                            <span className="font-medium">{d.name}</span>
+                            <span className="font-medium">{CAT_LABEL_KEY[d.name] ? t(CAT_LABEL_KEY[d.name]) : d.name}</span>
                           </div>
                           <span className="text-muted-foreground">{d.value}{t("analytics.count_suffix")}</span>
                         </div>
@@ -232,7 +233,7 @@ const AnalyticsPage = () => {
                           <th key={cat.key} className="p-2 text-center">
                             <div className="flex flex-col items-center gap-0.5">
                               <Icon className="h-3.5 w-3.5 text-muted-foreground" />
-                              <span className="font-medium text-muted-foreground text-[10px] md:text-xs">{cat.key}</span>
+                              <span className="font-medium text-muted-foreground text-[10px] md:text-xs">{t(CAT_LABEL_KEY[cat.key])}</span>
                             </div>
                           </th>
                         );
@@ -261,7 +262,7 @@ const AnalyticsPage = () => {
                                     backgroundColor: baseColor.replace(")", `, ${0.12 + intensity * 0.55})`).replace("hsl", "hsla"),
                                     color: intensity > 0.45 ? "#fff" : "hsl(0, 0%, 18%)",
                                   }}
-                                  title={`${shorten(region.region_city)} × ${cat.key} = ${val}건`}
+                                  title={`${shorten(region.region_city)} × ${t(CAT_LABEL_KEY[cat.key])} = ${val}${t("common.count_suffix")}`}
                                 >
                                   {val}
                                 </div>

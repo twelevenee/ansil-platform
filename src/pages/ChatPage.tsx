@@ -7,6 +7,7 @@ import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import ReactMarkdown from "react-markdown";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CAT_LABEL_KEY } from "@/utils/categoryMap";
 
 interface RecommendedProgram {
   id: string;
@@ -64,23 +65,24 @@ function TypingIndicator({ label }: { label: string }) {
   );
 }
 
-function ProgramCard({ program, applyLabel, sourceLabel }: { program: RecommendedProgram; applyLabel: string; sourceLabel: string }) {
+function ProgramCard({ program, applyLabel, sourceLabel, freeLabel, catLabel }: { program: RecommendedProgram; applyLabel: string; sourceLabel: string; freeLabel: string; catLabel: string }) {
   const badgeClass = categoryBadgeColors[program.category] || "bg-muted text-muted-foreground";
   const phone = program.contact?.match(/[\d-]{7,}/)?.[0];
+  const isFree = program.cost === "무료";
 
   return (
     <div className="rounded-xl border bg-card p-3 shadow-card transition-shadow hover:shadow-card-hover">
       <div className="mb-2 flex items-center gap-2">
         <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${badgeClass}`}>
-          {program.category}
+          {catLabel}
         </span>
         <span className="text-[10px] text-muted-foreground">{program.region_city}</span>
       </div>
       <h4 className="mb-1 text-sm font-semibold text-foreground">{program.name}</h4>
       <p className="mb-2 line-clamp-2 text-xs text-muted-foreground">{program.support_detail}</p>
       <div className="mb-2 flex items-center gap-2">
-        <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${program.cost === "무료" ? "bg-sky-light text-sky-deep" : "bg-peach-light text-peach-deep"}`}>
-          {program.cost === "무료" ? "무료" : program.cost}
+        <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${isFree ? "bg-sky-light text-sky-deep" : "bg-peach-light text-peach-deep"}`}>
+          {isFree ? freeLabel : program.cost}
         </span>
       </div>
       <div className="flex flex-wrap items-center gap-2">
@@ -112,12 +114,17 @@ function MessageBubble({
   onFeedback,
   applyLabel,
   sourceLabel,
+  freeLabel,
+  translateCat,
 }: {
   message: ChatMessage;
   onFeedback?: (id: string, type: "up" | "down") => void;
   applyLabel: string;
   sourceLabel: string;
+  freeLabel: string;
+  translateCat: (cat: string) => string;
 }) {
+  const { t } = useLanguage();
   const isUser = message.role === "user";
 
   return (
@@ -173,7 +180,7 @@ function MessageBubble({
         {message.recommended_programs && message.recommended_programs.length > 0 && (
           <div className="space-y-2">
             {message.recommended_programs.map((p) => (
-              <ProgramCard key={p.id} program={p} applyLabel={applyLabel} sourceLabel={sourceLabel} />
+              <ProgramCard key={p.id} program={p} applyLabel={applyLabel} sourceLabel={sourceLabel} freeLabel={freeLabel} catLabel={translateCat(p.category)} />
             ))}
           </div>
         )}
@@ -322,7 +329,7 @@ const ChatPage = () => {
         <div className="flex-1 overflow-y-auto overscroll-contain">
           <div className="mx-auto max-w-3xl space-y-4 px-4 py-4 pb-2 md:py-6">
             {messages.map((msg) => (
-              <MessageBubble key={msg.id} message={msg} onFeedback={handleFeedback} applyLabel={t("chat.apply")} sourceLabel={t("chat.source")} />
+              <MessageBubble key={msg.id} message={msg} onFeedback={handleFeedback} applyLabel={t("chat.apply")} sourceLabel={t("chat.source")} freeLabel={t("common.free")} translateCat={(cat) => CAT_LABEL_KEY[cat] ? t(CAT_LABEL_KEY[cat]) : cat} />
             ))}
 
             {chipsVisible && messages.length === 1 && (

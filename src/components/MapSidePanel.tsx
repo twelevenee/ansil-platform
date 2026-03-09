@@ -56,7 +56,7 @@ export function MapSidePanel({ selectedRegion, regionId }: MapSidePanelProps) {
                 <div className="flex items-center justify-between text-sm">
                   <span className="flex items-center gap-2 font-medium text-card-foreground">
                     <Icon className="h-4 w-4 text-muted-foreground" />
-                    {cat}
+                    {CAT_LABEL_KEY[cat] ? t(CAT_LABEL_KEY[cat]) : cat}
                   </span>
                   <span className={`font-semibold ${categoryTextClasses[cat] || "text-rose-deep"}`}>{count}{t("map.count_suffix")}</span>
                 </div>
@@ -120,7 +120,7 @@ export function MapSidePanel({ selectedRegion, regionId }: MapSidePanelProps) {
               <div key={cat} className="flex items-center justify-between rounded-xl bg-muted/50 px-3 py-2.5 min-h-[44px]">
                 <span className="flex items-center gap-2 text-sm text-card-foreground">
                   <Icon className="h-4 w-4 text-muted-foreground" />
-                  {cat}
+                  {CAT_LABEL_KEY[cat] ? t(CAT_LABEL_KEY[cat]) : cat}
                 </span>
                 <span className={`text-sm font-semibold ${categoryTextClasses[cat] || "text-rose-deep"}`}>{count}{t("map.count_suffix")}</span>
               </div>

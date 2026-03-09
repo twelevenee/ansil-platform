@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CAT_LABEL_KEY } from "@/utils/categoryMap";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -43,29 +44,33 @@ function shorten(name: string) {
   return name.replace(/특별시|광역시|특별자치시|특별자치도/g, "");
 }
 
-const TreemapContent = (props: any) => {
-  const { x, y, width, height, name, depth } = props;
-  if (width < 30 || height < 20) return null;
-  return (
-    <g>
-      <rect x={x} y={y} width={width} height={height} rx={4}
-        fill={depth === 2 ? (CAT_COLORS[name] || "#E8917F") : "transparent"}
-        stroke="hsl(var(--background))" strokeWidth={2} fillOpacity={0.85} />
-      {width > 45 && height > 28 && (
-        <text x={x + width / 2} y={y + height / 2} textAnchor="middle" dominantBaseline="central"
-          fontSize={depth === 1 ? 11 : 10} fill={depth === 2 ? "#fff" : "hsl(var(--foreground))"} fontWeight={depth === 1 ? 600 : 400}>
-          {name}
-        </text>
-      )}
-    </g>
-  );
-};
+// Treemap content rendered inside DashboardCharts to access t()
+
 
 export function DashboardCharts() {
   const { data: stats = [], isLoading } = useRegionStatsRPC();
   const { t } = useLanguage();
   const [region1, setRegion1] = useState("서울특별시");
   const [region2, setRegion2] = useState("대전광역시");
+
+  const TreemapContent = (props: any) => {
+    const { x, y, width, height, name, depth } = props;
+    if (width < 30 || height < 20) return null;
+    const label = depth === 2 && CAT_LABEL_KEY[name] ? t(CAT_LABEL_KEY[name]) : name;
+    return (
+      <g>
+        <rect x={x} y={y} width={width} height={height} rx={4}
+          fill={depth === 2 ? (CAT_COLORS[name] || "#E8917F") : "transparent"}
+          stroke="hsl(var(--background))" strokeWidth={2} fillOpacity={0.85} />
+        {width > 45 && height > 28 && (
+          <text x={x + width / 2} y={y + height / 2} textAnchor="middle" dominantBaseline="central"
+            fontSize={depth === 1 ? 11 : 10} fill={depth === 2 ? "#fff" : "hsl(var(--foreground))"} fontWeight={depth === 1 ? 600 : 400}>
+            {label}
+          </text>
+        )}
+      </g>
+    );
+  };
 
   const lollipopData = useMemo(() =>
     [...stats].sort((a, b) => Number(b.total_count) - Number(a.total_count))
@@ -141,8 +146,8 @@ export function DashboardCharts() {
                         <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                         <XAxis dataKey="name" tick={{ fontSize: 10 }} interval={0} height={50} />
                         <YAxis tick={{ fontSize: 11 }} />
-                        <Tooltip />
-                        <Legend wrapperStyle={{ fontSize: 11 }} />
+                        <Tooltip formatter={(v: number, name: string) => [v, CAT_LABEL_KEY[name] ? t(CAT_LABEL_KEY[name]) : name]} />
+                        <Legend wrapperStyle={{ fontSize: 11 }} formatter={(value: string) => CAT_LABEL_KEY[value] ? t(CAT_LABEL_KEY[value]) : value} />
                         {CAT_KEYS.map(cat => (
                           <Bar key={cat} dataKey={cat} stackId="a" fill={CAT_COLORS[cat]} />
                         ))}
@@ -182,14 +187,14 @@ export function DashboardCharts() {
                     <ResponsiveContainer width="100%" height="100%">
                       <RadarChart data={radarData}>
                         <PolarGrid stroke="hsl(var(--border))" />
-                        <PolarAngleAxis dataKey="category" tick={{ fontSize: 12 }} />
+                        <PolarAngleAxis dataKey="category" tick={{ fontSize: 12 }} tickFormatter={(value: string) => CAT_LABEL_KEY[value] ? t(CAT_LABEL_KEY[value]) : value} />
                         <PolarRadiusAxis tick={{ fontSize: 10 }} />
                         <Radar name={shorten(region1)} dataKey={region1}
                           stroke="#E8889E" fill="#E8889E" fillOpacity={0.4} strokeWidth={2} />
                         <Radar name={shorten(region2)} dataKey={region2}
                           stroke="#7BA4D9" fill="#7BA4D9" fillOpacity={0.3} strokeWidth={2} />
                         <Legend wrapperStyle={{ fontSize: 12 }} />
-                        <Tooltip />
+                        <Tooltip formatter={(v: number, name: string) => [v, CAT_LABEL_KEY[name] ? t(CAT_LABEL_KEY[name]) : name]} />
                       </RadarChart>
                     </ResponsiveContainer>
                   </div>
@@ -221,7 +226,7 @@ export function DashboardCharts() {
                   {CAT_KEYS.map(cat => (
                     <div key={cat} className="flex items-center gap-1.5 text-xs text-muted-foreground">
                       <div className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: CAT_COLORS[cat] }} />
-                      {cat}
+                      {t(CAT_LABEL_KEY[cat])}
                     </div>
                   ))}
                 </div>
