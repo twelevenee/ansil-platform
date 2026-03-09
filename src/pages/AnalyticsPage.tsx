@@ -8,7 +8,7 @@ import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 import { ChartTooltip } from "@/components/ui/chart-tooltip";
-import { FileText, MapPin, Gift, CheckCircle, Home, Shield, ShoppingBag, Heart, Users, TrendingUp } from "lucide-react";
+import { FileText, MapPin, Gift, CheckCircle, Home, Shield, ShoppingBag, Heart, Users, TrendingUp, Trophy, TrendingDown, ChevronDown, ChevronUp, Check, X } from "lucide-react";
 
 const CAT_META: { key: string; icon: React.ElementType; chipActive: string; chipInactive: string; hsl: string }[] = [
   { key: "주거안전", icon: Home, chipActive: "bg-sky-mid text-white", chipInactive: "bg-sky-light text-sky-deep border border-sky-mid/30", hsl: "hsl(213, 55%, 67%)" },
