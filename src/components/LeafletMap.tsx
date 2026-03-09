@@ -33,6 +33,27 @@ const regions: RegionMarker[] = [
   { name: "제주특별자치도", short: "제주", lat: 33.4996, lng: 126.5312, count: 5 },
 ];
 
+// Simplified polygon boundaries for each region (lat/lng pairs)
+const regionPolygons: Record<string, [number, number][]> = {
+  "서울특별시": [[37.70,126.76],[37.70,127.18],[37.43,127.18],[37.43,126.76]],
+  "인천광역시": [[37.60,126.35],[37.60,126.76],[37.30,126.76],[37.30,126.35]],
+  "경기도": [[37.90,126.35],[38.30,127.80],[37.70,127.80],[37.70,127.18],[37.43,127.18],[37.43,126.76],[37.30,126.76],[37.30,126.35],[36.90,126.80],[36.90,127.20],[37.10,127.50],[37.30,127.80],[37.00,127.80],[37.00,126.35]],
+  "강원특별자치도": [[38.60,127.00],[38.60,129.40],[37.60,129.40],[37.60,128.50],[37.10,127.50],[37.70,127.80],[38.30,127.80]],
+  "충청북도": [[37.10,127.20],[37.30,127.80],[37.00,127.80],[37.00,128.20],[36.70,128.30],[36.30,127.80],[36.20,127.30],[36.50,127.00]],
+  "충청남도": [[37.00,125.90],[37.00,126.80],[36.90,127.00],[36.50,127.00],[36.20,127.30],[36.00,127.30],[35.90,126.70],[36.20,125.90]],
+  "세종특별자치시": [[36.65,126.85],[36.65,127.10],[36.45,127.10],[36.45,126.85]],
+  "대전광역시": [[36.45,127.25],[36.45,127.55],[36.25,127.55],[36.25,127.25]],
+  "전북특별자치도": [[36.00,126.30],[36.00,127.30],[35.90,127.50],[35.60,127.50],[35.50,126.30]],
+  "전라남도": [[35.50,126.00],[35.60,127.50],[34.90,127.80],[34.20,127.00],[34.10,126.00]],
+  "광주광역시": [[35.25,126.70],[35.25,127.00],[35.05,127.00],[35.05,126.70]],
+  "경상북도": [[37.00,128.20],[37.60,129.40],[36.40,129.60],[35.70,129.10],[35.70,128.50],[36.30,127.80],[36.70,128.30]],
+  "대구광역시": [[36.00,128.40],[36.00,128.80],[35.75,128.80],[35.75,128.40]],
+  "경상남도": [[35.70,127.50],[35.70,129.10],[35.00,129.30],[34.90,128.00],[35.10,127.50]],
+  "울산광역시": [[35.70,129.10],[35.70,129.50],[35.40,129.50],[35.40,129.10]],
+  "부산광역시": [[35.30,128.80],[35.30,129.30],[35.00,129.30],[35.00,128.80]],
+  "제주특별자치도": [[33.60,126.10],[33.60,126.95],[33.10,126.95],[33.10,126.10]],
+};
+
 function getMarkerStyle(count: number) {
   if (count === 0) return { size: 28, color: "#D1D5DB" };
   if (count >= 35) return { size: 48, color: "#D4637A" };
@@ -81,6 +102,7 @@ export function LeafletMap({ selectedRegion, onRegionClick, programCounts }: Lea
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
+  const polygonLayerRef = useRef<L.LayerGroup | null>(null);
   const facilityLayersRef = useRef<L.LayerGroup[]>([]);
 
   const [showLockers, setShowLockers] = useState(true);
@@ -117,11 +139,49 @@ export function LeafletMap({ selectedRegion, onRegionClick, programCounts }: Lea
     };
   }, []);
 
-  // Update region markers
+  // Update region polygons and markers
   useEffect(() => {
     const map = mapInstanceRef.current;
     if (!map) return;
 
+    // Clear old polygons
+    if (polygonLayerRef.current) {
+      polygonLayerRef.current.remove();
+    }
+    const polyGroup = L.layerGroup();
+
+    mergedRegions.forEach((region) => {
+      const coords = regionPolygons[region.name];
+      if (!coords) return;
+      const isSelected = selectedRegion === region.name;
+
+      const polygon = L.polygon(coords, {
+        color: isSelected ? "#D4637A" : "transparent",
+        weight: isSelected ? 2 : 0,
+        fillColor: isSelected ? "#D4637A" : "#E8889E",
+        fillOpacity: isSelected ? 0.15 : 0,
+        className: "cursor-pointer",
+      });
+
+      polygon.on("click", () => onRegionClick(region.name));
+      polygon.on("mouseover", () => {
+        if (selectedRegion !== region.name) {
+          polygon.setStyle({ fillOpacity: 0.08, color: "#E8889E", weight: 1 });
+        }
+      });
+      polygon.on("mouseout", () => {
+        if (selectedRegion !== region.name) {
+          polygon.setStyle({ fillOpacity: 0, color: "transparent", weight: 0 });
+        }
+      });
+
+      polygon.addTo(polyGroup);
+    });
+
+    polyGroup.addTo(map);
+    polygonLayerRef.current = polyGroup;
+
+    // Clear old markers
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
 
