@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useNationalCategoryStats } from "@/hooks/usePrograms";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getFacilitiesByRegion } from "@/data/safetyFacilities";
+import { CAT_LABEL_KEY } from "@/utils/categoryMap";
 
 const categoryIcons: Record<string, React.ElementType> = {
   주거안전: Home, 귀가안전: Shield, 생활지원: Heart, 건강: Activity, 커뮤니티: Users,
