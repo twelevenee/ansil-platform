@@ -192,11 +192,11 @@ const AnalyticsPage = () => {
                             <Cell key={i} fill={entry.color} />
                           ))}
                         </Pie>
-                        <Tooltip formatter={(v: number, name: string) => [`${v}건`, name]} />
+                        <Tooltip formatter={(v: number, name: string) => [`${v}${t("analytics.count_suffix")}`, name]} />
                         <text x="50%" y="46%" textAnchor="middle" dominantBaseline="central"
                           className="fill-foreground text-xl font-bold">{freePct}%</text>
                         <text x="50%" y="58%" textAnchor="middle" dominantBaseline="central"
-                          className="fill-muted-foreground" style={{ fontSize: 10 }}>무료</text>
+                          className="fill-muted-foreground" style={{ fontSize: 10 }}>{t("analytics.free")}</text>
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
