@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Send, ThumbsUp, ThumbsDown, ExternalLink, MessageCircle, AlertTriangle } from "lucide-react";
+import { Send, ThumbsUp, ThumbsDown, ExternalLink, AlertTriangle } from "lucide-react";
+import ansimiAvatar from "@/assets/ansimi-avatar.png";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/Navbar";
 import { toast } from "@/hooks/use-toast";
