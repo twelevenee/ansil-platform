@@ -117,7 +117,7 @@ serve(async (req) => {
 
     // --- Build system prompt ---
     const programContext = formatProgramContext(matchedPrograms);
-    const systemPrompt = `당신은 '안심찾기' — 여성 1인가구를 위한 안심지원 안내 AI입니다.
+    const systemPrompt = `당신은 '안실(ANSIL)' — 여성 1인가구를 위한 안심지원 안내 AI입니다.
 사용자의 거주 지역과 상황에 맞는 지원제도를 안내합니다.
 반드시 친절하고 따뜻한 말투로 답변하세요.
 각 추천 제도에 대해 **제도명**, 지원내용, 비용, 신청방법, 문의처를 포함하세요.

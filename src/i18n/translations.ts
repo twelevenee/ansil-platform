@@ -891,7 +891,7 @@ const uz: Record<TranslationKey, string> = {
   "cat.living": "Turmush yordami",
   "cat.community": "Jamoa",
 
-  "chat.welcome": "Salom! Men **Ansimi**, AI xavfsizlik yordamchisiman 🏠\n\nHududingiz va vaziyatingizni ayting, men sizga mos dasturlarni topaman.",
+  "chat.welcome": "Salom! Men **ANSIL**, AI xavfsizlik yordamchisiman 🏠\n\nHududingiz va vaziyatingizni ayting, men sizga mos dasturlarni topaman.",
   "chat.typing": "Qidirilmoqda...",
   "chat.placeholder": "Savolingizni bering...",
   "chat.error": "Kechirasiz, keyinroq urinib ko'ring.",
