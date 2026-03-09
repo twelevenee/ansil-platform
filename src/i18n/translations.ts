@@ -764,6 +764,8 @@ const zh: Record<TranslationKey, string> = {
   "analytics.stat_regions": "覆盖地区",
   "analytics.stat_free": "免费比例",
   "analytics.stat_open": "可申请比例",
+  "analytics.sai_desc": "规模、免费比例、可申请比例和类别多样性的综合指数。",
+  "analytics.program_structure_title": "支援结构分析",
   "analytics.heatmap_title": "哪里缺什么？",
   "analytics.heatmap_desc": "地区×类别热力图 · ✕=0项",
   "analytics.donut_title": "费用分布",
