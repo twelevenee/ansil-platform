@@ -75,11 +75,11 @@ const AnalyticsPage = () => {
     const paid = programs.filter(p => p.cost !== "무료" && p.cost !== "미확인").length;
     const unknown = programs.length - free - paid;
     return [
-      { name: "무료", value: free, color: "hsl(213, 55%, 67%)" },
-      { name: "유료", value: paid, color: "hsl(345, 55%, 72%)" },
-      { name: "기타", value: unknown, color: "hsl(220, 9%, 80%)" },
+      { name: t("analytics.free"), value: free, color: "hsl(213, 55%, 67%)" },
+      { name: t("analytics.paid"), value: paid, color: "hsl(345, 55%, 72%)" },
+      { name: t("analytics.other"), value: unknown, color: "hsl(220, 9%, 80%)" },
     ].filter(d => d.value > 0);
-  }, [programs]);
+  }, [programs, t]);
 
   // Category distribution donut
   const catDonutData = useMemo(() => {
