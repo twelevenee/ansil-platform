@@ -37,7 +37,7 @@ const categoryBadgeColors: Record<string, string> = {
   귀가안전: "bg-lav-light text-lav-deep",
   생활지원: "bg-rose-light text-rose-deep",
   건강: "bg-coral-light text-coral-deep",
-  커뮤니티: "bg-peach-light text-peach-deep",
+  커뮤니티: "bg-peach-light text-peach-deep"
 };
 
 function getSessionId(): string {
@@ -49,7 +49,7 @@ function getSessionId(): string {
   return sid;
 }
 
-function TypingIndicator({ label }: { label: string }) {
+function TypingIndicator({ label }: {label: string;}) {
   return (
     <div className="flex items-start gap-2">
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-rose-light text-xl">👩🏻‍💻</span>
@@ -59,11 +59,11 @@ function TypingIndicator({ label }: { label: string }) {
         <span className="h-2 w-2 animate-bounce rounded-full bg-rose-mid" style={{ animationDelay: "150ms" }} />
         <span className="h-2 w-2 animate-bounce rounded-full bg-peach-mid" style={{ animationDelay: "300ms" }} />
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
-function ProgramCard({ program, applyLabel, sourceLabel, freeLabel, catLabel }: { program: RecommendedProgram; applyLabel: string; sourceLabel: string; freeLabel: string; catLabel: string }) {
+function ProgramCard({ program, applyLabel, sourceLabel, freeLabel, catLabel }: {program: RecommendedProgram;applyLabel: string;sourceLabel: string;freeLabel: string;catLabel: string;}) {
   const badgeClass = categoryBadgeColors[program.category] || "bg-muted text-muted-foreground";
   const phone = program.contact?.match(/[\d-]{7,}/)?.[0];
   const isFree = program.cost === "무료";
@@ -84,27 +84,27 @@ function ProgramCard({ program, applyLabel, sourceLabel, freeLabel, catLabel }: 
         </span>
       </div>
       <div className="flex flex-wrap items-center gap-2">
-        {program.apply_url && (
-          <a href={program.apply_url} target="_blank" rel="noopener noreferrer"
-            className="inline-flex min-h-[36px] items-center gap-1 rounded-lg bg-rose-mid px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-rose-deep">
+        {program.apply_url &&
+        <a href={program.apply_url} target="_blank" rel="noopener noreferrer"
+        className="inline-flex min-h-[36px] items-center gap-1 rounded-lg bg-rose-mid px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-rose-deep">
             {applyLabel} <ExternalLink className="h-3 w-3" />
           </a>
-        )}
-        {phone && (
-          <a href={`tel:${phone}`}
-            className="inline-flex min-h-[36px] items-center gap-1 rounded-lg border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted">
+        }
+        {phone &&
+        <a href={`tel:${phone}`}
+        className="inline-flex min-h-[36px] items-center gap-1 rounded-lg border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted">
             📞 {phone}
           </a>
-        )}
-        {program.source_url && (
-          <a href={program.source_url} target="_blank" rel="noopener noreferrer"
-            className="text-[10px] text-muted-foreground underline hover:text-foreground">
+        }
+        {program.source_url &&
+        <a href={program.source_url} target="_blank" rel="noopener noreferrer"
+        className="text-[10px] text-muted-foreground underline hover:text-foreground">
             {sourceLabel}
           </a>
-        )}
+        }
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 function MessageBubble({
@@ -113,109 +113,109 @@ function MessageBubble({
   applyLabel,
   sourceLabel,
   freeLabel,
-  translateCat,
-}: {
-  message: ChatMessage;
-  onFeedback?: (id: string, type: "up" | "down") => void;
-  applyLabel: string;
-  sourceLabel: string;
-  freeLabel: string;
-  translateCat: (cat: string) => string;
-}) {
+  translateCat
+
+
+
+
+
+
+
+}: {message: ChatMessage;onFeedback?: (id: string, type: "up" | "down") => void;applyLabel: string;sourceLabel: string;freeLabel: string;translateCat: (cat: string) => string;}) {
   const { t } = useLanguage();
   const isUser = message.role === "user";
 
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"} gap-3`}>
-      {!isUser && (
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-rose-light text-xl mt-1 shadow-sm">👩🏻‍💻</span>
-      )}
+      {!isUser &&
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-rose-light text-xl mt-1 shadow-sm">👩🏻‍💻</span>
+      }
       <div className="max-w-[85%] space-y-2.5 md:max-w-[72%]">
         {/* 안심이 이름 표시 (봇 메시지만) */}
-        {!isUser && (
-          <span className="ml-1 text-xs font-semibold text-muted-foreground">ANSIL</span>
-        )}
+        {!isUser &&
+        <span className="ml-1 text-xs font-semibold text-muted-foreground">안실</span>
+        }
 
-        {message.is_emergency && (
-          <div className="flex items-center gap-2 rounded-2xl bg-destructive/10 border border-destructive/30 px-4 py-3">
+        {message.is_emergency &&
+        <div className="flex items-center gap-2 rounded-2xl bg-destructive/10 border border-destructive/30 px-4 py-3">
             <AlertTriangle className="h-5 w-5 shrink-0 text-destructive" />
             <div className="text-sm font-semibold text-destructive">
               🚨 {t("chat.emergency_label")} <a href="tel:112" className="underline">{t("chat.emergency_police")}</a> | <a href="tel:1366" className="underline">{t("chat.emergency_women")}</a>
             </div>
           </div>
-        )}
+        }
 
         <div
           className={`relative px-4 py-3 text-sm leading-relaxed ${
-            isUser
-              ? "rounded-2xl rounded-br-md bg-gradient-to-br from-rose-mid to-rose-deep text-white shadow-md"
-              : "rounded-2xl rounded-bl-md border border-border/60 bg-card text-card-foreground shadow-card"
-          }`}
-        >
+          isUser ?
+          "rounded-2xl rounded-br-md bg-gradient-to-br from-rose-mid to-rose-deep text-white shadow-md" :
+          "rounded-2xl rounded-bl-md border border-border/60 bg-card text-card-foreground shadow-card"}`
+          }>
+          
           {/* 말풍선 꼬리 */}
-          {isUser ? (
-            <div className="absolute -right-1.5 bottom-2 h-3 w-3 rotate-45 bg-rose-deep" />
-          ) : (
-            <div className="absolute -left-1.5 top-3 h-3 w-3 rotate-45 border-l border-b border-border/60 bg-card" />
-          )}
+          {isUser ?
+          <div className="absolute -right-1.5 bottom-2 h-3 w-3 rotate-45 bg-rose-deep" /> :
 
-          {isUser ? (
-            <span>{message.content}</span>
-          ) : (
-            <div className="prose prose-sm max-w-none">
+          <div className="absolute -left-1.5 top-3 h-3 w-3 rotate-45 border-l border-b border-border/60 bg-card" />
+          }
+
+          {isUser ?
+          <span>{message.content}</span> :
+
+          <div className="prose prose-sm max-w-none">
               <ReactMarkdown
-                components={{
-                  strong: ({ children }) => <strong className="font-bold">{children}</strong>,
-                  ul: ({ children }) => <ul className="list-disc pl-4 my-1">{children}</ul>,
-                  ol: ({ children }) => <ol className="list-decimal pl-4 my-1">{children}</ol>,
-                  li: ({ children }) => <li className="mb-0.5">{children}</li>,
-                  p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
-                  h3: ({ children }) => <h3 className="font-bold text-base mt-2 mb-1">{children}</h3>,
-                  h2: ({ children }) => <h2 className="font-bold text-base mt-3 mb-1">{children}</h2>,
-                  a: ({ href, children }) => (
-                    <a href={href} target="_blank" rel="noopener noreferrer" className="text-sky-deep underline">
+              components={{
+                strong: ({ children }) => <strong className="font-bold">{children}</strong>,
+                ul: ({ children }) => <ul className="list-disc pl-4 my-1">{children}</ul>,
+                ol: ({ children }) => <ol className="list-decimal pl-4 my-1">{children}</ol>,
+                li: ({ children }) => <li className="mb-0.5">{children}</li>,
+                p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                h3: ({ children }) => <h3 className="font-bold text-base mt-2 mb-1">{children}</h3>,
+                h2: ({ children }) => <h2 className="font-bold text-base mt-3 mb-1">{children}</h2>,
+                a: ({ href, children }) =>
+                <a href={href} target="_blank" rel="noopener noreferrer" className="text-sky-deep underline">
                       {children}
                     </a>
-                  ),
-                }}
-              >
+
+              }}>
+              
                 {message.content}
               </ReactMarkdown>
             </div>
-          )}
+          }
         </div>
 
-        {message.recommended_programs && message.recommended_programs.length > 0 && (
-          <div className="space-y-2">
-            {message.recommended_programs.map((p) => (
-              <ProgramCard key={p.id} program={p} applyLabel={applyLabel} sourceLabel={sourceLabel} freeLabel={freeLabel} catLabel={translateCat(p.category)} />
-            ))}
+        {message.recommended_programs && message.recommended_programs.length > 0 &&
+        <div className="space-y-2">
+            {message.recommended_programs.map((p) =>
+          <ProgramCard key={p.id} program={p} applyLabel={applyLabel} sourceLabel={sourceLabel} freeLabel={freeLabel} catLabel={translateCat(p.category)} />
+          )}
           </div>
-        )}
+        }
 
-        {message.role === "assistant" && message.id !== "welcome" && onFeedback && (
-          <div className="flex items-center gap-1">
+        {message.role === "assistant" && message.id !== "welcome" && onFeedback &&
+        <div className="flex items-center gap-1">
             <button
-              onClick={() => onFeedback(message.id, "up")}
-              className={`flex min-h-[40px] min-w-[40px] items-center justify-center rounded-full p-2 transition-colors ${
-                message.feedback === "up" ? "bg-sky-light text-sky-deep" : "text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/50"
-              }`}
-            >
+            onClick={() => onFeedback(message.id, "up")}
+            className={`flex min-h-[40px] min-w-[40px] items-center justify-center rounded-full p-2 transition-colors ${
+            message.feedback === "up" ? "bg-sky-light text-sky-deep" : "text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/50"}`
+            }>
+            
               <ThumbsUp className="h-3.5 w-3.5" />
             </button>
             <button
-              onClick={() => onFeedback(message.id, "down")}
-              className={`flex min-h-[40px] min-w-[40px] items-center justify-center rounded-full p-2 transition-colors ${
-                message.feedback === "down" ? "bg-coral-light text-coral-deep" : "text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/50"
-              }`}
-            >
+            onClick={() => onFeedback(message.id, "down")}
+            className={`flex min-h-[40px] min-w-[40px] items-center justify-center rounded-full p-2 transition-colors ${
+            message.feedback === "down" ? "bg-coral-light text-coral-deep" : "text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/50"}`
+            }>
+            
               <ThumbsDown className="h-3.5 w-3.5" />
             </button>
           </div>
-        )}
+        }
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 const ChatPage = () => {
@@ -225,7 +225,7 @@ const ChatPage = () => {
   const welcomeMessage: ChatMessage = {
     id: "welcome",
     role: "assistant",
-    content: t("chat.welcome"),
+    content: t("chat.welcome")
   };
 
   const [messages, setMessages] = useState<ChatMessage[]>([welcomeMessage]);
@@ -243,7 +243,7 @@ const ChatPage = () => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => { scrollToBottom(); }, [messages, isTyping]);
+  useEffect(() => {scrollToBottom();}, [messages, isTyping]);
 
   useEffect(() => {
     const handleResize = () => setTimeout(scrollToBottom, 100);
@@ -269,7 +269,7 @@ const ChatPage = () => {
 
       try {
         const { data, error } = await supabase.functions.invoke("chat", {
-          body: { message: text.trim(), session_id: sessionId.current },
+          body: { message: text.trim(), session_id: sessionId.current }
         });
 
         if (error) throw error;
@@ -281,7 +281,7 @@ const ChatPage = () => {
           feedback: null,
           recommended_programs: data.recommended_programs,
           is_emergency: data.is_emergency,
-          chat_log_id: data.chat_log_id,
+          chat_log_id: data.chat_log_id
         };
 
         setMessages((prev) => [...prev, assistantMsg]);
@@ -290,7 +290,7 @@ const ChatPage = () => {
         toast({
           title: t("chat.error_title"),
           description: t("chat.error"),
-          variant: "destructive",
+          variant: "destructive"
         });
       } finally {
         setIsTyping(false);
@@ -314,7 +314,7 @@ const ChatPage = () => {
 
   const handleFeedback = async (id: string, type: "up" | "down") => {
     setMessages((prev) =>
-      prev.map((m) => (m.id === id ? { ...m, feedback: m.feedback === type ? null : type } : m))
+    prev.map((m) => m.id === id ? { ...m, feedback: m.feedback === type ? null : type } : m)
     );
 
     const msg = messages.find((m) => m.id === id);
@@ -322,7 +322,7 @@ const ChatPage = () => {
       try {
         await supabase.from("feedback").insert({
           chat_log_id: msg.chat_log_id,
-          rating: type === "up" ? 5 : 1,
+          rating: type === "up" ? 5 : 1
         });
       } catch (e) {
         console.error("Feedback error:", e);
@@ -336,23 +336,23 @@ const ChatPage = () => {
       <div className="flex flex-1 flex-col overflow-hidden">
         <div className="flex-1 overflow-y-auto overscroll-contain">
           <div className="mx-auto max-w-3xl space-y-4 px-4 py-4 pb-2 md:py-6">
-            {messages.map((msg) => (
-              <MessageBubble key={msg.id} message={msg} onFeedback={handleFeedback} applyLabel={t("chat.apply")} sourceLabel={t("chat.source")} freeLabel={t("common.free")} translateCat={(cat) => CAT_LABEL_KEY[cat] ? t(CAT_LABEL_KEY[cat]) : cat} />
-            ))}
+            {messages.map((msg) =>
+            <MessageBubble key={msg.id} message={msg} onFeedback={handleFeedback} applyLabel={t("chat.apply")} sourceLabel={t("chat.source")} freeLabel={t("common.free")} translateCat={(cat) => CAT_LABEL_KEY[cat] ? t(CAT_LABEL_KEY[cat]) : cat} />
+            )}
 
-            {chipsVisible && messages.length === 1 && (
-              <div className="flex flex-wrap gap-2 pl-10">
-                {exampleChips.map((chip) => (
-                  <button
-                    key={chip}
-                    onClick={() => sendMessage(chip)}
-                    className="min-h-[44px] rounded-full border bg-card px-3.5 py-2.5 text-xs text-card-foreground transition-all hover:-translate-y-0.5 hover:shadow-card-hover active:scale-95"
-                  >
+            {chipsVisible && messages.length === 1 &&
+            <div className="flex flex-wrap gap-2 pl-10">
+                {exampleChips.map((chip) =>
+              <button
+                key={chip}
+                onClick={() => sendMessage(chip)}
+                className="min-h-[44px] rounded-full border bg-card px-3.5 py-2.5 text-xs text-card-foreground transition-all hover:-translate-y-0.5 hover:shadow-card-hover active:scale-95">
+                
                     {chip}
                   </button>
-                ))}
+              )}
               </div>
-            )}
+            }
 
             {isTyping && <TypingIndicator label={t("chat.typing")} />}
             <div ref={bottomRef} />
@@ -369,21 +369,21 @@ const ChatPage = () => {
               className="min-h-[44px] flex-1 rounded-xl border bg-background px-4 py-3 text-base outline-none transition-colors placeholder:text-muted-foreground focus:border-rose-mid focus:ring-1 focus:ring-rose-mid"
               disabled={isTyping}
               enterKeyHint="send"
-              autoComplete="off"
-            />
+              autoComplete="off" />
+            
             <Button
               type="submit"
               size="icon"
               disabled={!input.trim() || isTyping}
-              className="min-h-[44px] min-w-[44px] shrink-0 rounded-xl bg-gradient-cta text-white hover:opacity-90"
-            >
+              className="min-h-[44px] min-w-[44px] shrink-0 rounded-xl bg-gradient-cta text-white hover:opacity-90">
+              
               <Send className="h-4 w-4" />
             </Button>
           </form>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 };
 
 export default ChatPage;
