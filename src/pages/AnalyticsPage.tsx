@@ -8,7 +8,7 @@ import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 import { ChartTooltip } from "@/components/ui/chart-tooltip";
-import { FileText, MapPin, Gift, CheckCircle, Home, Shield, ShoppingBag, Heart, Users } from "lucide-react";
+import { FileText, MapPin, Gift, CheckCircle, Home, Shield, ShoppingBag, Heart, Users, TrendingUp } from "lucide-react";
 
 const CAT_META: { key: string; icon: React.ElementType; chipActive: string; chipInactive: string; hsl: string }[] = [
   { key: "주거안전", icon: Home, chipActive: "bg-sky-mid text-white", chipInactive: "bg-sky-light text-sky-deep border border-sky-mid/30", hsl: "hsl(213, 55%, 67%)" },
@@ -59,6 +59,31 @@ const AnalyticsPage = () => {
   const freePct = totalPrograms ? Math.round((freeCount / totalPrograms) * 100) : 0;
   const openCount = programs.filter(p => p.status === "신청가능").length;
   const openPct = totalPrograms ? Math.round((openCount / totalPrograms) * 100) : 0;
+
+  // SAI calculation
+  const saiData = useMemo(() => {
+    const regionMap: Record<string, typeof programs> = {};
+    programs.forEach(p => {
+      if (!regionMap[p.region_city]) regionMap[p.region_city] = [];
+      regionMap[p.region_city].push(p);
+    });
+    const maxCount = Math.max(...Object.values(regionMap).map(arr => arr.length), 1);
+
+    const rows = Object.entries(regionMap).map(([region, progs]) => {
+      const total = progs.length;
+      const scaleScore = (total / maxCount) * 100;
+      const freeScore = total ? (progs.filter(p => p.cost === "무료").length / total) * 100 : 0;
+      const availableScore = total ? (progs.filter(p => p.status === "신청가능").length / total) * 100 : 0;
+      const uniqueCats = new Set(progs.map(p => p.category)).size;
+      const diversityScore = (uniqueCats / 5) * 100;
+      const sai = Math.round(scaleScore * 0.4 + freeScore * 0.2 + availableScore * 0.2 + diversityScore * 0.2);
+      return { region, sai };
+    });
+
+    rows.sort((a, b) => b.sai - a.sai);
+    const avg = rows.length ? Math.round(rows.reduce((s, r) => s + r.sai, 0) / rows.length) : 0;
+    return { rows, avg };
+  }, [programs]);
 
   const heatmapRegions = useMemo(() =>
     [...stats].sort((a, b) => Number(b.total_count) - Number(a.total_count)),
@@ -116,12 +141,13 @@ const AnalyticsPage = () => {
           </div>
 
           {/* Key Stats */}
-          <div className="mb-8 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+          <div className="mb-8 grid grid-cols-2 gap-3 md:grid-cols-5 md:gap-4">
             {[
               { icon: FileText, label: t("analytics.stat_total"), value: totalPrograms, suffix: t("common.count_suffix"), bg: "bg-sky-light", iconColor: "text-sky-deep", valueColor: "text-sky-deep" },
               { icon: MapPin, label: t("analytics.stat_regions"), value: totalRegions, suffix: t("common.region_count_suffix"), bg: "bg-lav-light", iconColor: "text-lav-deep", valueColor: "text-lav-deep" },
               { icon: Gift, label: t("analytics.stat_free"), value: freePct, suffix: "%", bg: "bg-rose-light", iconColor: "text-rose-deep", valueColor: "text-rose-deep" },
               { icon: CheckCircle, label: t("analytics.stat_open"), value: openPct, suffix: "%", bg: "bg-peach-light", iconColor: "text-peach-deep", valueColor: "text-peach-deep" },
+              { icon: TrendingUp, label: t("analytics.sai_title"), value: saiData.avg, suffix: t("analytics.sai_national_avg"), bg: "bg-coral-light", iconColor: "text-coral-deep", valueColor: "text-coral-deep" },
             ].map((item, i) => (
               <Card key={i} className="overflow-hidden rounded-2xl border-none shadow-card">
                 <CardContent className="p-4 md:p-6">
@@ -279,6 +305,60 @@ const AnalyticsPage = () => {
             </CardContent>
           </Card>
 
+          {/* SAI Ranking Table */}
+          <Card className="mb-8 rounded-2xl border-none shadow-card">
+            <CardHeader>
+              <CardTitle className="text-base font-semibold">{t("analytics.sai_ranking_title")}</CardTitle>
+              <CardDescription className="text-xs">{t("analytics.sai_ranking_desc")}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto -mx-2 md:mx-0">
+                <table className="w-full min-w-[400px] border-collapse text-xs md:text-sm">
+                  <thead>
+                    <tr>
+                      <th className="p-2 text-left font-medium text-muted-foreground">#</th>
+                      <th className="p-2 text-left font-medium text-muted-foreground">{t("analytics.sai_col_region")}</th>
+                      <th className="p-2 text-center font-medium text-muted-foreground">{t("analytics.sai_col_index")}</th>
+                      <th className="p-2 text-center font-medium text-muted-foreground">{t("analytics.sai_col_grade")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {saiData.rows.map((row, i) => {
+                      const grade = row.sai >= 80
+                        ? { label: t("analytics.sai_grade_very_high"), bg: "bg-sky-light", text: "text-sky-deep" }
+                        : row.sai >= 60
+                        ? { label: t("analytics.sai_grade_normal"), bg: "bg-peach-light", text: "text-peach-deep" }
+                        : row.sai >= 40
+                        ? { label: t("analytics.sai_grade_low"), bg: "bg-coral-light", text: "text-coral-deep" }
+                        : { label: t("analytics.sai_grade_very_low"), bg: "bg-rose-light", text: "text-rose-deep" };
+                      return (
+                        <tr key={row.region} className="border-t border-border/30">
+                          <td className="p-2 text-muted-foreground">{i + 1}</td>
+                          <td className="p-2 font-medium text-foreground">{shorten(row.region)}</td>
+                          <td className="p-2 text-center">
+                            <div className="flex items-center justify-center gap-2">
+                              <div className="hidden h-2 w-16 overflow-hidden rounded-full bg-muted md:block">
+                                <div
+                                  className="h-full rounded-full bg-coral-mid transition-all duration-700"
+                                  style={{ width: `${row.sai}%` }}
+                                />
+                              </div>
+                              <span className="font-semibold text-foreground">{row.sai}</span>
+                            </div>
+                          </td>
+                          <td className="p-2 text-center">
+                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${grade.bg} ${grade.text}`}>
+                              {grade.label}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
           {/* Source */}
           <div className="rounded-2xl bg-rose-light/50 p-5 text-center text-sm text-muted-foreground">
             <p>{t("analytics.source")}</p>
