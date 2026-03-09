@@ -143,7 +143,7 @@ const ko = {
   "analytics.page_title": "여성 1인가구 지원 현황 분석",
   "analytics.page_subtitle": "전국 여성 1인가구 지원제도의 규모와 접근성을 데이터로 확인해보세요.",
   "analytics.stat_total": "총 지원제도",
-  "analytics.stat_regions": "커버 지역",
+  "analytics.stat_regions": "ㅈ 지역",
   "analytics.stat_free": "무료 비율",
   "analytics.stat_open": "신청 가능 비율",
   "analytics.sai_desc": "지원 규모, 무료 비율, 신청 가능 여부, 카테고리 다양성을 종합한 지수입니다.",
