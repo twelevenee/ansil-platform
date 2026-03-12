@@ -1,6 +1,6 @@
 # ANSIL (안실)
 
-> AI-powered platform that aggregates scattered safety support programs and facilities for women living alone in Korea, helping users find what fits their needs.
+> AI-powered platform that aggregates scattered safety support programs and facilities for women living alone in Korea, helping each user find what fits her needs.
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-ansil.lovable.app-E8889E?style=for-the-badge)](https://ansil.lovable.app)
 
@@ -20,7 +20,7 @@ ANSIL brings all regional safety programs and facilities into one platform — s
 
 ### Interactive Policy Map
 - Choropleth map of all 17 metropolitan regions with program density visualization
-- Click any region to view category breakdown and nearby safety facilities (smart lockers, guardian houses)
+- Click a region to view category breakdown and nearby safety facilities (smart lockers, guardian houses)
 - Region detail pages with full program listings
 
 ### AI Support Assistant (안실)
