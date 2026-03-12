@@ -37,9 +37,14 @@ ANSIL brings all regional safety programs and facilities into one platform — s
 
 ## Screenshots
 
-| Map View | AI Chat | Analytics |
-|----------|---------|-----------|
-| ![Map](docs/screenshot-map.png) | ![Chat](docs/screenshot-chat.png) | ![Analytics](docs/screenshot-analytics.png) |
+### Map View
+![Map](docs/screenshot-map.png)
+
+### AI Chat
+![Chat](docs/screenshot-chat.png)
+
+### Analytics
+![Analytics](docs/screenshot-analytics.png)
 
 ---
 
@@ -66,6 +71,6 @@ ANSIL brings all regional safety programs and facilities into one platform — s
 
 ## About
 
-![SheBuilds](docs/shebuilds-poster.png)
-
 This project was built for **SheBuilds** — International Women's Day Hackathon by Lovable x Anthropic, in partnership with Womxn Who Code Korea.
+
+![SheBuilds](docs/shebuilds-poster.png)
