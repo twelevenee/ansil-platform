@@ -23,7 +23,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to="/chat" replace />} />
+          <Route path="/" element={<Navigate to="/map" replace />} />
           <Route path="/map" element={<Index />} />
           <Route path="/region/:cityName" element={<RegionDetail />} />
           <Route path="/chat" element={<ChatPage />} />
